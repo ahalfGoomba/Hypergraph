@@ -353,7 +353,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                         listener.graphElementDeleted(false, pos);
                     }
 
-                } else if (mouseEvent.isControlDown() || SwingUtilities.isRightMouseButton(mouseEvent)) {
+                } else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
                     //Rechtsklick oder mit Strg
                     //Knoten zum K-Knoten machen oder umgekehrt
                     netData.changeTerminalStatus(currentNode);
@@ -393,6 +393,14 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 int x = clickX - 10;
                 int y = clickY - 10;
 
+                if(mouseEvent.isControlDown())
+            	{
+                	System.out.println("test");
+                	HyperEdgePoint newHEP = new HyperEdgePoint(x, y);
+                	//TODO hep erstellen + multiselection
+
+
+            	} else {
                 //isMetaDown() ist beim Rechtsklick true
                 boolean c_node = mouseEvent.isMetaDown();
 
@@ -416,7 +424,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 //neuen Knoten hinzufügen
                 netData.addNode(newNode);
                 listener.graphElementAdded(true, drawnNodes.size() - 1);
-            }
+            	}
+                }
         }
         //neu zeichnen
         netPanel.repaint();
