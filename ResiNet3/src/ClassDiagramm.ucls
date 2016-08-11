@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="com.resinet.model.NetPanelData.ResizeAction" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/NetPanelData.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1454" y="-42"/>    
+    <position height="-1" width="-1" x="1298" y="-85"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,7 +39,7 @@
   </class>  
   <class id="5" language="java" name="com.resinet.model.HyperEdgePoint" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/HyperEdgePoint.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1926" y="-333"/>    
+    <position height="-1" width="-1" x="1181" y="-1600"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -48,7 +48,7 @@
   </class>  
   <class id="6" language="java" name="com.resinet.model.HyperEdgeLine" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/HyperEdgeLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1697" y="-515"/>    
+    <position height="-1" width="-1" x="1181" y="-1452"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="com.resinet.model.NetPanelData.TerminalChangeAction" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/NetPanelData.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2894" y="-196"/>    
+    <position height="-1" width="-1" x="2377" y="-679"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -120,7 +120,7 @@
   </class>  
   <class id="14" language="java" name="com.resinet.model.NetPanelData.MoveAction" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/NetPanelData.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="2780" y="180"/>    
+    <position height="-1" width="-1" x="1603" y="-730"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -138,7 +138,7 @@
   </class>  
   <class id="16" language="java" name="com.resinet.model.BorderRectangle" project="HyperGraph" 
     file="/HyperGraph/ResiNet3/src/com/resinet/model/BorderRectangle.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1995" y="1111"/>    
+    <position height="-1" width="-1" x="2180" y="744"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -244,7 +244,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="48">    
-    <bendpoint x="2267" y="393"/>    
+    <bendpoint x="1125" y="-1308"/>    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="49" name="affectedNodes"/>      
       <multiplicity id="50" minimum="0" maximum="2147483647"/>    
@@ -277,7 +277,6 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="60">    
-    <bendpoint x="2492" y="393"/>    
     <end type="SOURCE" refId="10" navigable="false">      
       <attribute id="61" name="node"/>      
       <multiplicity id="62" minimum="0" maximum="1"/>    
@@ -314,7 +313,6 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="72">    
-    <bendpoint x="2606" y="393"/>    
     <end type="SOURCE" refId="14" navigable="false">      
       <attribute id="73" name="movedNodes"/>      
       <multiplicity id="74" minimum="0" maximum="2147483647"/>    
@@ -427,7 +425,6 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="113">    
-    <bendpoint x="1225" y="-251"/>    
     <end type="SOURCE" refId="4" navigable="false">      
       <attribute id="114" name="resizeNodes"/>      
       <multiplicity id="115" minimum="0" maximum="2147483647"/>    
@@ -460,8 +457,7 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="125">    
-    <bendpoint x="3215" y="128"/>    
-    <bendpoint x="3215" y="393"/>    
+    <bendpoint x="1149" y="-732"/>    
     <end type="SOURCE" refId="13" navigable="false">      
       <attribute id="126" name="nodes"/>      
       <multiplicity id="127" minimum="0" maximum="2147483647"/>    
