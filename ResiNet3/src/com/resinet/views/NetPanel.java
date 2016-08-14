@@ -225,6 +225,7 @@ public class NetPanel extends JPanel {
     	imgGraphics.setColor(Color.black);
     	imgGraphics.draw(HEP);
     	
+    	
     }
 
     /**

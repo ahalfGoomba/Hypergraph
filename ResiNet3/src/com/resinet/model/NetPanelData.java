@@ -113,6 +113,17 @@ public class NetPanelData implements Serializable {
         undoManager.addEdit(action);
     	
     }
+    
+    /**
+     * HyperEdgePoint löschen
+     * @param newHEP
+     */
+    public void removeHyperEdgePoint(HyperEdgePoint HEP){
+    	AddOrRemoveAction action = new AddOrRemoveAction(false, HEP);
+        action.execute();
+        undoManager.addEdit(action);
+    }
+   
 
     /**
      * Entfernt eine Menge von Knoten und alle anliegenden Kanten.
@@ -626,4 +637,6 @@ public class NetPanelData implements Serializable {
                     .forEach(EdgeLine::refresh);
         }
     }
+
+	
 }

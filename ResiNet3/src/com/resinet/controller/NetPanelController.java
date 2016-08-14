@@ -42,6 +42,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     //Werden false, wenn etwa Knoten nicht berücksichtigt werden sollen
     private boolean nodeClickable = true;
     private boolean edgeClickable = true;
+    private boolean HyperEdgePointClickable =true;
 
     //Aktuelle Mausposition
     private Point currentMousePosition;
@@ -390,6 +391,30 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
 
             if (!edgeClicked) {
+            	boolean HyperEdgePointClicked = false;
+            	//Wenn kein Kanten angeklickt wurde, auf HyperEdgePoint pr�fen
+            	for(HyperEdgePoint currentHyperEdgePoint : drawnHyperEdgePoints) {
+            		if(currentHyperEdgePoint.contains(clickX, clickY)) {
+            			//HyperEdgePoint wurde angeklickt
+            			HyperEdgePointClicked = true; 
+            			
+            			if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
+                            //mit Shift geklickt oder mit mittlerer Maustaste
+                            //HyperEdgePoint löschen
+            				netData.removeHyperEdgePoint(currentHyperEdgePoint);
+            			
+                            int currentHyperEdgePointIndex = drawnHyperEdgePoints.indexOf(currentHyperEdgePoint);
+                            
+                            listener.graphElementDeleted(true, currentHyperEdgePointIndex);		
+            			}
+            			//TODO HyperEdgePointClickable fertig machen
+            			else if(HyperEdgePointClickable) {
+            				listener.graphElementClicked(true, drawnHyperEdgePoints.indexOf(currentHyperEdgePoint));
+            			}
+            			break;
+            		}
+            	}
+            	if(!HyperEdgePointClicked){
                 //Wenn kein bestehendes Element angeklickt wurde, neuen Knoten erzeugen
                 int x = clickX - 10;
                 int y = clickY - 10;
@@ -423,11 +448,13 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                         }
                     }
                 }
+            	
                 //neuen Knoten hinzufügen
                 netData.addNode(newNode);
                 listener.graphElementAdded(0, drawnNodes.size() - 1);
             	}
                 }
+        }
         }
         //neu zeichnen
         netPanel.repaint();
