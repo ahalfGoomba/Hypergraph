@@ -27,12 +27,14 @@ public class NetPanelData implements Serializable {
 
     private final ArrayList<NodePoint> nodes;
     private final ArrayList<EdgeLine> edges;
+    private final ArrayList<HyperEdgePoint> hyperEdgePoints;
 
     private final UndoManager undoManager;
 
     public NetPanelData() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
+        hyperEdgePoints = new ArrayList<>();
         undoManager = new UndoManager();
     }
 
@@ -98,6 +100,18 @@ public class NetPanelData implements Serializable {
         AddOrRemoveAction action = new AddOrRemoveAction(false, edge);
         action.execute();
         undoManager.addEdit(action);
+    }
+    
+    /**
+     * HyperEdgePoint hinzufügen
+     * @param Der einzufügende HEP
+     */
+    public void addHyperEdgePoint(HyperEdgePoint newHEP){
+    	System.out.println("test2");
+    	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP);
+        action.execute();
+        undoManager.addEdit(action);
+    	
     }
 
     /**
@@ -349,6 +363,14 @@ public class NetPanelData implements Serializable {
     public List<EdgeLine> getEdges() {
         return Collections.unmodifiableList(edges);
     }
+    
+    /**
+     * Gibt eine nicht veränderbare Listenräpräsentation der HyperEdgePoints zurück
+     * @return nicht veränderbare Liste der HyperEdgePoints
+     */
+    public List<HyperEdgePoint> getHyperEdgePoints(){
+    	return Collections.unmodifiableList(hyperEdgePoints);
+    }
 
     /**
      * Beschreibt alle Aktionen, bei denen Knoten und/oder Kanten hinzugefÃ¼gt oder gelÃ¶scht werden.
@@ -357,6 +379,7 @@ public class NetPanelData implements Serializable {
         private static final long serialVersionUID = 7183317665439824767L;
         List<NodePoint> affectedNodes;
         List<EdgeLine> affectedEdges;
+        List<HyperEdgePoint> affectedHyperEdgePoints;
         final boolean isAddAction;
 
         AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
@@ -376,6 +399,12 @@ public class NetPanelData implements Serializable {
             affectedEdges = new ArrayList<>();
             affectedEdges.add(edge);
         }
+        
+        AddOrRemoveAction(boolean isAddAction, HyperEdgePoint hyperEdgePoint){
+        	this.isAddAction = isAddAction;
+        	affectedHyperEdgePoints = new ArrayList<>();
+        	affectedHyperEdgePoints.add(hyperEdgePoint);
+        }
 
         @Override
         public void redo() throws CannotRedoException {
@@ -391,12 +420,22 @@ public class NetPanelData implements Serializable {
                     nodes.removeAll(affectedNodes);
                 }
             }
+            
             if (affectedEdges != null) {
                 if (isAddAction) {
                     edges.addAll(affectedEdges);
                 } else {
                     edges.removeAll(affectedEdges);
-                }
+                }              
+            }
+            
+            if(affectedHyperEdgePoints != null){
+            	if(isAddAction){
+            		hyperEdgePoints.addAll(affectedHyperEdgePoints);
+            		System.out.println(affectedHyperEdgePoints.size());
+            	} else {
+            		hyperEdgePoints.removeAll(affectedHyperEdgePoints);
+            	}
             }
         }
 

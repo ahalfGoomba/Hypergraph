@@ -2,6 +2,7 @@ package com.resinet.views;
 
 import com.resinet.controller.NetPanelController;
 import com.resinet.model.EdgeLine;
+import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.GraphWrapper;
 import com.resinet.model.NodePoint;
 import com.resinet.util.GraphChangedListener;
@@ -74,6 +75,7 @@ public class NetPanel extends JPanel {
     public void paintComponent(Graphics g) {
         List<NodePoint> drawnNodes = controller.getNodes();
         List<EdgeLine> drawnEdges = controller.getEdges();
+        List<HyperEdgePoint> drawnHyperEdgePoints = controller.getHyperEdgePoints();
         if (centerGraphOnNextPaint) {
             centerGraphOnNextPaint = false;
             controller.centerGraph();
@@ -120,6 +122,16 @@ public class NetPanel extends JPanel {
                 imgGraphics.drawString(s, (float) nodePoint.getX() + 3, (float) nodePoint.getY() + 15);
             count++;
         }
+        
+       //HyperEdgePoint zeichen
+        int x = 0;
+        for (HyperEdgePoint HEP : drawnHyperEdgePoints) {
+            imgGraphics.setColor(Color.black);
+            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
+            
+         
+        }
+        
 
         imgGraphics.setColor(Color.BLACK);
 

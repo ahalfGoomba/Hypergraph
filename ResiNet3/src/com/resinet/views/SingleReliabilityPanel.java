@@ -12,7 +12,7 @@ public class SingleReliabilityPanel extends JPanel {
     private static final long serialVersionUID = -754335718725658583L;
 
     private final ProbabilitySpinner spinner;
-    private final boolean isNode;
+    private final int element;
 
     /**
      * Die bevorzugte Breite
@@ -29,12 +29,12 @@ public class SingleReliabilityPanel extends JPanel {
      * @param isNode True wenn ein Knoten repräsentiert wird, sonst false
      * @param number Die Nummer des Elements
      */
-    public SingleReliabilityPanel(boolean isNode, int number) {
+    public SingleReliabilityPanel(int element, int number) {
         super();
-        this.isNode = isNode;
+        this.element = element;
 
         String text;
-        String type = isNode ? Strings.getLocalizedString("vertex") : Strings.getLocalizedString("edge");
+        String type = element == 0 ? Strings.getLocalizedString("vertex") : Strings.getLocalizedString("edge");
         text = type + " " + number;
 
         JLabel label = new JLabel(text, SwingConstants.RIGHT);
@@ -48,8 +48,8 @@ public class SingleReliabilityPanel extends JPanel {
         add(spinner);
     }
 
-    public boolean isNode() {
-        return isNode;
+    public int isNode() {
+        return element;
     }
 
     public ProbabilitySpinner getSpinner() {

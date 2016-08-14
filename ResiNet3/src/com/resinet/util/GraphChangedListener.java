@@ -9,10 +9,10 @@ public interface GraphChangedListener {
     /**
      * Wird ausgelöst, wenn im Graphen eine Komponente hinzugefügt wird
      *
-     * @param isNode True bei Knoten, false bei Kante
+     * @param element 0 bei Knoten, 1 bei Kante, 2 bei HyperEdgePoint
      * @param number Die Komponentennummer
      */
-    void graphElementAdded(boolean isNode, int number);
+    void graphElementAdded(int element, int number);
 
     /**
      * Wird ausgelöst, wenn im Graphen eine Komponente gelöscht wird.

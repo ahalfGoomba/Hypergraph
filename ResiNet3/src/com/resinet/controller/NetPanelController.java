@@ -329,6 +329,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         }
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
+        List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
 
         Integer clickX = mouseEvent.getX();
         Integer clickY = mouseEvent.getY();
@@ -397,8 +398,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             	{
                 	System.out.println("test");
                 	HyperEdgePoint newHEP = new HyperEdgePoint(x, y);
-                	//TODO hep erstellen + multiselection
-
+                	//TODO  multiselection
+                	netData.addHyperEdgePoint(newHEP);
+                	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
 
             	} else {
                 //isMetaDown() ist beim Rechtsklick true
@@ -423,7 +425,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 }
                 //neuen Knoten hinzufügen
                 netData.addNode(newNode);
-                listener.graphElementAdded(true, drawnNodes.size() - 1);
+                listener.graphElementAdded(0, drawnNodes.size() - 1);
             	}
                 }
         }
@@ -502,7 +504,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
                     //Maus wurde in diesem Knoten losgelassen -> als Endknoten der Kante festlegen
                     netData.addEdge(draggingLine.startNode, currentNode);
-                    listener.graphElementAdded(false, drawnEdges.size() - 1);
+                    listener.graphElementAdded(1, drawnEdges.size() - 1);
 
                     netPanel.repaint();
                     return;
@@ -857,6 +859,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
     public List<EdgeLine> getEdges() {
         return netData.getEdges();
+    }
+    
+    public List<HyperEdgePoint> getHyperEdgePoints(){
+    	return netData.getHyperEdgePoints();
     }
 
     public boolean isNodeClickable() {

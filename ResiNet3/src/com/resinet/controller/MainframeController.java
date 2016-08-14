@@ -124,15 +124,15 @@ public class MainframeController extends WindowAdapter implements ActionListener
      * @param number Die Komponentennummer
      */
     @Override
-    public void graphElementAdded(boolean isNode, int number) {
+    public void graphElementAdded(int element, int number) {
         //Feld nur hinzufügen, falls der Einzelzuverlässigkeitsmodus aktiv ist und die Komponente berücksichtigt werden soll
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME)
             return;
 
-        if ((!isNode && !mainFrame.getConsiderEdgesBox().isSelected()) || (isNode && !mainFrame.getConsiderNodesBox().isSelected()))
+        if ((element == 0 && !mainFrame.getConsiderEdgesBox().isSelected()) || (element == 1 && !mainFrame.getConsiderNodesBox().isSelected()) || (element == 2 && !mainFrame.getConsiderNodesBox().isSelected()))
             return;
 
-        addFieldToProbPanel(number, isNode);
+        addFieldToProbPanel(number, element);
 
         //Scrollpane updaten
         refreshSingleReliabilityScrollPane();
@@ -439,11 +439,11 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
         //Fehlende Kantenwahrscheinlichkeitsfelder hinzufügen
         for (int i = edgeBoxCount; i < edgeCount; i++) {
-            addFieldToProbPanel(i, false);
+            addFieldToProbPanel(i, 1);
         }
         //Fehlende Knotenwahrscheinlichkeitsfelder hinzufügen
         for (int i = nodeBoxCount; i < nodeCount; i++) {
-            addFieldToProbPanel(i, true);
+            addFieldToProbPanel(i, 0);
         }
 
         //Überflüssige Kantenwahrscheinlichkeitsfelder entfernen
@@ -509,11 +509,11 @@ public class MainframeController extends WindowAdapter implements ActionListener
      * @param number     Nummer des Felds
      * @param isNodeProb True, wenn das Feld für einen Knoten ist, false bei Kante
      */
-    private void addFieldToProbPanel(int number, boolean isNodeProb) {
-        SingleReliabilityPanel newPanel = new SingleReliabilityPanel(isNodeProb, number);
+    private void addFieldToProbPanel(int number, int elementProb) {
+        SingleReliabilityPanel newPanel = new SingleReliabilityPanel(elementProb, number);
         JPanel singleReliabilitiesPanel = mainFrame.getSingleReliabilitiesContainer();
 
-        if (isNodeProb) {
+        if (elementProb == 0) {
             //Falls es ein Knoten ist
             nodeProbabilityBoxes.add(newPanel.getSpinner());
             if (mainFrame.getConsiderEdgesBox().isSelected()) {
@@ -526,7 +526,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
             }
-        } else {
+        } else if (elementProb == 1){
             //Falls es eine Kante ist
             edgeProbabilityBoxes.add(newPanel.getSpinner());
 
@@ -540,6 +540,8 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
             }
+        } else {
+        	//TODO Spinner Feld f�r hyperEdge einf�gen
         }
     }
 
