@@ -125,10 +125,10 @@ public class NetPanel extends JPanel {
         
        //HyperEdgePoint zeichen
         int x = 0;
-        for (HyperEdgePoint HEP : drawnHyperEdgePoints) {
+        for (HyperEdgePoint hep : drawnHyperEdgePoints) {
             imgGraphics.setColor(Color.black);
             // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
-            
+            drawHyperEdgePoint(imgGraphics, hep);
          
         }
         
@@ -217,6 +217,15 @@ public class NetPanel extends JPanel {
         imgGraphics.setStroke(new BasicStroke(1));
     }
 
+    
+    /**
+     * Zeichnet einen HyperedgePoint
+     */
+    private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint HEP){
+    	imgGraphics.setColor(Color.black);
+    	imgGraphics.draw(HEP);
+    	
+    }
 
     /**
      * Setzt die Flag, dass beim nächsten Zeichnen der Graph zentriert wird
