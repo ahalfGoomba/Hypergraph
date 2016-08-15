@@ -156,7 +156,10 @@ public class NetPanelData implements Serializable {
         ArrayList<NodePoint> originalSelectedNodes = new ArrayList<>();
         ArrayList<NodePoint> selectedNodes = new ArrayList<>();
         ArrayList<EdgeLine> selectedEdges = new ArrayList<>();
-
+        ArrayList<HyperEdgePoint> originalSelectedHEPs = new ArrayList<>();
+        ArrayList<HyperEdgePoint> selectedHEPs = new ArrayList<>();
+        
+        
         //Ausgewählte Knoten sammeln
         for (NodePoint nodePoint : nodes) {
             if (nodePoint.selected) {
@@ -191,8 +194,8 @@ public class NetPanelData implements Serializable {
             }
             //Aktuellen Knoten durch geklonten ersetzen
             selectedNodes.set(i, newNode);
-        }
-        return new NodeEdgeWrapper(originalSelectedNodes, selectedNodes, selectedEdges);
+        }       
+        return new NodeEdgeWrapper(originalSelectedNodes, selectedNodes, selectedEdges, originalSelectedHEPs, selectedHEPs);
     }
 
     /**
@@ -228,6 +231,30 @@ public class NetPanelData implements Serializable {
      */
     public void moveNodesNotFinal(ArrayList<NodePoint> nodes, Dimension amount) {
         MoveAction action = new MoveAction(nodes, amount);
+        action.execute();
+    }
+    
+    
+    /**
+     * Bewegt eine Menge von HEPS um die angegebenen Koordinaten. Diese Methode sollte nicht aufgerufen werden,
+     * w�hrend das Verschieben noch im Gange ist. 
+     * 
+     * @param HEP
+     * @param amount
+     */
+    public void moveHEPFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
+    	undoManager.addEdit(action);
+    }
+    
+    /**
+     * Bewegt eine Menge von HEP um die angegebenen Koordinaten, aber fügt diese Aktion nicht in den UndoManager ein.
+     * Diese Methode sollte aufgerufen werden, während das Verschieben am Gange ist.
+     * @param HEP
+     * @param amount
+     */
+    public void moveHEPNotFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
         action.execute();
     }
 
@@ -514,7 +541,48 @@ public class NetPanelData implements Serializable {
                     .forEach(EdgeLine::refresh);
         }
     }
+    
+    /**
+     * Beschreibt eine Aktion, bei der eine Menge von HEP bewegt wird.
+     */
+    private class MoveActionHEP extends AbstractUndoableEdit {
+        private static final long serialVersionUID = 1L ;
 
+        final List<HyperEdgePoint> movedHEP;
+        final Dimension amount;
+
+        MoveActionHEP(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+            movedHEP = new ArrayList<>(HEP);
+            this.amount = amount;
+        }
+
+        @Override
+        public void redo() throws CannotRedoException {
+            super.redo();
+            execute();
+        }
+
+        void execute() {
+            for (HyperEdgePoint hep : movedHEP) {
+                hep.x += amount.getWidth();
+                hep.y += amount.getHeight();
+            }
+            
+        }
+
+        @Override
+        public void undo() throws CannotUndoException {
+            super.undo();
+            for (HyperEdgePoint hep : movedHEP) {
+                hep.x -= amount.getWidth();
+                hep.y -= amount.getHeight();
+            }
+           	        }
+
+       
+    }
+
+    
     /**
      * Beschreibt eine Aktion, bei der der Terminalstatus eines Knotens verändert wird
      */

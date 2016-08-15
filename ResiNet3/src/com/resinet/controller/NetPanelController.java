@@ -30,19 +30,22 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     private int resizeBorder = 0;
     private boolean selectedNodesDragging = false;
     private boolean selectedNodesResizing = false;
+    private boolean selectedHyperEdgePointDragging = false;
     private Point selectionDraggingStart;
 
     //Variablen für das Auswählen
     private boolean selectDragging = false;
     private Point selectStartPoint;
     private boolean nodesSelected = false;
+    private boolean hyperEdgePointsSelected = false; 
+    
     private BorderRectangle selectionRectangle;
     private BorderRectangle beginSelectionRectangle;
 
     //Werden false, wenn etwa Knoten nicht berücksichtigt werden sollen
     private boolean nodeClickable = true;
     private boolean edgeClickable = true;
-    private boolean HyperEdgePointClickable =true;
+    private boolean HyperEdgePointClickable = true;
 
     //Aktuelle Mausposition
     private Point currentMousePosition;
@@ -117,7 +120,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             panelWidth = netPanel.getParent().getWidth();
         }
 
-        Rectangle2D graphRect = GraphUtil.getGraphBounds(netData.getNodes());
+        Rectangle2D graphRect = GraphUtil.getGraphBounds(netData.getNodes(), netData.getHyperEdgePoints());
 
         Integer offsetX, offsetY;
 
@@ -218,7 +221,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         ArrayList<NodePoint> nodes = nodeEdgeWrapper.nodes;
 
         //Freie Stelle für neue Knoten suchen
-        BorderRectangle pasteRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes);
+        BorderRectangle pasteRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.heps);
         Point2D originalLocation = pasteRectangle.getLocation();
 
         //Wenn das Rechteck um die eingefügten Knoten andere Knoten kreuzt, neue Position suchen
@@ -248,6 +251,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             nodePoint.x += pasteRectangle.getX() - originalLocation.getX();
             nodePoint.y += pasteRectangle.getY() - originalLocation.getY();
         }
+        
+        
 
         //Kantenkoordinaten neu setzen
         nodeEdgeWrapper.edges.forEach(EdgeLine::refresh);
@@ -257,10 +262,11 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
         listener.graphChanged();
 
-        //Eingefügte Knoten auswählen
+        //Eingefügte Knoten und HEPs auswählen
         nodeEdgeWrapper.nodes.forEach((nodePoint -> nodePoint.selected = true));
-        selectionRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, 5);
+        selectionRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.heps, 5);
         nodesSelected = true;
+        hyperEdgePointsSelected = true; 
         netPanel.selectionAnimationTimer.restart();
 
         //Scrollbar refreshen
@@ -477,6 +483,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         if (cursorInsideSelection || cursorOnSelectionBorder) {
             selectedNodesDragging = cursorInsideSelection;
             selectedNodesResizing = !cursorInsideSelection;
+            selectedHyperEdgePointDragging = cursorInsideSelection; 
             selectionDraggingStart = mouseEvent.getPoint();
             hoveredElement = null;
             beginSelectionRectangle = (BorderRectangle) selectionRectangle.clone();
@@ -507,6 +514,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
+        List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
 
         if (newLineDragging) {
             newLineDragging = false;
@@ -547,7 +555,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
             //Liste mit ausgewählten Knoten
             ArrayList<NodePoint> selectedNodes = new ArrayList<>();
-
+            
+            
             for (NodePoint node : drawnNodes) {
                 if (node.intersects(selectionRectangle)) {
                     node.selected = true;
@@ -557,14 +566,32 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                     node.selected = false;
                 }
             }
-
+                  
+            
+            ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>(); 
+            
+            for (HyperEdgePoint hep : drawnHyperEdgePoints){
+            	if (hep.intersects(selectionRectangle)){
+            		hep.selected = true;
+            		hyperEdgePointsSelected = true;
+            		selectedHyperEdgePoints.add(hep);
+            	} else {
+            		hep.selected = false;
+            	}
+            }
+            
             //Rechteck erstellen, dass mit 5 Pixel Abstand alle ausgewählten Knoten umschließt
             //Falls keine Knoten ausgewählt wurden, hat das Reckteck alle Parameter auf 0
-            selectionRectangle = GraphUtil.getGraphBounds(selectedNodes, 5);
+            selectionRectangle = GraphUtil.getGraphBounds(selectedNodes, selectedHyperEdgePoints, 5);
+        
 
             if (nodesSelected) {
                 //Timer (neu) starten (falls er bereits läuft)
                 netPanel.selectionAnimationTimer.restart();
+            }
+            
+            if(hyperEdgePointsSelected){
+            	netPanel.selectionAnimationTimer.restart();
             }
         }
 
@@ -581,6 +608,21 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             netData.moveNodesFinal(selectedNodes, moveAmount);
             //Scrollpane aktualisieren
             revalidateScrollPane();
+        }
+        
+        if (selectedHyperEdgePointDragging){
+        	selectedHyperEdgePointDragging = false;
+        	
+        	//Ausgew�hlte HEP sammeln
+        	ArrayList<HyperEdgePoint> selectedHEPs = new ArrayList <>(
+        			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
+        	
+        	 Point endPoint = mouseEvent.getPoint();
+             Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
+
+             netData.moveHEPFinal(selectedHEPs, moveAmount);
+             //Scrollpane aktualisieren
+             revalidateScrollPane();
         }
 
         if (selectedNodesResizing) {
@@ -769,11 +811,12 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     }
 
     /**
-     * Wählt alle Knoten aus
+     * Wählt alle Knoten und HEP aus
      */
     private void selectAllNodes() {
         List<NodePoint> drawnNodes = netData.getNodes();
-        selectNodes(drawnNodes);
+        List<HyperEdgePoint> drawnHEP = netData.getHyperEdgePoints();       
+        selectNodes(drawnNodes, drawnHEP);
     }
 
     /**
@@ -782,21 +825,26 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      *
      * @param nodesToSelect die auszuwählenden Knoten
      */
-    private void selectNodes(List<NodePoint> nodesToSelect) {
+    private void selectNodes(List<NodePoint> nodesToSelect , List<HyperEdgePoint> hepToSelect) {
         //Ohne Knoten gibts nichts auszuwählen
-        if (nodesToSelect.isEmpty())
+        if (nodesToSelect.isEmpty() || hepToSelect.isEmpty())
             return;
 
         //Alle Knoten als ausgewählt markieren
         for (NodePoint node : nodesToSelect) {
             node.selected = true;
         }
+        
+        for (HyperEdgePoint hep : hepToSelect){
+        	hep.selected = true; 
+        }
 
-        //Rechteck erstellen, dass mit 5 Pixel Abstand alle ausgewählten Knoten umschließt
-        //Falls keine Knoten ausgewählt wurden, hat das Reckteck alle Parameter auf 0
-        selectionRectangle = GraphUtil.getGraphBounds(nodesToSelect, 5);
+        //Rechteck erstellen, dass mit 5 Pixel Abstand alle ausgewählten Knoten und HEP umschließt
+        //Falls keine Knoten oder HEP ausgewählt wurden, hat das Reckteck alle Parameter auf 0
+        selectionRectangle = GraphUtil.getGraphBounds(nodesToSelect, hepToSelect, 5);
 
         nodesSelected = true;
+        hyperEdgePointsSelected = true;
         //Timer (neu) starten (falls er bereits läuft)
         netPanel.selectionAnimationTimer.restart();
     }
@@ -808,7 +856,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         List<NodePoint> nodes = new ArrayList<>(netData.getNodes());
 
         ArrayList<NodePoint> intersectingNodes = new ArrayList<>();
-
+        ArrayList<HyperEdgePoint> intersectingHEPs = new ArrayList<>();
+        //TODO f�r �berlappende HEPs umsetzen
         //Alle Knotenkombinationen durchgehen
         for (int i1 = 0, nodesSize1 = nodes.size(); i1 < nodesSize1; i1++) {
             NodePoint node1 = nodes.get(i1);
@@ -834,7 +883,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
         }
 
-        selectNodes(intersectingNodes);
+        selectNodes(intersectingNodes, intersectingHEPs );
     }
 
     /**
@@ -854,10 +903,14 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      */
     public void addGraphWrapperAndSelect(GraphWrapper graphWrapper) {
         netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges);
-
+        
+        //TODO HyperEdgePoints hinzuf�gen
+        //nur eingef�gt damit hier was funktioniert....sp�ter �ndern!
+        ArrayList<HyperEdgePoint> heps = new ArrayList<>();
+        
         //Eingefügte Knoten auswählen
         graphWrapper.nodes.forEach((nodePoint -> nodePoint.selected = true));
-        selectionRectangle = GraphUtil.getGraphBounds(graphWrapper.nodes, 5);
+        selectionRectangle = GraphUtil.getGraphBounds(graphWrapper.nodes, heps, 5);
         nodesSelected = true;
         netPanel.selectionAnimationTimer.restart();
 

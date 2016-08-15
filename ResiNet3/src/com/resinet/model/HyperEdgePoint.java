@@ -4,6 +4,9 @@ import java.awt.geom.Ellipse2D;
 
 public class HyperEdgePoint extends Ellipse2D.Double {
 	
+	private static final long serialVersionUID = 1L;
+	public boolean selected = false;
+	
 	   /**
     * Erstellt einen Knoten als Zentrum der Hyperkante(kein Knoten des Graphen)
     *

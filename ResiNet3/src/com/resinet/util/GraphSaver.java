@@ -3,6 +3,7 @@ package com.resinet.util;
 import com.resinet.model.BorderRectangle;
 import com.resinet.model.CalculationParams;
 import com.resinet.model.EdgeLine;
+import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.NodePoint;
 import com.resinet.views.NetPanel;
 import org.w3c.dom.Document;
@@ -519,6 +520,7 @@ public final class GraphSaver {
 
         List<NodePoint> drawnNodes = params.graphNodes;
         List<EdgeLine> drawnEdges = params.graphEdges;
+        List<HyperEdgePoint> drawnHEPs = params.graphHEPs; 
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -533,7 +535,7 @@ public final class GraphSaver {
              * Das heißt, dass alle Elemente um x nach links und y nach oben verschoben werden, damit der Graph nach
              * dem Laden richtig zentriert werden kann.
              */
-            Rectangle2D graphRect = GraphUtil.getGraphBounds(drawnNodes);
+            Rectangle2D graphRect = GraphUtil.getGraphBounds(drawnNodes, drawnHEPs);
 
             //Breite und Höhe schreiben
             Element sizeNode = doc.createElement("size");
@@ -670,7 +672,7 @@ public final class GraphSaver {
         netPanel.print(image.createGraphics());
 
         //Bild auf den Graphen zuschneiden
-        BorderRectangle bounds = GraphUtil.getGraphBounds(netPanel.getNodes(), 2);
+        BorderRectangle bounds = GraphUtil.getGraphBounds(netPanel.getNodes(), netPanel.getHyperEdgePoints(), 2);
         image = image.getSubimage((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
 
         try {
