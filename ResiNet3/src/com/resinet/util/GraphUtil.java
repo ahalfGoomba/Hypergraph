@@ -16,12 +16,13 @@ public class GraphUtil {
     /**
      * Bestimmt das den Graphen umgebende Rechteck
      *
+     *@param hep die HyperEdgePointliste
      * @param nodes  Die Knotenliste
      * @param spaces Abstand des Rechtecks in alle Richtungen zum Graphen
      * @return Ein Rechteck, das den Graphen umschließt
      */
-    public static BorderRectangle getGraphBounds(List<NodePoint> nodes, int spaces) {
-        if (nodes.isEmpty()) {
+    public static BorderRectangle getGraphBounds(List<NodePoint> nodes, List<HyperEdgePoint> hep, int spaces) {
+        if (nodes.isEmpty() || hep.isEmpty() ) {
             return new BorderRectangle(0, 0, 0, 0);
         }
 
@@ -38,8 +39,23 @@ public class GraphUtil {
             }
             if (drawnNode.getMaxY() > maxY) {
                 maxY = (int) drawnNode.getMaxY();
-            }
+            }   
         }
+        
+        for (HyperEdgePoint drawnHyperEdgePoint : hep) {
+        	if (drawnHyperEdgePoint.getX() < minX){
+                minX = (int) drawnHyperEdgePoint.getX();
+        }
+        if (drawnHyperEdgePoint.getMaxX() > maxX) {
+            maxX = (int) drawnHyperEdgePoint.getMaxX();
+        }
+        if (drawnHyperEdgePoint.getY() < minY) {
+            minY = (int) drawnHyperEdgePoint.getY();
+        }
+        if (drawnHyperEdgePoint.getMaxY() > maxY) {
+            maxY = (int) drawnHyperEdgePoint.getMaxY();
+        } 
+    }
 
         return new BorderRectangle(Math.max(minX - spaces, 0), Math.max(minY - spaces, 0),
                 Math.max(maxX - minX + 2 * spaces, 0), Math.max(maxY - minY + 2 * spaces, 0));
@@ -48,12 +64,12 @@ public class GraphUtil {
 
     /**
      * Bestimmt das den Graphen umgebende Rechteck
-     *
+     *@param hep Die HyperEdgePointliste
      * @param nodes Die Knotenliste
      * @return Ein Rechteck, das den Graphen umschließt
      */
-    public static BorderRectangle getGraphBounds(List<NodePoint> nodes) {
-        return getGraphBounds(nodes, 0);
+    public static BorderRectangle getGraphBounds(List<NodePoint> nodes, List<HyperEdgePoint> hep) {
+        return getGraphBounds(nodes, hep, 0);
     }
 
 

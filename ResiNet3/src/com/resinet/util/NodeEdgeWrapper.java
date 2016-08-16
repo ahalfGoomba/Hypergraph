@@ -1,6 +1,7 @@
 package com.resinet.util;
 
 import com.resinet.model.EdgeLine;
+import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.NodePoint;
 
 import java.io.Serializable;
@@ -17,17 +18,21 @@ public class NodeEdgeWrapper implements Serializable {
      * dann geklont sind.
      */
     ArrayList<NodePoint> originalNodes;
+    ArrayList<HyperEdgePoint> originalHEPs;
 
     public final ArrayList<NodePoint> nodes;
     public final ArrayList<EdgeLine> edges;
-
-    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges) {
+    public final ArrayList<HyperEdgePoint> heps;
+    
+    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges, ArrayList<HyperEdgePoint> heps) {
         this.nodes = nodes;
         this.edges = edges;
+        this.heps = heps;
     }
 
-    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges) {
-        this(nodes, edges);
+    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges,  ArrayList<HyperEdgePoint> originalHEPs, ArrayList<HyperEdgePoint> heps) {
+        this(nodes, edges, heps);
         this.originalNodes = originalNodes;
+        this.originalHEPs = originalHEPs;
     }
 }

@@ -27,6 +27,7 @@ public class CalculationParams implements Constants {
 
     public List<NodePoint> graphNodes;
     public List<EdgeLine> graphEdges;
+    public List<HyperEdgePoint> graphHEPs; 
 
     /**
      * Parameterloser Konstruktor zur Benutzung als Datenwrapper.
@@ -126,5 +127,6 @@ public class CalculationParams implements Constants {
     public void setGraphLists(List<NodePoint> nodes, List<EdgeLine> edges) {
         graphNodes = nodes;
         graphEdges = edges;
+       
     }
 }

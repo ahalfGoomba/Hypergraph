@@ -225,6 +225,7 @@ public class NetPanel extends JPanel {
     	imgGraphics.setColor(Color.black);
     	imgGraphics.draw(hep);
     	
+    	
     }
 
     /**
@@ -241,7 +242,7 @@ public class NetPanel extends JPanel {
      */
     @Override
     public Dimension getPreferredSize() {
-        Rectangle2D graphRect = GraphUtil.getGraphBounds(controller.getNodes());
+        Rectangle2D graphRect = GraphUtil.getGraphBounds(controller.getNodes(), controller.getHyperEdgePoints());
 
         return new Dimension((int) (graphRect.getX() + graphRect.getWidth()) + 10,
                 (int) (graphRect.getY() + graphRect.getHeight()) + 10);
@@ -370,7 +371,10 @@ public class NetPanel extends JPanel {
         return controller.getEdges();
     }
 
-
+    public List<HyperEdgePoint> getHyperEdgePoints(){
+    	return controller.getHyperEdgePoints();
+    }
+    
     public NetPanelController getController() {
         return controller;
     }
