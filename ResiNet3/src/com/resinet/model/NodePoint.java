@@ -6,7 +6,7 @@ public class NodePoint extends Ellipse2D.Double {
     private static final long serialVersionUID = -9017839205054461834L;
 
     public boolean c_node = false;
-    public boolean selected = false;
+    public boolean selected;
 
     /**
      * Erstellt einen neuen Knoten
@@ -18,6 +18,7 @@ public class NodePoint extends Ellipse2D.Double {
     public NodePoint(double x, double y, boolean c_node) {
         super(x, y, 20, 20);
         this.c_node = c_node;
+        selected = false;
     }
 
     /**
@@ -44,5 +45,14 @@ public class NodePoint extends Ellipse2D.Double {
         np.width -= 1;
         np.height -= 1;
         return np;
+    }
+    
+    public void setSelected(boolean isSelected){
+    	selected = isSelected;
+  
+    }
+    
+    public boolean getSelected(){
+    	return selected;
     }
 }

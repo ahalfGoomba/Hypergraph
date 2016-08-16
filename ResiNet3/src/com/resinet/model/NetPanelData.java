@@ -28,13 +28,14 @@ public class NetPanelData implements Serializable {
     private final ArrayList<NodePoint> nodes;
     private final ArrayList<EdgeLine> edges;
     private final ArrayList<HyperEdgePoint> hyperEdgePoints;
-
+    private final ArrayList<HyperEdgeLine> hyperEdgeLines;
     private final UndoManager undoManager;
 
     public NetPanelData() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
         hyperEdgePoints = new ArrayList<>();
+        hyperEdgeLines = new ArrayList<>();
         undoManager = new UndoManager();
     }
 
@@ -102,16 +103,39 @@ public class NetPanelData implements Serializable {
         undoManager.addEdit(action);
     }
     
+
+    public void addHyperEdge(HyperEdgePoint newHEP, List<NodePoint> selectedNodes){
+       addHyperEdgePoint(newHEP);
+       System.out.println(selectedNodes.size());
+        
+        for (NodePoint nodePoint : selectedNodes) {        	
+               	
+                addHyperEdgeLine(nodePoint, newHEP);
+                System.out.println("test1");
+            
+        }
+    }
+    
     /**
      * HyperEdgePoint hinzufügen
      * @param Der einzufügende HEP
      */
     public void addHyperEdgePoint(HyperEdgePoint newHEP){
-    	System.out.println("test2");
     	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP);
         action.execute();
         undoManager.addEdit(action);
     	
+    }
+    /**
+     * fügt eine Kante vom HyperEdgePoint zu einem Knoten des Graphen ein
+     * @param nodePoint Knoten des Graphen
+     * @param hep HyperEdgePoint
+     */
+    public void addHyperEdgeLine(NodePoint nodePoint, HyperEdgePoint hep){
+    	HyperEdgeLine newHyperEdgeLine = new HyperEdgeLine(nodePoint, hep);
+        AddOrRemoveAction action = new AddOrRemoveAction(true, newHyperEdgeLine);
+        action.execute();
+        undoManager.addEdit(action);
     }
     
     /**
@@ -327,7 +351,7 @@ public class NetPanelData implements Serializable {
         }
         removeNodes(selectedNodes);
     }
-
+    
     /**
      * Ã„ndert den Terminalstatus eines Knotens (grafisch gesehen wird zwischen schwarz und weiÃŸ gewechselt).
      *
@@ -409,6 +433,10 @@ public class NetPanelData implements Serializable {
     public List<HyperEdgePoint> getHyperEdgePoints(){
     	return Collections.unmodifiableList(hyperEdgePoints);
     }
+    
+    public List<HyperEdgeLine> getHyperEdgeLines(){
+    	return Collections.unmodifiableList(hyperEdgeLines);
+    }
 
     /**
      * Beschreibt alle Aktionen, bei denen Knoten und/oder Kanten hinzugefÃ¼gt oder gelÃ¶scht werden.
@@ -418,6 +446,7 @@ public class NetPanelData implements Serializable {
         List<NodePoint> affectedNodes;
         List<EdgeLine> affectedEdges;
         List<HyperEdgePoint> affectedHyperEdgePoints;
+        List<HyperEdgeLine> affectedHyperEdgeLines;
         final boolean isAddAction;
 
         AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
@@ -442,6 +471,12 @@ public class NetPanelData implements Serializable {
         	this.isAddAction = isAddAction;
         	affectedHyperEdgePoints = new ArrayList<>();
         	affectedHyperEdgePoints.add(hyperEdgePoint);
+        }
+        
+        AddOrRemoveAction(boolean isAddAction, HyperEdgeLine hyperEdgeLine){
+        	this.isAddAction = isAddAction;
+        	affectedHyperEdgeLines = new ArrayList<>();
+        	affectedHyperEdgeLines.add(hyperEdgeLine);
         }
 
         @Override
@@ -470,9 +505,17 @@ public class NetPanelData implements Serializable {
             if(affectedHyperEdgePoints != null){
             	if(isAddAction){
             		hyperEdgePoints.addAll(affectedHyperEdgePoints);
-            		System.out.println(affectedHyperEdgePoints.size());
             	} else {
             		hyperEdgePoints.removeAll(affectedHyperEdgePoints);
+            	}
+            }
+            
+            if(affectedHyperEdgeLines != null){
+            	if(isAddAction){
+            		hyperEdgeLines.addAll(affectedHyperEdgeLines);
+            		System.out.println(affectedHyperEdgeLines.size());
+            	} else {
+            		hyperEdgePoints.removeAll(affectedHyperEdgeLines);
             	}
             }
         }

@@ -38,9 +38,11 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     private Point selectStartPoint;
     private boolean nodesSelected = false;
     private boolean hyperEdgePointsSelected = false; 
-    
+    private List<NodePoint> selectedNodes;
     private BorderRectangle selectionRectangle;
     private BorderRectangle beginSelectionRectangle;
+    
+    
 
     //Werden false, wenn etwa Knoten nicht berÃ¼cksichtigt werden sollen
     private boolean nodeClickable = true;
@@ -64,6 +66,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     public NetPanelController(NetPanel netPanel, GraphChangedListener listener) {
         this.netPanel = netPanel;
         this.listener = listener;
+        selectedNodes = new ArrayList<NodePoint>();
 
         netData = new NetPanelData();
     }
@@ -328,6 +331,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         netPanel.requestFocusInWindow();
+        
 
         if (nodesSelected) {
             resetSelection();
@@ -337,7 +341,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
         List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
-
+      
         Integer clickX = mouseEvent.getX();
         Integer clickY = mouseEvent.getY();
         boolean nodeClicked = false;
@@ -348,6 +352,13 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             if (currentNode.contains(clickX, clickY)) {
                 //Knoten wurde angeklickt
                 nodeClicked = true;
+               
+                if(mouseEvent.isControlDown()){                	
+                	
+                	currentNode.setSelected(true);              	
+                	selectedNodes.add(currentNode);
+                	System.out.println(selectedNodes.size());
+                }
 
                 if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
                     //mit Shift geklickt oder mit mittlerer Maustaste
@@ -425,13 +436,18 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 int x = clickX - 10;
                 int y = clickY - 10;
 
-                if(mouseEvent.isControlDown())
-            	{
-                	System.out.println("test");
-                	HyperEdgePoint newHEP = new HyperEdgePoint(x, y);
-                	//TODO  multiselection
-                	netData.addHyperEdgePoint(newHEP);
+                if(mouseEvent.isControlDown()){
+                	
+                	if(selectedNodes.size() >= 2){
+                	HyperEdgePoint newHE = new HyperEdgePoint(x, y);
+                	netData.addHyperEdge(newHE, selectedNodes);                	
                 	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
+                	selectedNodes.clear();
+                	//Field für HyperEdge einfügen
+                	} else {
+                		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
+                		//TODO fehler popup einfügen
+                	}
 
             	} else {
                 //isMetaDown() ist beim Rechtsklick true
@@ -937,12 +953,17 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         return netData.getNodes();
     }
 
+
     public List<EdgeLine> getEdges() {
         return netData.getEdges();
     }
     
     public List<HyperEdgePoint> getHyperEdgePoints(){
     	return netData.getHyperEdgePoints();
+    }
+    
+    public List<HyperEdgeLine> getHyperEdgeLines(){
+    	return netData.getHyperEdgeLines();
     }
 
     public boolean isNodeClickable() {

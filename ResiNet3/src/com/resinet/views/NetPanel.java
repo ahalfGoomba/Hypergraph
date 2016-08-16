@@ -3,6 +3,7 @@ package com.resinet.views;
 import com.resinet.controller.NetPanelController;
 import com.resinet.model.EdgeLine;
 import com.resinet.model.HyperEdgePoint;
+import com.resinet.model.HyperEdgeLine;
 import com.resinet.model.GraphWrapper;
 import com.resinet.model.NodePoint;
 import com.resinet.util.GraphChangedListener;
@@ -76,6 +77,7 @@ public class NetPanel extends JPanel {
         List<NodePoint> drawnNodes = controller.getNodes();
         List<EdgeLine> drawnEdges = controller.getEdges();
         List<HyperEdgePoint> drawnHyperEdgePoints = controller.getHyperEdgePoints();
+        List<HyperEdgeLine> drawnHyperEdgeLines = controller.getHyperEdgeLines();
         if (centerGraphOnNextPaint) {
             centerGraphOnNextPaint = false;
             controller.centerGraph();
@@ -89,6 +91,22 @@ public class NetPanel extends JPanel {
         imgGraphics.setColor(Color.WHITE);
         //Hintergrund zeichnen
         imgGraphics.fillRect(0, 0, getWidth(), getHeight());
+        
+  
+        
+        for(HyperEdgeLine hel : drawnHyperEdgeLines) {
+            imgGraphics.setColor(Color.black);
+            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
+            drawHyperEdgeLine(imgGraphics, hel);  
+        }
+        
+        //HyperEdgePoint zeichen
+
+        for (HyperEdgePoint hep : drawnHyperEdgePoints) {
+            imgGraphics.setColor(Color.black);
+            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
+            drawHyperEdgePoint(imgGraphics, hep);         
+        }
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
         //und die Kanten demzufolge nur bis zu den Rändern der Knoten gehen
@@ -123,14 +141,7 @@ public class NetPanel extends JPanel {
             count++;
         }
         
-       //HyperEdgePoint zeichen
-        int x = 0;
-        for (HyperEdgePoint hep : drawnHyperEdgePoints) {
-            imgGraphics.setColor(Color.black);
-            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
-            drawHyperEdgePoint(imgGraphics, hep);
-         
-        }
+
         
 
         imgGraphics.setColor(Color.BLACK);
@@ -224,7 +235,15 @@ public class NetPanel extends JPanel {
     private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint hep){
     	imgGraphics.setColor(Color.black);
     	imgGraphics.draw(hep);
+    	 imgGraphics.setColor(Color.white);
+         imgGraphics.fill(hep);
     	
+    	
+    }
+    
+    private void drawHyperEdgeLine(Graphics2D imgGraphics, HyperEdgeLine hel){
+    	imgGraphics.setColor(Color.black);
+    	imgGraphics.draw(hel);
     	
     }
 
