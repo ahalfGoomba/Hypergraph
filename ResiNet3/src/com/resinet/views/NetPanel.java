@@ -221,9 +221,9 @@ public class NetPanel extends JPanel {
     /**
      * Zeichnet einen HyperedgePoint
      */
-    private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint HEP){
+    private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint hep){
     	imgGraphics.setColor(Color.black);
-    	imgGraphics.draw(HEP);
+    	imgGraphics.draw(hep);
     	
     }
 
