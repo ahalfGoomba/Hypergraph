@@ -443,7 +443,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	netData.addHyperEdge(newHE, selectedNodes);                	
                 	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
                 	selectedNodes.clear();
-                	//Field für HyperEdge einfügen
+                	
                 	} else {
                 		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
                 		//TODO fehler popup einfügen

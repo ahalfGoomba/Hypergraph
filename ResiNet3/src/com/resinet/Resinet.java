@@ -103,7 +103,7 @@ public class Resinet implements Constants {
             mainFrame.setMinimumSize(new Dimension(700, 500));
 
             //Größe setzen
-            mainFrame.setSize(1000, 700);
+            mainFrame.setSize(1200, 700);
 
             //Auf dem Bildschirm zentrieren und sichtbar machen
             mainFrame.setLocationRelativeTo(null);
@@ -299,10 +299,11 @@ public class Resinet implements Constants {
     private void initProbabilitiesPanel() {
         reliabilitiesTabbedPane = new JTabbedPane(JTabbedPane.TOP);
         reliabilitiesTabbedPane.addChangeListener(controller);
+      
         initSingleReliabilitiesTab();
 
         initSameReliabilityTab();
-
+        
         sidePanel.add(reliabilitiesTabbedPane, BorderLayout.CENTER);
     }
 

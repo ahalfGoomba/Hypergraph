@@ -26,7 +26,7 @@ public class SingleReliabilityPanel extends JPanel {
     /**
      * Konstruktor
      *
-     * @param isNode True wenn ein Knoten reprÃ¤sentiert wird, sonst false
+     * @param element 0 für Knoten, 1 für Kante, 2 für Hyperkante
      * @param number Die Nummer des Elements
      */
     public SingleReliabilityPanel(int element, int number) {
@@ -34,7 +34,15 @@ public class SingleReliabilityPanel extends JPanel {
         this.element = element;
 
         String text;
-        String type = element == 0 ? Strings.getLocalizedString("vertex") : Strings.getLocalizedString("edge");
+        String type;
+        if(element == 0 ){
+        	type = Strings.getLocalizedString("vertex");
+        } else if(element == 1){
+        	type = Strings.getLocalizedString("edge");
+        } else {
+        	type = Strings.getLocalizedString("he");
+        }
+        
         text = type + " " + number;
 
         JLabel label = new JLabel(text, SwingConstants.RIGHT);

@@ -507,7 +507,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
      * FÃ¼gt dem Wahrscheinlichkeitspanel ein Panel fÃ¼r die Wahrscheinlichkeit einer Komponente hinzu
      *
      * @param number     Nummer des Felds
-     * @param isNodeProb True, wenn das Feld fÃ¼r einen Knoten ist, false bei Kante
+     * @param element 0 für knoten, 1 für kanten, 2 für hyperkanten
      */
     private void addFieldToProbPanel(int number, int elementProb) {
         SingleReliabilityPanel newPanel = new SingleReliabilityPanel(elementProb, number);
@@ -542,6 +542,18 @@ public class MainframeController extends WindowAdapter implements ActionListener
             }
         } else {
         	//TODO Spinner Feld für hyperEdge einfügen
+        	 edgeProbabilityBoxes.add(newPanel.getSpinner());
+
+             if (mainFrame.getConsiderNodesBox().isSelected()) {
+                 //in die rechte Spalte einfÃ¼gen
+                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(2, number));
+             } else {
+                 //hinten anfÃ¼gen
+                 int lastx = mainFrame.getLastSingleReliabilityComponentX();
+                 int newX = lastx == 1 ? 0 : 1;
+
+                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
+             }
         }
     }
 
