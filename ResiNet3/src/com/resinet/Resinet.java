@@ -52,7 +52,8 @@ public class Resinet implements Constants {
     private JCheckBox calculationSeriesCheckBox;
     private JCheckBox considerNodesBox;
     private JCheckBox considerEdgesBox;
-    private JScrollPane singleReliabilitiesScrollPane;
+    private JCheckBox considerHyperEdgesBox;
+     private JScrollPane singleReliabilitiesScrollPane;
     private JPanel expandedOutputPanel;
     private JButton collapseOutputBtn;
     private JCheckBox differentForTerminalCheckBox;
@@ -289,7 +290,7 @@ public class Resinet implements Constants {
 
     private void initSideBar() {
         sidePanel = new JPanel(new BorderLayout());
-
+       
         initProbabilitiesPanel();
         initCalculatePanel();
 
@@ -386,6 +387,11 @@ public class Resinet implements Constants {
         considerEdgesBox.addItemListener(controller);
         considerComponentsPanel.add(considerEdgesBox);
         considerEdgesBox.setSelected(true);
+        
+        considerHyperEdgesBox = new JCheckBox(Strings.getLocalizedString("consider.hyperedge.reliabilities"));
+        considerHyperEdgesBox.addItemListener(controller);
+        considerComponentsPanel.add(considerHyperEdgesBox);
+        considerHyperEdgesBox.setSelected(true);
 
         singleReliabilitiesContainer = new JPanel(new GridBagLayout());
         singleReliabilitiesContainer.setBorder(new EmptyBorder(0, 0, 0, 15));
@@ -566,6 +572,10 @@ public class Resinet implements Constants {
 
     public JCheckBox getConsiderEdgesBox() {
         return considerEdgesBox;
+    }
+    
+    public JCheckBox getConsiderHyperEdgesBox(){
+    	return considerHyperEdgesBox;
     }
 
     public JScrollPane getSingleReliabilitiesScrollPane() {

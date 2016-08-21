@@ -389,7 +389,7 @@ public class NetPanel extends JPanel {
     public List<EdgeLine> getEdges() {
         return controller.getEdges();
     }
-
+    
     public List<HyperEdgePoint> getHyperEdgePoints(){
     	return controller.getHyperEdgePoints();
     }

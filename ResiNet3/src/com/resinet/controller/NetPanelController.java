@@ -358,7 +358,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	
                 	currentNode.setSelected(true);              	
                 	selectedNodes.add(currentNode);
-                	System.out.println(selectedNodes.size());
+                	
                 }
 
                 if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
@@ -979,9 +979,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         return edgeClickable;
     }
 
-    public void setClickableElements(boolean nodeClickable, boolean edgeClickable) {
+    public void setClickableElements(boolean nodeClickable, boolean edgeClickable, boolean hyperEdgeClickable) {
         this.nodeClickable = nodeClickable;
         this.edgeClickable = edgeClickable;
+        this.HyperEdgePointClickable = hyperEdgeClickable;
     }
 
     public Point getCurrentMousePosition() {
