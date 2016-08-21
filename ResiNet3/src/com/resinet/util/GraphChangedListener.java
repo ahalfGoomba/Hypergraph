@@ -17,18 +17,18 @@ public interface GraphChangedListener {
     /**
      * Wird ausgelöst, wenn im Graphen eine Komponente gelöscht wird.
      *
-     * @param isNode True bei Knoten, false bei Kante
+     * @param element 0 bei Knoten, 1 bei Kante, 2 bei HyperEdgePoint
      * @param number Die Komponentennummer
      */
-    void graphElementDeleted(boolean isNode, int number);
+    void graphElementDeleted(int element, int number);
 
     /**
      * Wird ausgelöst, wenn im Graphen eine Komponente angeklickt wird.
      *
-     * @param isNode True bei Knoten, false bei Kante
+     * @param element 0 bei Knoten, 1 bei Kante, 2 bei HyperEdgePoint
      * @param number Die Komponentennummer
      */
-    void graphElementClicked(boolean isNode, int number);
+    void graphElementClicked(int element, int number);
 
     /**
      * Wird ausgelöst, wenn der Graph durch andere Operationen, wie Copy&Paste verändert wird.

@@ -367,10 +367,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                     int currentNodeIndex = drawnNodes.indexOf(currentNode);
 
                     List<Integer> removedEdgeIndices = netData.removeNode(currentNode);
-                    listener.graphElementDeleted(true, currentNodeIndex);
+                    listener.graphElementDeleted(0, currentNodeIndex);
 
                     for (Integer pos : removedEdgeIndices) {
-                        listener.graphElementDeleted(false, pos);
+                        listener.graphElementDeleted(1, pos);
                     }
 
                 } else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
@@ -380,7 +380,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
                 } else if (nodeClickable) {
                     //Event auslösen
-                    listener.graphElementClicked(true, drawnNodes.indexOf(currentNode));
+                    listener.graphElementClicked(0, drawnNodes.indexOf(currentNode));
                 }
                 break;
             }
@@ -397,11 +397,11 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                         netData.removeEdge(edgeLine);
 
                         int edgeIndex = drawnEdges.indexOf(edgeLine);
-                        listener.graphElementDeleted(false, edgeIndex);
+                        listener.graphElementDeleted(1, edgeIndex);
 
                     } else if (edgeClickable) {
                         //Event auslösen
-                        listener.graphElementClicked(false, drawnEdges.indexOf(edgeLine));
+                        listener.graphElementClicked(1, drawnEdges.indexOf(edgeLine));
                     }
                     edgeClicked = true;
                     break;
@@ -422,16 +422,16 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             				int currentHyperEdgePointIndex = drawnHyperEdgePoints.indexOf(currentHyperEdgePoint);
             				
             				List<Integer> removedHyperEdgeIndices = netData.removeHyperEdgePoint(currentHyperEdgePoint);
-            				listener.graphElementDeleted(true, currentHyperEdgePointIndex);	
+            				listener.graphElementDeleted(2, currentHyperEdgePointIndex);	
             				netData.removeHyperEdgePoint(currentHyperEdgePoint);
             			
                           
                             
-                            listener.graphElementDeleted(true, currentHyperEdgePointIndex);		
+                            listener.graphElementDeleted(2, currentHyperEdgePointIndex);		
             			}
             			//TODO HyperEdgePointClickable fertig machen
             			else if(HyperEdgePointClickable) {
-            				listener.graphElementClicked(true, drawnHyperEdgePoints.indexOf(currentHyperEdgePoint));
+            				listener.graphElementClicked(2, drawnHyperEdgePoints.indexOf(currentHyperEdgePoint));
             			}
             			break;
             		}

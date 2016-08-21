@@ -143,19 +143,23 @@ public class MainframeController extends WindowAdapter implements ActionListener
     /**
      * Wird ausgelöst, wenn ein Graphelement gelöscht wird. Entfernt das zugehörige Eingabefeld.
      *
-     * @param isNode True bei Knoten, false bei Kante
+     * @param element 0 bei Knoten, 1 bei Kante, 2 bei HyperEdgePoint
      * @param number Die Komponentennummer
      */
     @Override
-    public void graphElementDeleted(boolean isNode, int number) {
+    public void graphElementDeleted(int element, int number) {
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME)
             return;
 
         List<ProbabilitySpinner> list;
-        if (isNode) {
+        if (element == 0) {
             list = nodeProbabilityBoxes;
-        } else {
+        } 
+        else if  (element == 1){
             list = edgeProbabilityBoxes;
+        }
+        else{
+        	list = hyperEdgeProbabilityBoxes;
         }
 
         //Alle Wahrscheinlichkeiten ein Feld vorrücken lassen
@@ -175,19 +179,21 @@ public class MainframeController extends WindowAdapter implements ActionListener
      * Wird ausgelöst, wenn ein Element im Graphen angeklickt wird. Fokussiert das entsprechende Eingabefeld für die
      * Zuverlässigkeit.
      *
-     * @param isNode True bei Knoten, false bei Kante
+     * @param element 0 bei Knoten, 1 bei Kante, 2 bei HyperEdgePoint
      * @param number Die Komponentennummer
      */
     @Override
-    public void graphElementClicked(boolean isNode, int number) {
+    public void graphElementClicked(int element , int number) {
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME) {
-            if (isNode) {
+            if (element == 0) {
                 mainFrame.getSameReliabilityNodeProbBox().requestFocusInWindow();
-            } else {
+            } else if (element == 1){
                 mainFrame.getSameReliabilityEdgeProbBox().requestFocusInWindow();
+            } else if (element == 2){
+            //	mainFrame.getSameReliabilityHyperEdgeProbBox().requestFocusInWindow();
             }
         } else {
-            if (isNode) {
+            if (element == 0) {
                 if (nodeProbabilityBoxes.size() > number) {
                     nodeProbabilityBoxes.get(number).requestFocusInWindow();
                 }
