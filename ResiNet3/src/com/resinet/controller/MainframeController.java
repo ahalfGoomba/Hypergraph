@@ -476,7 +476,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         }
         
         //Überschüssige HyperEdgewahrscheinlichkeitsfelder entfernen
-        for (int i = hyperEdgeCount; i > hyperEdgeCount; i--){
+        for (int i = hyperEdgeBoxCount; i > hyperEdgeCount; i--){
         	
         	ProbabilitySpinner textField = hyperEdgeProbabilityBoxes.get(hyperEdgeProbabilityBoxes.size() - 1);
             textField.getParent().getParent().remove(textField.getParent());
