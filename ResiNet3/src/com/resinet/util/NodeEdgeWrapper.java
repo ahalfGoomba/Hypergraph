@@ -18,21 +18,21 @@ public class NodeEdgeWrapper implements Serializable {
      * dann geklont sind.
      */
     ArrayList<NodePoint> originalNodes;
-    ArrayList<HyperEdgePoint> originalHEPs;
+    ArrayList<HyperEdgePoint> originalhyperEdgePoints;
 
     public final ArrayList<NodePoint> nodes;
     public final ArrayList<EdgeLine> edges;
-    public final ArrayList<HyperEdgePoint> heps;
+    public final ArrayList<HyperEdgePoint> hyperEdgePoints;
     
-    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges, ArrayList<HyperEdgePoint> heps) {
+    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges, ArrayList<HyperEdgePoint> hyperEdgePoints) {
         this.nodes = nodes;
         this.edges = edges;
-        this.heps = heps;
+        this.hyperEdgePoints = hyperEdgePoints;
     }
 
-    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges,  ArrayList<HyperEdgePoint> originalHEPs, ArrayList<HyperEdgePoint> heps) {
-        this(nodes, edges, heps);
+    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges,  ArrayList<HyperEdgePoint> originalhyperEdgePoints, ArrayList<HyperEdgePoint> hyperEdgePoints) {
+        this(nodes, edges, hyperEdgePoints);
         this.originalNodes = originalNodes;
-        this.originalHEPs = originalHEPs;
+        this.originalhyperEdgePoints = originalhyperEdgePoints;
     }
 }
