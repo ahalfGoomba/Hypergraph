@@ -25,7 +25,28 @@ public class GraphUtil {
         if (nodes.isEmpty() || hep.isEmpty() ) {
             return new BorderRectangle(0, 0, 0, 0);
         }
-
+        //TODO alles überprüfen
+//        if (hep.isEmpty()){
+//        	 int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = 0, maxY = 0;
+//             for (NodePoint drawnNode : nodes) {
+//                 if (drawnNode.getX() < minX) {
+//                     minX = (int) drawnNode.getX();
+//                 }
+//                 if (drawnNode.getMaxX() > maxX) {
+//                     maxX = (int) drawnNode.getMaxX();
+//                 }
+//                 if (drawnNode.getY() < minY) {
+//                     minY = (int) drawnNode.getY();
+//                 }
+//                 if (drawnNode.getMaxY() > maxY) {
+//                     maxY = (int) drawnNode.getMaxY();
+//                 }   
+//             }
+//             
+//             return new BorderRectangle(Math.max(minX - spaces, 0), Math.max(minY - spaces, 0),
+//                     Math.max(maxX - minX + 2 * spaces, 0), Math.max(maxY - minY + 2 * spaces, 0));
+//        }
+        
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = 0, maxY = 0;
         for (NodePoint drawnNode : nodes) {
             if (drawnNode.getX() < minX) {
@@ -118,9 +139,11 @@ public class GraphUtil {
     public static Graph makeGraph(NetPanel netPanel) {
         List<EdgeLine> graphEdges = netPanel.getEdges();
         List<NodePoint> graphNodes = netPanel.getNodes();
+        List<HyperEdgePoint> graphHEP = netPanel.getHyperEdgePoints();
 
         ArrayList<Node> nodeList = new ArrayList<>();
         ArrayList<Edge> edgeList = new ArrayList<>();
+        ArrayList<HyperEdge> hyperedgeList = new ArrayList<>();
 
         int counter = 0;
         //Knoten eintragen
@@ -146,6 +169,9 @@ public class GraphUtil {
             node2.add_Edge(edge);
             counter++;
         }
+               
+        
+        
         return new Graph(nodeList, edgeList);
     }
 

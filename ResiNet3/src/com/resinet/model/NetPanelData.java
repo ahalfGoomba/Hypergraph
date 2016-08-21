@@ -59,7 +59,9 @@ public class NetPanelData implements Serializable {
     public List<Integer> removeNode(NodePoint node) {
         ArrayList<NodePoint> nodeWrapper = new ArrayList<>();
         ArrayList<EdgeLine> removeEdges = new ArrayList<>();
+        ArrayList<HyperEdgeLine> removeHyperEdgeLines = new ArrayList<>();
         ArrayList<Integer> removedEdgeIndices = new ArrayList<>();
+        ArrayList<Integer> removedHyperEdgeLineIndices = new ArrayList<>(); 
         nodeWrapper.add(node);
 
         //Anliegende Kanten sammeln
@@ -71,13 +73,46 @@ public class NetPanelData implements Serializable {
                 removedEdgeIndices.add(i);
             }
         }
-
-        AddOrRemoveAction action = new AddOrRemoveAction(false, nodeWrapper, removeEdges);
+        
+        for (int i = 0; i < hyperEdgeLines.size(); i++){
+        	HyperEdgeLine hyperEdgeLine = hyperEdgeLines.get(i);
+        	
+        	if (node.equals(hyperEdgeLine.startNode)){
+        		removeHyperEdgeLines.add(hyperEdgeLine);
+        		removedHyperEdgeLineIndices.add(i);
+        	}
+        }
+        //TODO HyperEdgePoints entfernen wenn sie nicht mehr mit einem Knoten verbunden sind
+        AddOrRemoveAction action = new AddOrRemoveAction(false, nodeWrapper, removeEdges, removeHyperEdgeLines);
         action.execute();
         undoManager.addEdit(action);
-
+        
+        //TODO wahrscheinlich auch removedHyperEdgeLines ausgeben lassen (mit Map?)
         return removedEdgeIndices;
+        
     }
+    
+    public List<Integer> removeHyperEdgePoint(HyperEdgePoint hyperEdgePoint){
+    	ArrayList<Integer> removedHyperEdgeLineIndices = new ArrayList<>(); 
+    	ArrayList<HyperEdgeLine> removeHyperEdgeLines = new ArrayList<>();
+    	ArrayList<HyperEdgePoint> hyperEdgePointWrapper = new ArrayList<>();
+    	hyperEdgePointWrapper.add(hyperEdgePoint);
+    	
+    	for (int i = 0; i < hyperEdgeLines.size(); i++){
+        	HyperEdgeLine hyperEdgeLine = hyperEdgeLines.get(i);
+        	
+        	if (hyperEdgePoint.equals(hyperEdgeLine.hyperEdgePoint)){
+        		removeHyperEdgeLines.add(hyperEdgeLine);
+        		removedHyperEdgeLineIndices.add(i);
+        	}
+    	}
+    	 AddOrRemoveAction action = new AddOrRemoveAction(false, hyperEdgePointWrapper, removeHyperEdgeLines);
+         action.execute();
+         undoManager.addEdit(action);
+         
+         return removedHyperEdgeLineIndices;
+    }
+    
 
     /**
      * FÃ¼gt eine Kante hinzu.
@@ -103,7 +138,11 @@ public class NetPanelData implements Serializable {
         undoManager.addEdit(action);
     }
     
-
+    /**
+     * Fügt HyperEdge hinzu
+     * @param newHEP
+     * @param selectedNodes
+     */
     public void addHyperEdge(HyperEdgePoint newHEP, List<NodePoint> selectedNodes){
        addHyperEdgePoint(newHEP);
        System.out.println(selectedNodes.size());
@@ -142,9 +181,19 @@ public class NetPanelData implements Serializable {
      * HyperEdgePoint löschen
      * @param newHEP
      */
-    public void removeHyperEdgePoint(HyperEdgePoint HEP){
-    	AddOrRemoveAction action = new AddOrRemoveAction(false, HEP);
+    public void removeHyperEdgePoints(ArrayList<HyperEdgePoint> removeHyperEdgePoints){
+    	ArrayList<HyperEdgeLine> removeHyperEdges = new ArrayList<>();
+    	
+    	//Anliegende Kanten sammeln
+    	for (HyperEdgeLine hyperEdgeLine : hyperEdgeLines){
+    		if ( removeHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint)){
+    			removeHyperEdges.add(hyperEdgeLine);
+    		}
+    	}
+    	AddOrRemoveAction action = new AddOrRemoveAction(false, removeHyperEdgePoints, removeHyperEdges);    	    	
         action.execute();
+        
+    	
         undoManager.addEdit(action);
     }
    
@@ -156,6 +205,7 @@ public class NetPanelData implements Serializable {
      */
     public void removeNodes(ArrayList<NodePoint> removeNodes) {
         ArrayList<EdgeLine> removeEdges = new ArrayList<>();
+        ArrayList<HyperEdgeLine> removeHyperEdgeLines = new ArrayList<>();
 
         //Anliegende Kanten sammeln
         for (EdgeLine edge : edges) {
@@ -163,8 +213,14 @@ public class NetPanelData implements Serializable {
                 removeEdges.add(edge);
             }
         }
+    	//Anliegende Kanten sammeln
+    	for (HyperEdgeLine hyperEdgeLine : hyperEdgeLines){
+    		if ( removeNodes.contains(hyperEdgeLine.startNode)){
+    			removeHyperEdgeLines.add(hyperEdgeLine);
+    		}
+    	}
 
-        AddOrRemoveAction action = new AddOrRemoveAction(false, removeNodes, removeEdges);
+        AddOrRemoveAction action = new AddOrRemoveAction(false, removeNodes, removeEdges, removeHyperEdgeLines);
         action.execute();
         undoManager.addEdit(action);
     }
@@ -227,9 +283,10 @@ public class NetPanelData implements Serializable {
      *
      * @param nodes Die Knotenmenge
      * @param edges Die Kantenmenge
+     * @param hyperEdgeLines Die HyperEdgeLinemenge
      */
-    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
-        AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges);
+    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgeLine> hyperEdgeLines) {
+        AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges, hyperEdgeLines);
         action.execute();
         undoManager.addEdit(action);
     }
@@ -331,8 +388,9 @@ public class NetPanelData implements Serializable {
      * Entfernt alle Elemente des Graphen
      */
     public void resetGraph() {
-        AddOrRemoveAction action = new AddOrRemoveAction(false, nodes, edges);
+        AddOrRemoveAction action = new AddOrRemoveAction(false, nodes, edges, hyperEdgePoints, hyperEdgeLines);
         action.execute();
+        
         undoManager.addEdit(action);
     }
 
@@ -449,12 +507,42 @@ public class NetPanelData implements Serializable {
         List<HyperEdgeLine> affectedHyperEdgeLines;
         final boolean isAddAction;
 
-        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
+//        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
+//            this.isAddAction = isAddAction;
+//            affectedNodes = new ArrayList<>(addedNodes);
+//            affectedEdges = new ArrayList<>(addedEdges);
+//        }
+        
+        AddOrRemoveAction(boolean isAddAction, List<HyperEdgePoint> addedHyperEdgePoints, List<HyperEdgeLine> addedHyperEdgeLines) {
             this.isAddAction = isAddAction;
+            affectedHyperEdgePoints = new ArrayList<>(addedHyperEdgePoints);
+            affectedHyperEdgeLines = new ArrayList<>(addedHyperEdgeLines);
+        }
+        
+        
+        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges, List<HyperEdgePoint> addedHyperEdgePoints,
+        		List<HyperEdgeLine> addedHyperEdgeLines){
+        	this.isAddAction = isAddAction;
             affectedNodes = new ArrayList<>(addedNodes);
             affectedEdges = new ArrayList<>(addedEdges);
-        }
+            affectedHyperEdgePoints = new ArrayList<>(addedHyperEdgePoints);
+            affectedHyperEdgeLines = new ArrayList<>(addedHyperEdgeLines);
+            }
+        
+        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges, 
+        		List<HyperEdgeLine> addedHyperEdgeLines){
+        	this.isAddAction = isAddAction;
+            affectedNodes = new ArrayList<>(addedNodes);
+            affectedEdges = new ArrayList<>(addedEdges);
+            affectedHyperEdgeLines = new ArrayList<>(addedHyperEdgeLines);
+            }
 
+        AddOrRemoveAction(boolean isAddAction, List<HyperEdgePoint> addedHyperEdgePoints){
+        	this.isAddAction = isAddAction;
+        	affectedHyperEdgePoints = new ArrayList<>(addedHyperEdgePoints);        	        	
+        }
+        
+       
         AddOrRemoveAction(boolean isAddAction, NodePoint node) {
             this.isAddAction = isAddAction;
             affectedNodes = new ArrayList<>();
@@ -515,7 +603,7 @@ public class NetPanelData implements Serializable {
             		hyperEdgeLines.addAll(affectedHyperEdgeLines);
             		System.out.println(affectedHyperEdgeLines.size());
             	} else {
-            		hyperEdgePoints.removeAll(affectedHyperEdgeLines);
+            		hyperEdgeLines.removeAll(affectedHyperEdgeLines);
             	}
             }
         }

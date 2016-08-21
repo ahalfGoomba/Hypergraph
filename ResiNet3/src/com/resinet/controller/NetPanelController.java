@@ -222,9 +222,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         resetSelection();
 
         ArrayList<NodePoint> nodes = nodeEdgeWrapper.nodes;
-
+        ArrayList<HyperEdgePoint> hyperEdgePoints = nodeEdgeWrapper.hyperEdgePoints;
+        
         //Freie Stelle fÃ¼r neue Knoten suchen
-        BorderRectangle pasteRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.heps);
+        BorderRectangle pasteRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.hyperEdgePoints);
         Point2D originalLocation = pasteRectangle.getLocation();
 
         //Wenn das Rechteck um die eingefÃ¼gten Knoten andere Knoten kreuzt, neue Position suchen
@@ -260,14 +261,14 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         //Kantenkoordinaten neu setzen
         nodeEdgeWrapper.edges.forEach(EdgeLine::refresh);
 
-        //Neue Knoten und Kanten hinzufÃ¼gen
-        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges);
+        //Neue Knoten und Kanten hinzufÃ¼gen 
+        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, null);
 
         listener.graphChanged();
 
-        //EingefÃ¼gte Knoten und HEPs auswÃ¤hlen
+        //EingefÃ¼gte Knoten und hyperEdgePoints auswÃ¤hlen
         nodeEdgeWrapper.nodes.forEach((nodePoint -> nodePoint.selected = true));
-        selectionRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.heps, 5);
+        selectionRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.hyperEdgePoints, 5);
         nodesSelected = true;
         hyperEdgePointsSelected = true; 
         netPanel.selectionAnimationTimer.restart();
@@ -418,9 +419,13 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             			if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
                             //mit Shift geklickt oder mit mittlerer Maustaste
                             //HyperEdgePoint lÃ¶schen
+            				int currentHyperEdgePointIndex = drawnHyperEdgePoints.indexOf(currentHyperEdgePoint);
+            				
+            				List<Integer> removedHyperEdgeIndices = netData.removeHyperEdgePoint(currentHyperEdgePoint);
+            				listener.graphElementDeleted(true, currentHyperEdgePointIndex);	
             				netData.removeHyperEdgePoint(currentHyperEdgePoint);
             			
-                            int currentHyperEdgePointIndex = drawnHyperEdgePoints.indexOf(currentHyperEdgePoint);
+                          
                             
                             listener.graphElementDeleted(true, currentHyperEdgePointIndex);		
             			}
@@ -630,13 +635,13 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         	selectedHyperEdgePointDragging = false;
         	
         	//Ausgewählte HEP sammeln
-        	ArrayList<HyperEdgePoint> selectedHEPs = new ArrayList <>(
+        	ArrayList<HyperEdgePoint> selectedhyperEdgePoints = new ArrayList <>(
         			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
         	
         	 Point endPoint = mouseEvent.getPoint();
              Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
 
-             netData.moveHEPFinal(selectedHEPs, moveAmount);
+             netData.moveHEPFinal(selectedhyperEdgePoints, moveAmount);
              //Scrollpane aktualisieren
              revalidateScrollPane();
         }
@@ -831,8 +836,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      */
     private void selectAllNodes() {
         List<NodePoint> drawnNodes = netData.getNodes();
-        List<HyperEdgePoint> drawnHEP = netData.getHyperEdgePoints();       
-        selectNodes(drawnNodes, drawnHEP);
+//        List<HyperEdgePoint> drawnHEP = netData.getHyperEdgePoints();       
+//        selectNodes(drawnNodes, drawnHEP);
     }
 
     /**
@@ -872,8 +877,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         List<NodePoint> nodes = new ArrayList<>(netData.getNodes());
 
         ArrayList<NodePoint> intersectingNodes = new ArrayList<>();
-        ArrayList<HyperEdgePoint> intersectingHEPs = new ArrayList<>();
-        //TODO für überlappende HEPs umsetzen
+        ArrayList<HyperEdgePoint> intersectinghyperEdgePoints = new ArrayList<>();
+        //TODO für überlappende hyperEdgePoints umsetzen
         //Alle Knotenkombinationen durchgehen
         for (int i1 = 0, nodesSize1 = nodes.size(); i1 < nodesSize1; i1++) {
             NodePoint node1 = nodes.get(i1);
@@ -899,7 +904,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
         }
 
-        selectNodes(intersectingNodes, intersectingHEPs );
+        selectNodes(intersectingNodes, intersectinghyperEdgePoints );
     }
 
     /**
@@ -909,7 +914,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param edges Die Kantenmenge
      */
     public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
-        netData.addNodesAndEdges(nodes, edges);
+        netData.addNodesAndEdges(nodes, edges, null);
     }
 
     /**
@@ -918,15 +923,15 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param graphWrapper Wrapper mit Mengen von Knoten und Kanten
      */
     public void addGraphWrapperAndSelect(GraphWrapper graphWrapper) {
-        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges);
+        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges, null);
         
         //TODO HyperEdgePoints hinzufügen
         //nur eingefügt damit hier was funktioniert....später ändern!
-        ArrayList<HyperEdgePoint> heps = new ArrayList<>();
+        ArrayList<HyperEdgePoint> hyperEdgePoints = new ArrayList<>();
         
         //EingefÃ¼gte Knoten auswÃ¤hlen
         graphWrapper.nodes.forEach((nodePoint -> nodePoint.selected = true));
-        selectionRectangle = GraphUtil.getGraphBounds(graphWrapper.nodes, heps, 5);
+        selectionRectangle = GraphUtil.getGraphBounds(graphWrapper.nodes, hyperEdgePoints, 5);
         nodesSelected = true;
         netPanel.selectionAnimationTimer.restart();
 
