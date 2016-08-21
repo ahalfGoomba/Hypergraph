@@ -515,7 +515,7 @@ public class NetPanelData implements Serializable {
             		hyperEdgeLines.addAll(affectedHyperEdgeLines);
             		System.out.println(affectedHyperEdgeLines.size());
             	} else {
-            		hyperEdgePoints.removeAll(affectedHyperEdgeLines);
+            		hyperEdgeLines.removeAll(affectedHyperEdgeLines);
             	}
             }
         }
