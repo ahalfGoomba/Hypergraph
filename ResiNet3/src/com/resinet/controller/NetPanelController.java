@@ -451,6 +451,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	
                 	} else {
                 		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
+                		JOptionPane.showMessageDialog(null, "Es müssen mindestens 2 Knoten ausgewählt werden!", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                 		//TODO fehler popup einfügen
                 	}
 
