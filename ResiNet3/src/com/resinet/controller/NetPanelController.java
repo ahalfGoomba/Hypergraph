@@ -23,7 +23,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     private final GraphChangedListener listener;
 
     private final NetPanelData netData;
-
+    
+    private boolean hypergraphMode;
     //Variablen für Verschieben und Skalieren
     private boolean cursorInsideSelection;
     private boolean cursorOnSelectionBorder = false;
@@ -466,8 +467,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 //Wenn kein bestehendes Element angeklickt wurde, neuen Knoten erzeugen
                 int x = clickX - 10;
                 int y = clickY - 10;
-
-                if(mouseEvent.isControlDown()){
+                System.out.println(hypergraphMode + "netpanelcontroller");
+                if(mouseEvent.isControlDown() && hypergraphMode){
                 	
                 	if(selectedNodes.size() >= 2){
                 	HyperEdgePoint newHE = new HyperEdgePoint(x, y);
@@ -1112,5 +1113,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
     public NetPanelData getNetData() {
         return netData;
+    }
+    
+    public void setHypergraphMode(boolean status){
+    	hypergraphMode = status;
     }
 }
