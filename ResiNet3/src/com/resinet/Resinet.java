@@ -314,7 +314,7 @@ public class Resinet implements Constants {
         contentPane.add(sidePanel, BorderLayout.LINE_END);
     }
 
-    private void initProbabilitiesPanel() {
+    public void initProbabilitiesPanel() {
         reliabilitiesTabbedPane = new JTabbedPane(JTabbedPane.TOP);
         reliabilitiesTabbedPane.addChangeListener(controller);
       
@@ -418,7 +418,7 @@ public class Resinet implements Constants {
         singleReliabilitiesPanel.add(singleReliabilitiesScrollPane, BorderLayout.CENTER);
     }
 
-    private void initCalculatePanel() {
+     public void initCalculatePanel() {
         JPanel calculatePanel = new JPanel();
 
         calculatePanel.setBorder(BorderFactory.createTitledBorder(Strings.getLocalizedString("start.calculation")));
@@ -714,5 +714,9 @@ public class Resinet implements Constants {
     
     public JTabbedPane getTabbedPane(){
     	return reliabilitiesTabbedPane;
+    }
+    
+    public JPanel getSidePanel(){
+    	return sidePanel;
     }
 }

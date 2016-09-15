@@ -83,7 +83,9 @@ public class MainframeController extends WindowAdapter implements ActionListener
         } else if (button == mainFrame.getAlignGraphMenuItem()) {
             //TODO graph ausrichten
         } else if (button == mainFrame.getCreateHypergraphGraphMenuItem()) {
-        	switchToHypergraphMode();
+        	switchMode(true);
+        } else if (button == mainFrame.getCreateGraphGraphMenuItem()) {
+        	switchMode(false);
         } else if (button == mainFrame.getCalcReliabilityBtn()) {
             startCalculation(CALCULATION_MODES.RELIABILITY);
         } else if (button == mainFrame.getCalcResilienceBtn()) {
@@ -115,7 +117,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
             boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
-            boolean considerHyperEdges = mainFrame.getConsiderHyperEdgesBox().isSelected();
+
 
             netPanelController.setClickableElements(considerNodes, considerEdges);
             updateSingleReliabilityProbPanel();
@@ -707,13 +709,15 @@ public class MainframeController extends WindowAdapter implements ActionListener
         calculator.start();
     }
     /**
-     * Wechselt in den Modus zum Erstellen von Hypergraphen
+     * Wechselt in den Modus zum Erstellen von Hypergraphen oder normaeln graphen
+     * @param mode true = hypergraph modus false = normaler Modus
+     * 
      */
-    private void switchToHypergraphMode(){
-    	System.out.println("Jetzt kannst du Hypergraphen erstellen");
-    	mainFrame.setHypergraphMode(true);
+    private void switchMode(boolean mode){
+    	System.out.println(mode);
+    	mainFrame.setHypergraphMode(mode);
     	resetGraph();
-    	changeTabbedPane(true);
+    	changeTabbedPane(mode);
     }
 
     /**
@@ -732,9 +736,11 @@ public class MainframeController extends WindowAdapter implements ActionListener
     	if(hypergraphMode){
     		tabbedPane.remove(1);
     		tabbedPane.remove(0);
+    		//mainFrame.getSidePanel().removeAll();
     	} else {
-    		mainFrame.initSameReliabilityTab();
-    		mainFrame.initSingleReliabilitiesTab();
+    		
+    		mainFrame.initProbabilitiesPanel();
+    		mainFrame.initCalculatePanel();
     	}
     }
 }
