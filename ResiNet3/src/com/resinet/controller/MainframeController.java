@@ -671,7 +671,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
             int nodeCount = nodeProbabilityBoxes.size();
             BigDecimal[] edgeProbabilities = new BigDecimal[edgeCount];
             BigDecimal[] nodeProbabilities = new BigDecimal[nodeCount];
-
+  
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
             boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
 
