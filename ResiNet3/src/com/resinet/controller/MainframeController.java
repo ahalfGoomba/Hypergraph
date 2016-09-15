@@ -130,7 +130,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME)
             return;
 
-        if ((element == 0 && !mainFrame.getConsiderNodesBox().isSelected()) || (element == 1 && !mainFrame.getConsiderEdgesBox().isSelected()) || (element == 2 && !mainFrame.getConsiderHyperEdgesBox().isSelected()))
+        if ((element == 0 && !mainFrame.getConsiderNodesBox().isSelected()) || (element == 1 && !mainFrame.getConsiderEdgesBox().isSelected()) )
             return;
 
         addFieldToProbPanel(number, element);
