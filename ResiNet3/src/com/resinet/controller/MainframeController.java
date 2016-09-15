@@ -440,7 +440,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
         boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
         boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
-        boolean considerHyperEdges = mainFrame.getConsiderHyperEdgesBox().isSelected();
+
         
       
         
@@ -449,7 +449,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         int edgeBoxCount = edgeProbabilityBoxes.size();
         int nodeCount = considerNodes ? mainFrame.getNetPanel().getNodes().size() : 0;
         int nodeBoxCount = nodeProbabilityBoxes.size();
-        int hyperEdgeCount = considerHyperEdges ? mainFrame.getNetPanel().getHyperEdgePoints().size() : 0;
+       
         int hyperEdgeBoxCount = hyperEdgeProbabilityBoxes.size();
 
         
@@ -462,10 +462,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
             addFieldToProbPanel(i, 0);
         }
         
-       //Fehlende HyperKantenwahrscheinlichkeiten hinzuf�gen
-        for (int i = hyperEdgeBoxCount; i < hyperEdgeCount; i++) {
-        	addFieldToProbPanel(i, 2);
-        }
+
 
         //Überflüssige Kantenwahrscheinlichkeitsfelder entfernen
         for (int i = edgeBoxCount; i > edgeCount; i--) {
@@ -481,30 +478,20 @@ public class MainframeController extends WindowAdapter implements ActionListener
             nodeProbabilityBoxes.remove(textField);
         }
         
-        //�bersch�ssige HyperEdgewahrscheinlichkeitsfelder entfernen
-        for (int i = hyperEdgeBoxCount; i > hyperEdgeCount; i--){
-        	
-        	ProbabilitySpinner textField = hyperEdgeProbabilityBoxes.get(hyperEdgeProbabilityBoxes.size() - 1);
-            textField.getParent().getParent().remove(textField.getParent());
-            hyperEdgeProbabilityBoxes.remove(textField);
-        }
 
         
-        //TODO
+
+        
+
         //Elemente neu anordnen
-        if (considerEdges && considerNodes && considerHyperEdges) {
+        if (considerEdges && considerNodes) {
             realignProbabiliyPanels(nodeProbabilityBoxes, 0);
             realignProbabiliyPanels(edgeProbabilityBoxes, 1);
-            realignProbabiliyPanels(hyperEdgeProbabilityBoxes, 3);
-        } else if (!considerEdges && considerNodes && considerHyperEdges) {
-            realignProbabiliyPanels(nodeProbabilityBoxes, 0);
-            realignProbabiliyPanels(hyperEdgeProbabilityBoxes, 3);
-        } else if (considerEdges && !considerNodes && considerHyperEdges) {
+        } else if (!considerEdges) {
+            realignProbabiliyPanels(nodeProbabilityBoxes, 2);
+        } else {
             realignProbabiliyPanels(edgeProbabilityBoxes, 2);
-            realignProbabiliyPanels(hyperEdgeProbabilityBoxes, 3);
-        } else if (considerEdges && considerNodes && !considerHyperEdges){
-        	 realignProbabiliyPanels(nodeProbabilityBoxes, 0);
-             realignProbabiliyPanels(edgeProbabilityBoxes, 1);
+        
         }
 
         refreshSingleReliabilityScrollPane();
@@ -553,7 +540,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         if (elementProb == 0) {
             //Falls es ein Knoten ist
             nodeProbabilityBoxes.add(newPanel.getSpinner());
-            if (mainFrame.getConsiderEdgesBox().isSelected() && mainFrame.getConsiderHyperEdgesBox().isSelected()) {
+            if (mainFrame.getConsiderEdgesBox().isSelected()) {
                 //in linke spalte einfügen
                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(0, number));
             } else {
@@ -567,7 +554,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
             //Falls es eine Kante ist
             edgeProbabilityBoxes.add(newPanel.getSpinner());
 
-            if (mainFrame.getConsiderNodesBox().isSelected() && mainFrame.getConsiderHyperEdgesBox().isSelected()) {
+            if (mainFrame.getConsiderNodesBox().isSelected()) {
                 //in die rechte Spalte einfügen
                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(1, number));
             } else {
@@ -578,20 +565,20 @@ public class MainframeController extends WindowAdapter implements ActionListener
                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
             }
         } else {
-        	
-        	hyperEdgeProbabilityBoxes.add(newPanel.getSpinner());
-
-        	
-             if (mainFrame.getConsiderEdgesBox().isSelected() && mainFrame.getConsiderNodesBox().isSelected()) {
-                 //in die rechte Spalte einfügen
-                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(2, number));
-             } else {
-                 //hinten anfügen
-                 int lastx = mainFrame.getLastSingleReliabilityComponentX();
-                 int newX = lastx == 1 ? 0 : 1;
-
-                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
-             }
+//        	//probability box for hyper Edge (currently not in use)
+//        	hyperEdgeProbabilityBoxes.add(newPanel.getSpinner());
+//
+//        	
+//             if (mainFrame.getConsiderEdgesBox().isSelected() && mainFrame.getConsiderNodesBox().isSelected()) {
+//                 //in die rechte Spalte einfügen
+//                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(2, number));
+//             } else {
+//                 //hinten anfügen
+//                 int lastx = mainFrame.getLastSingleReliabilityComponentX();
+//                 int newX = lastx == 1 ? 0 : 1;
+//
+//                 singleReliabilitiesPanel.add(newPanel, GbcBuilder.build(newX, number - newX));
+          //   }
         }
     }
 
