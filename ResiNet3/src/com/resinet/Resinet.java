@@ -62,7 +62,8 @@ public class Resinet implements Constants {
     private JMenuItem redoMenuItem;
     private JMenuItem centerGraphMenuItem;
     private JMenuItem alignGraphMenuItem;
-    private JMenuItem hypergraphGraphMenuItem;
+    private JMenuItem hypergraphFileMenuItem;
+    private JMenuItem graphFileMenuItem;
     private JMenuItem generateGraphMenuItem;
     
     private boolean switchToHypergraph; 
@@ -237,11 +238,6 @@ public class Resinet implements Constants {
         selectOverlappingVerticesMenuItem.setActionCommand("select overlapping");
         graphMenu.add(selectOverlappingVerticesMenuItem);
 
-        graphMenu.addSeparator();
-        
-        hypergraphGraphMenuItem = new JMenuItem(Strings.getLocalizedString("hypergraph"));
-        hypergraphGraphMenuItem.addActionListener(controller);
-        graphMenu.add(hypergraphGraphMenuItem);
         
         graphMenu.addSeparator();
 
@@ -256,7 +252,18 @@ public class Resinet implements Constants {
     private void initFileMenu() {
         //Menü "Datei" aufbauen
         JMenu fileMenu = new JMenu(Strings.getLocalizedString("file"));
-
+        
+        
+        hypergraphFileMenuItem = new JMenuItem(Strings.getLocalizedString("hypergraph"));
+        hypergraphFileMenuItem.addActionListener(controller);
+        fileMenu.add(hypergraphFileMenuItem);
+        
+        graphFileMenuItem = new JMenuItem(Strings.getLocalizedString("graph.graph"));
+        graphFileMenuItem.addActionListener(controller);
+        fileMenu.add(graphFileMenuItem); 
+        
+        fileMenu.addSeparator(); 
+        
         resetMenuItem = new JMenuItem(Strings.getLocalizedString("reset.network"));
         resetMenuItem.addActionListener(controller);
         //Tastenkombination Strg+R
@@ -685,7 +692,11 @@ public class Resinet implements Constants {
     }
     
     public JMenuItem getCreateHypergraphGraphMenuItem(){
-    	return hypergraphGraphMenuItem;
+    	return hypergraphFileMenuItem;
+    }
+    
+    public JMenuItem getCreateGraphGraphMenuItem(){
+    	return graphFileMenuItem;
     }
 
     public JMenuItem getGenerateGraphMenuItem() {
