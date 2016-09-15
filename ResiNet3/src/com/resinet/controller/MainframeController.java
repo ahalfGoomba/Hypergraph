@@ -117,7 +117,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
             boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
             boolean considerHyperEdges = mainFrame.getConsiderHyperEdgesBox().isSelected();
 
-            netPanelController.setClickableElements(considerNodes, considerEdges, considerHyperEdges);
+            netPanelController.setClickableElements(considerNodes, considerEdges);
             updateSingleReliabilityProbPanel();
         }
     }
@@ -282,13 +282,13 @@ public class MainframeController extends WindowAdapter implements ActionListener
         NetPanelController netPanelController = mainFrame.getNetPanel().getController();
 
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME) {
-            netPanelController.setClickableElements(true, true, true);
+            netPanelController.setClickableElements(true, true);
         } else {
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
             boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
-            boolean considerHyperEdges = mainFrame.getConsiderHyperEdgesBox().isSelected();
+            
 
-            netPanelController.setClickableElements(considerNodes, considerEdges, considerHyperEdges);
+            netPanelController.setClickableElements(considerNodes, considerEdges);
         }
         updateSingleReliabilityProbPanel();
     }
@@ -713,6 +713,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
     	System.out.println("Jetzt kannst du Hypergraphen erstellen");
     	mainFrame.setHypergraphMode(true);
     	resetGraph();
+    	changeTabbedPane(true);
     }
 
     /**
@@ -724,5 +725,16 @@ public class MainframeController extends WindowAdapter implements ActionListener
         NetPanel netPanel = mainFrame.getNetPanel();
         netPanel.addGraphWrapperAndSelect(graphWrapper);
         updateSingleReliabilityProbPanel();
+    }
+    
+    private void changeTabbedPane(boolean hypergraphMode){
+    	JTabbedPane tabbedPane = mainFrame.getTabbedPane();
+    	if(hypergraphMode){
+    		tabbedPane.remove(1);
+    		tabbedPane.remove(0);
+    	} else {
+    		mainFrame.initSameReliabilityTab();
+    		mainFrame.initSingleReliabilitiesTab();
+    	}
     }
 }

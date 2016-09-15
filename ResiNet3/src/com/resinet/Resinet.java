@@ -53,7 +53,7 @@ public class Resinet implements Constants {
     private JCheckBox considerNodesBox;
     private JCheckBox considerEdgesBox;
     private JCheckBox considerHyperEdgesBox;
-     private JScrollPane singleReliabilitiesScrollPane;
+    private JScrollPane singleReliabilitiesScrollPane;
     private JPanel expandedOutputPanel;
     private JButton collapseOutputBtn;
     private JCheckBox differentForTerminalCheckBox;
@@ -318,7 +318,7 @@ public class Resinet implements Constants {
         sidePanel.add(reliabilitiesTabbedPane, BorderLayout.CENTER);
     }
 
-    private void initSameReliabilityTab() {
+    public void initSameReliabilityTab() {
         JPanel sameReliabilityPanel = new JPanel(new GridBagLayout());
         sameReliabilityPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         reliabilitiesTabbedPane.addTab(Strings.getLocalizedString("same.reliabilities"), sameReliabilityPanel);
@@ -382,7 +382,7 @@ public class Resinet implements Constants {
         sameReliabilityPanel.add(nodeProbabilityStepSizeBox, GbcBuilder.build(1, 7, 1, 1, 1, 0).bottom(10));
     }
 
-    private void initSingleReliabilitiesTab() {
+    public void initSingleReliabilitiesTab() {
         JPanel singleReliabilitiesPanel = new JPanel(new BorderLayout());
         reliabilitiesTabbedPane.addTab(Strings.getLocalizedString("different.reliabilities"), singleReliabilitiesPanel);
 
@@ -699,5 +699,9 @@ public class Resinet implements Constants {
     
     public boolean getHyergraphMode(){
     	return hypergraphMode;
+    }
+    
+    public JTabbedPane getTabbedPane(){
+    	return reliabilitiesTabbedPane;
     }
 }
