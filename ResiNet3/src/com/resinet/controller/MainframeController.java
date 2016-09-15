@@ -42,7 +42,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
      */
     private final List<ProbabilitySpinner> edgeProbabilityBoxes = new ArrayList<>();
     private final List<ProbabilitySpinner> nodeProbabilityBoxes = new ArrayList<>();
-
+    
+   
+ 
+    
     public MainframeController() {
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addPropertyChangeListener("permanentFocusOwner", this);
@@ -79,6 +82,8 @@ public class MainframeController extends WindowAdapter implements ActionListener
             netPanel.repaint();
         } else if (button == mainFrame.getAlignGraphMenuItem()) {
             //TODO graph ausrichten
+        } else if (button == mainFrame.getCreateHypergraphGraphMenuItem()) {
+        	switchToHypergraphMode();
         } else if (button == mainFrame.getCalcReliabilityBtn()) {
             startCalculation(CALCULATION_MODES.RELIABILITY);
         } else if (button == mainFrame.getCalcResilienceBtn()) {
@@ -700,6 +705,12 @@ public class MainframeController extends WindowAdapter implements ActionListener
         System.out.println("startCalculation: " + Thread.currentThread().getName());
         //Starte die Berechnung
         calculator.start();
+    }
+    /**
+     * Wechselt in den Modus zum Erstellen von Hypergraphen
+     */
+    private void switchToHypergraphMode(){
+    	System.out.println("Jetzt kannst du Hypergraphen erstellen");
     }
 
     /**
