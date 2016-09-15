@@ -9,11 +9,13 @@ public class GraphWrapper {
     public final ArrayList<NodePoint> nodes;
     public final ArrayList<EdgeLine> edges;
     public final ArrayList<HyperEdgePoint> hep; 
-
+    public final ArrayList<HyperEdgeLine> hel; 
+    
     public GraphWrapper() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
         hep = new ArrayList<>();
+        hel = new ArrayList<>();
     }
 
     /**

@@ -925,7 +925,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param graphWrapper Wrapper mit Mengen von Knoten und Kanten
      */
     public void addGraphWrapperAndSelect(GraphWrapper graphWrapper) {
-        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges, null);
+        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges, graphWrapper.hel);
         
         //TODO HyperEdgePoints hinzufügen
         //nur eingefügt damit hier was funktioniert....später ändern!
