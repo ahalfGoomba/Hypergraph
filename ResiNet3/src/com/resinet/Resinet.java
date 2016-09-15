@@ -62,6 +62,7 @@ public class Resinet implements Constants {
     private JMenuItem redoMenuItem;
     private JMenuItem centerGraphMenuItem;
     private JMenuItem alignGraphMenuItem;
+    private JMenuItem hypergraphGraphMenuItem;
     private JMenuItem generateGraphMenuItem;
 
     public Resinet(MainframeController controller) {
@@ -233,6 +234,12 @@ public class Resinet implements Constants {
         selectOverlappingVerticesMenuItem.setActionCommand("select overlapping");
         graphMenu.add(selectOverlappingVerticesMenuItem);
 
+        graphMenu.addSeparator();
+        
+        hypergraphGraphMenuItem = new JMenuItem(Strings.getLocalizedString("hypergraph"));
+        hypergraphGraphMenuItem.addActionListener(controller);
+        graphMenu.add(hypergraphGraphMenuItem);
+        
         graphMenu.addSeparator();
 
         generateGraphMenuItem = new JMenuItem(Strings.getLocalizedString("generate.graph"));
