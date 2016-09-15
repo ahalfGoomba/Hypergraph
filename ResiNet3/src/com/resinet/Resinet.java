@@ -64,10 +64,13 @@ public class Resinet implements Constants {
     private JMenuItem alignGraphMenuItem;
     private JMenuItem hypergraphGraphMenuItem;
     private JMenuItem generateGraphMenuItem;
+    
+    private boolean switchToHypergraph; 
 
     public Resinet(MainframeController controller) {
         this.controller = controller;
         contentPane = new JPanel(new BorderLayout());
+        switchToHypergraph = false; 
 
         //Windows Look-and-Feel setzen
         try {
@@ -679,6 +682,10 @@ public class Resinet implements Constants {
 
     public JMenuItem getAlignGraphMenuItem() {
         return alignGraphMenuItem;
+    }
+    
+    public JMenuItem getCreateHypergraphGraphMenuItem(){
+    	return hypergraphGraphMenuItem;
     }
 
     public JMenuItem getGenerateGraphMenuItem() {
