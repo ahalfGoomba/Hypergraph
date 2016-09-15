@@ -395,10 +395,6 @@ public class Resinet implements Constants {
         considerComponentsPanel.add(considerEdgesBox);
         considerEdgesBox.setSelected(true);
         
-        considerHyperEdgesBox = new JCheckBox(Strings.getLocalizedString("consider.hyperedge.reliabilities"));
-        considerHyperEdgesBox.addItemListener(controller);
-        considerComponentsPanel.add(considerHyperEdgesBox);
-        considerHyperEdgesBox.setSelected(true);
 
         singleReliabilitiesContainer = new JPanel(new GridBagLayout());
         singleReliabilitiesContainer.setBorder(new EmptyBorder(0, 0, 0, 15));
