@@ -42,7 +42,6 @@ public class MainframeController extends WindowAdapter implements ActionListener
      */
     private final List<ProbabilitySpinner> edgeProbabilityBoxes = new ArrayList<>();
     private final List<ProbabilitySpinner> nodeProbabilityBoxes = new ArrayList<>();
-    private final List<ProbabilitySpinner> hyperEdgeProbabilityBoxes = new ArrayList<>();
 
     public MainframeController() {
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
@@ -155,12 +154,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
         if (element == 0) {
             list = nodeProbabilityBoxes;
         } 
-        else if  (element == 1){
+        else {
             list = edgeProbabilityBoxes;
         }
-        else{
-        	list = hyperEdgeProbabilityBoxes;
-        }
+
 
         //Alle Wahrscheinlichkeiten ein Feld vorrücken lassen
         for (int i = number; i < list.size() - 1; i++) {
@@ -368,7 +365,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
         nodeProbabilityBoxes.clear();
         edgeProbabilityBoxes.clear();
-        hyperEdgeProbabilityBoxes.clear();
+
     }
 
     /**
@@ -450,7 +447,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         int nodeCount = considerNodes ? mainFrame.getNetPanel().getNodes().size() : 0;
         int nodeBoxCount = nodeProbabilityBoxes.size();
        
-        int hyperEdgeBoxCount = hyperEdgeProbabilityBoxes.size();
+        
         
         //Fehlende Kantenwahrscheinlichkeitsfelder hinzufügen
         for (int i = edgeBoxCount; i < edgeCount; i++) {
