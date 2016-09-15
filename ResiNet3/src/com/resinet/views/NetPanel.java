@@ -96,7 +96,7 @@ public class NetPanel extends JPanel {
         
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
             imgGraphics.setColor(Color.black);
-            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
+
             drawHyperEdgeLine(imgGraphics, hel);  
         }
         
@@ -104,7 +104,7 @@ public class NetPanel extends JPanel {
 
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
             imgGraphics.setColor(Color.black);
-            // TODO draw hyperedgepoint methoder erstellen HIER WEITER MACHEN!
+
             drawHyperEdgePoint(imgGraphics, hep);         
         }
 
@@ -237,7 +237,28 @@ public class NetPanel extends JPanel {
     	imgGraphics.draw(hep);
     	 imgGraphics.setColor(Color.white);
          imgGraphics.fill(hep);
-    	
+         
+         if (hep.equals(controller.getHoveredElement())) {
+             imgGraphics.setColor(Color.white);
+             imgGraphics.fill(hep);
+             imgGraphics.setColor(Color.black);
+
+             imgGraphics.setStroke(new BasicStroke(2));
+             imgGraphics.draw(hep);
+        	 
+         }
+         else{
+             imgGraphics.setColor(Color.white);
+             imgGraphics.fill(hep);
+             imgGraphics.setColor(Color.black);
+
+            
+             if (hep.selected) {
+                 imgGraphics.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2, 2}, selectionAnimationPhase));
+             }
+
+             imgGraphics.draw(hep);
+         }
     	
     }
     

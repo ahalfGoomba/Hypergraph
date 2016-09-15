@@ -373,6 +373,8 @@ public class NetPanelData implements Serializable {
         ResizeAction action = new ResizeAction(nodes, direction, factorX, factorY, selectionRectangle);
         undoManager.addEdit(action);
     }
+    
+
 
     /**
      * Bewegt alle Knoten um die angegebenen Koordinaten. Diese Aktion kann nicht rückgängig gemacht werden.
@@ -408,6 +410,21 @@ public class NetPanelData implements Serializable {
             }
         }
         removeNodes(selectedNodes);
+    }
+    
+    /**
+     * Entfernt alle ausgewählten HEP.
+     */
+    public void removeSelectedHyperEdgePoints(){
+    	ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>(); 
+    	
+    	for(HyperEdgePoint hyperEdgePoint : hyperEdgePoints){
+    		if (hyperEdgePoint.selected){
+    			hyperEdgePoint.selected = false;
+    			selectedHyperEdgePoints.add(hyperEdgePoint); 
+    		}
+    	}
+    	removeHyperEdgePoints(selectedHyperEdgePoints);
     }
     
     /**
