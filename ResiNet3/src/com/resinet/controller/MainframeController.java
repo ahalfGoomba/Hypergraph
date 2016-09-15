@@ -451,7 +451,6 @@ public class MainframeController extends WindowAdapter implements ActionListener
         int nodeBoxCount = nodeProbabilityBoxes.size();
        
         int hyperEdgeBoxCount = hyperEdgeProbabilityBoxes.size();
-
         
         //Fehlende Kantenwahrscheinlichkeitsfelder hinzufügen
         for (int i = edgeBoxCount; i < edgeCount; i++) {
