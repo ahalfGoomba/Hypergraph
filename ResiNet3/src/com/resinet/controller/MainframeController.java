@@ -711,6 +711,8 @@ public class MainframeController extends WindowAdapter implements ActionListener
      */
     private void switchToHypergraphMode(){
     	System.out.println("Jetzt kannst du Hypergraphen erstellen");
+    	mainFrame.setHypergraphMode(true);
+    	resetGraph();
     }
 
     /**

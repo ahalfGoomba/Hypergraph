@@ -65,12 +65,12 @@ public class Resinet implements Constants {
     private JMenuItem hypergraphGraphMenuItem;
     private JMenuItem generateGraphMenuItem;
     
-    private boolean switchToHypergraph; 
+    private boolean hypergraphMode; 
 
     public Resinet(MainframeController controller) {
         this.controller = controller;
         contentPane = new JPanel(new BorderLayout());
-        switchToHypergraph = false; 
+        hypergraphMode = false; 
 
         //Windows Look-and-Feel setzen
         try {
@@ -546,6 +546,11 @@ public class Resinet implements Constants {
         expandedOutputPanel.setVisible(!collapsed);
         statusBarCollapsedLabel.setVisible(collapsed);
     }
+    
+    public void setHypergraphMode(boolean status){
+    	hypergraphMode = status;
+    	netPanel.getController().setHypergraphMode(hypergraphMode);
+    }
 
     public int getLastSingleReliabilityComponentX() {
         int componentCount = singleReliabilitiesContainer.getComponentCount();
@@ -690,5 +695,9 @@ public class Resinet implements Constants {
 
     public JMenuItem getGenerateGraphMenuItem() {
         return generateGraphMenuItem;
+    }
+    
+    public boolean getHyergraphMode(){
+    	return hypergraphMode;
     }
 }
