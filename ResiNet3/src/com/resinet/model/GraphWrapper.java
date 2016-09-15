@@ -8,13 +8,13 @@ import java.util.ArrayList;
 public class GraphWrapper {
     public final ArrayList<NodePoint> nodes;
     public final ArrayList<EdgeLine> edges;
-    public final ArrayList<HyperEdgePoint> hep; 
+    public final ArrayList<HyperEdgePoint> hyperEdgePoints; 
     public final ArrayList<HyperEdgeLine> hel; 
     
     public GraphWrapper() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
-        hep = new ArrayList<>();
+        hyperEdgePoints = new ArrayList<>();
         hel = new ArrayList<>();
     }
 
@@ -32,7 +32,7 @@ public class GraphWrapper {
      * @param hp
      */
     public void addHyperEdgePoint(HyperEdgePoint hp){
-    	hep.add(hp);
+    	hyperEdgePoints.add(hp);
     }
 
     /**

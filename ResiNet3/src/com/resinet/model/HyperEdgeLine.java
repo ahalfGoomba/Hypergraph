@@ -4,6 +4,10 @@ import java.awt.geom.Line2D;
 
 public class HyperEdgeLine extends Line2D.Double {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2506626990682794819L;
 	public NodePoint startNode;
 	public HyperEdgePoint hyperEdgePoint;
 	
