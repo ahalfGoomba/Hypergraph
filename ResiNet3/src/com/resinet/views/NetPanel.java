@@ -259,7 +259,7 @@ public class NetPanel extends JPanel {
 
              imgGraphics.draw(hep);
          }
-    	
+         imgGraphics.setStroke(new BasicStroke(1));	
     }
     
     private void drawHyperEdgeLine(Graphics2D imgGraphics, HyperEdgeLine hel){
