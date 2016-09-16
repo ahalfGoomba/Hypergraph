@@ -86,8 +86,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         switch (action) {
             case "delete":
             	removeSelectedNodes();
-            	
-                
+            	                
                 break;
             case "undo":
                 netData.undo();
@@ -547,7 +546,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         //Prüfen, ob in ein Knoten gedrückt wurde, damit das Ziehen einer Kante gestartet wird
         List<NodePoint> drawnNodes = netData.getNodes();
         for (NodePoint node : drawnNodes) {
-            if (node.contains(x, y)) {
+            if (node.contains(x, y) && !hypergraphMode) {
                 //Es wurde in den Kreis geklickt, also Kantenziehen starten
                 draggingLine = new EdgeLine(node, null);
                 newLineDragging = true;
