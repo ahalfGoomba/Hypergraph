@@ -85,8 +85,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
         switch (action) {
             case "delete":
-                removeSelectedNodes();
-                removeSelectedHyperEdgePoints();
+            	removeSelectedNodes();
+            	
+                
                 break;
             case "undo":
                 netData.undo();
@@ -182,6 +183,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      */
     public void resetSelection() {
         nodesSelected = false;
+        hyperEdgePointsSelected = false; 
         netPanel.selectionAnimationTimer.stop();
         netData.resetSelection();
     }
@@ -190,9 +192,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * Entfernt alle ausgewählten Knoten vom Graphen
      */
     private void removeSelectedNodes() {
-        if (!nodesSelected)
+        if (!nodesSelected && !hyperEdgePointsSelected)
             return;
-
+        
+        netData.removeSelectedHyperEdgePoints();
         netData.removeSelectedNodes();
         resetSelection();
     }
