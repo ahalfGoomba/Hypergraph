@@ -730,6 +730,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
         updateSingleReliabilityProbPanel();
     }
     
+    /**
+     * change SidePanel auf hypergraph ansicht
+     * @param hypergraphMode
+     */
     private void changeSidePanel(boolean hypergraphMode){
     	JTabbedPane tabbedPane = mainFrame.getTabbedPane();
     	if(hypergraphMode){
