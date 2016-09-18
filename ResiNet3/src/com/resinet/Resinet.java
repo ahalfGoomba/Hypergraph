@@ -40,6 +40,7 @@ public class Resinet implements Constants {
 
     private JTextPane statusBarCollapsedLabel;
     private JPanel singleReliabilitiesContainer;
+    private JTabbedPane hypergraphTabbedPane;
 
     private GUI_STATES guiState;
     private JTabbedPane reliabilitiesTabbedPane;
@@ -53,6 +54,7 @@ public class Resinet implements Constants {
     private JCheckBox considerNodesBox;
     private JCheckBox considerEdgesBox;
     private JCheckBox considerHyperEdgesBox;
+    private JCheckBox coloredHyperedges;
     private JScrollPane singleReliabilitiesScrollPane;
     private JPanel expandedOutputPanel;
     private JButton collapseOutputBtn;
@@ -310,11 +312,12 @@ public class Resinet implements Constants {
        
         initProbabilitiesPanel();
         initCalculatePanel();
+        initHypergraphPanel();
 
         contentPane.add(sidePanel, BorderLayout.LINE_END);
     }
 
-    public void initProbabilitiesPanel() {
+    private void initProbabilitiesPanel() {
         reliabilitiesTabbedPane = new JTabbedPane(JTabbedPane.TOP);
         reliabilitiesTabbedPane.addChangeListener(controller);
       
@@ -323,9 +326,10 @@ public class Resinet implements Constants {
         initSameReliabilityTab();
         
         sidePanel.add(reliabilitiesTabbedPane, BorderLayout.CENTER);
+       
     }
 
-    public void initSameReliabilityTab() {
+    private void initSameReliabilityTab() {
         JPanel sameReliabilityPanel = new JPanel(new GridBagLayout());
         sameReliabilityPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         reliabilitiesTabbedPane.addTab(Strings.getLocalizedString("same.reliabilities"), sameReliabilityPanel);
@@ -389,7 +393,7 @@ public class Resinet implements Constants {
         sameReliabilityPanel.add(nodeProbabilityStepSizeBox, GbcBuilder.build(1, 7, 1, 1, 1, 0).bottom(10));
     }
 
-    public void initSingleReliabilitiesTab() {
+    private void initSingleReliabilitiesTab() {
         JPanel singleReliabilitiesPanel = new JPanel(new BorderLayout());
         reliabilitiesTabbedPane.addTab(Strings.getLocalizedString("different.reliabilities"), singleReliabilitiesPanel);
 
@@ -418,7 +422,7 @@ public class Resinet implements Constants {
         singleReliabilitiesPanel.add(singleReliabilitiesScrollPane, BorderLayout.CENTER);
     }
 
-     public void initCalculatePanel() {
+    private void initCalculatePanel() {
         JPanel calculatePanel = new JPanel();
 
         calculatePanel.setBorder(BorderFactory.createTitledBorder(Strings.getLocalizedString("start.calculation")));
@@ -437,6 +441,23 @@ public class Resinet implements Constants {
         calculatePanel.add(calculationProgressBar, GbcBuilder.build(0, 2, 2, 1, 1, 0).fillBoth());
 
         sidePanel.add(calculatePanel, BorderLayout.PAGE_END);
+    }
+    
+    private void initHypergraphPanel(){
+    	hypergraphTabbedPane = new JTabbedPane(JTabbedPane.TOP);
+        hypergraphTabbedPane.addChangeListener(controller);
+    	JPanel hypergraphPanel = new JPanel(new BorderLayout());
+    	
+    	coloredHyperedges = new JCheckBox("colored Hyperedges");
+    	coloredHyperedges.addItemListener(controller);
+    	hypergraphPanel.add(coloredHyperedges);
+    	hypergraphTabbedPane.add("Hypergraph", hypergraphPanel);
+    	
+    	
+    	//hypergraphTabbedPane.setVisible(false);
+    	
+    	
+    	contentPane.add(sidePanel, BorderLayout.LINE_END);
     }
 
 
@@ -718,5 +739,9 @@ public class Resinet implements Constants {
     
     public JPanel getSidePanel(){
     	return sidePanel;
+    }
+    
+    public JTabbedPane getHypergraphTabbedPane(){
+    	return hypergraphTabbedPane;
     }
 }

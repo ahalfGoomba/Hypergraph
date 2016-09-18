@@ -375,7 +375,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 //Knoten wurde angeklickt
                 nodeClicked = true;
                
-                if(mouseEvent.isControlDown()){                	
+                if(mouseEvent.isControlDown() && hypergraphMode){                	
                 	
                 	currentNode.setSelected(true);              	
                 	selectedNodes.add(currentNode);

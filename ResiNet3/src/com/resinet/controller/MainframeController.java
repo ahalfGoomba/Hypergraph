@@ -714,10 +714,9 @@ public class MainframeController extends WindowAdapter implements ActionListener
      * 
      */
     private void switchMode(boolean mode){
-    	System.out.println(mode);
     	mainFrame.setHypergraphMode(mode);
     	resetGraph();
-    	changeTabbedPane(mode);
+    	changeSidePanel(mode);
     }
 
     /**
@@ -731,16 +730,24 @@ public class MainframeController extends WindowAdapter implements ActionListener
         updateSingleReliabilityProbPanel();
     }
     
-    private void changeTabbedPane(boolean hypergraphMode){
+    private void changeSidePanel(boolean hypergraphMode){
     	JTabbedPane tabbedPane = mainFrame.getTabbedPane();
     	if(hypergraphMode){
-    		tabbedPane.remove(1);
-    		tabbedPane.remove(0);
-    		//mainFrame.getSidePanel().removeAll();
+    		//tabbedPane.setVisible(false);
+    	    	
+    		 mainFrame.getSidePanel().remove(mainFrame.getTabbedPane());
+    		 mainFrame.getSidePanel().add(mainFrame.getHypergraphTabbedPane(), BorderLayout.CENTER);
+    		
+    		 mainFrame.getHypergraphTabbedPane().setVisible(true);
     	} else {
     		
-    		mainFrame.initProbabilitiesPanel();
-    		mainFrame.initCalculatePanel();
+    		mainFrame.getHypergraphTabbedPane().setVisible(false);
+    		//mainFrame.getSidePanel().setVisible(true);
+    		mainFrame.getSidePanel().remove(mainFrame.getHypergraphTabbedPane());
+    		mainFrame.getSidePanel().add(mainFrame.getTabbedPane());
+    		//tabbedPane.setVisible(true);
+    		
+    		
     	}
     }
 }
