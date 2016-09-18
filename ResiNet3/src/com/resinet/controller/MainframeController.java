@@ -740,6 +740,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
     		tabbedPane.setVisible(false);
     	    	
     		 mainFrame.getSidePanel().remove(mainFrame.getTabbedPane());
+    		 mainFrame.getSidePanel().remove(mainFrame.getCalculatePanel());
     		 mainFrame.getSidePanel().add(mainFrame.getHypergraphTabbedPane(), BorderLayout.CENTER);
     		
     		 mainFrame.getHypergraphTabbedPane().setVisible(true);
@@ -747,9 +748,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
     	} else {
     		tabbedPane.setVisible(true);
     		mainFrame.getHypergraphTabbedPane().setVisible(false);
-    		//mainFrame.getSidePanel().setVisible(true);
+    		
     		mainFrame.getSidePanel().remove(mainFrame.getHypergraphTabbedPane());
     		mainFrame.getSidePanel().add(mainFrame.getTabbedPane());
+    		mainFrame.getSidePanel().add(mainFrame.getCalculatePanel(), BorderLayout.PAGE_END);
     		tabbedPane.setVisible(true);
     		
     		

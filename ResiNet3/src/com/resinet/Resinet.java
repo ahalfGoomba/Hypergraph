@@ -41,6 +41,7 @@ public class Resinet implements Constants {
     private JTextPane statusBarCollapsedLabel;
     private JPanel singleReliabilitiesContainer;
     private JTabbedPane hypergraphTabbedPane;
+    JPanel calculatePanel;
 
     private GUI_STATES guiState;
     private JTabbedPane reliabilitiesTabbedPane;
@@ -423,7 +424,7 @@ public class Resinet implements Constants {
     }
 
     private void initCalculatePanel() {
-        JPanel calculatePanel = new JPanel();
+        calculatePanel = new JPanel();
 
         calculatePanel.setBorder(BorderFactory.createTitledBorder(Strings.getLocalizedString("start.calculation")));
         calculatePanel.setLayout(new GridBagLayout());
@@ -744,5 +745,9 @@ public class Resinet implements Constants {
     
     public JTabbedPane getHypergraphTabbedPane(){
     	return hypergraphTabbedPane;
+    }
+    
+    public JPanel getCalculatePanel(){
+    	return calculatePanel;
     }
 }
