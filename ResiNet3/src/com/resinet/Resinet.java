@@ -454,7 +454,8 @@ public class Resinet implements Constants {
     	hypergraphTabbedPane.add("Hypergraph", hypergraphPanel);
     	
     	
-    	//hypergraphTabbedPane.setVisible(false);
+    	hypergraphTabbedPane.setVisible(false);
+    	
     	
     	
     	contentPane.add(sidePanel, BorderLayout.LINE_END);

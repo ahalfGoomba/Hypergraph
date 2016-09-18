@@ -737,19 +737,20 @@ public class MainframeController extends WindowAdapter implements ActionListener
     private void changeSidePanel(boolean hypergraphMode){
     	JTabbedPane tabbedPane = mainFrame.getTabbedPane();
     	if(hypergraphMode){
-    		//tabbedPane.setVisible(false);
+    		tabbedPane.setVisible(false);
     	    	
     		 mainFrame.getSidePanel().remove(mainFrame.getTabbedPane());
     		 mainFrame.getSidePanel().add(mainFrame.getHypergraphTabbedPane(), BorderLayout.CENTER);
     		
     		 mainFrame.getHypergraphTabbedPane().setVisible(true);
+    		 
     	} else {
-    		
+    		tabbedPane.setVisible(true);
     		mainFrame.getHypergraphTabbedPane().setVisible(false);
     		//mainFrame.getSidePanel().setVisible(true);
     		mainFrame.getSidePanel().remove(mainFrame.getHypergraphTabbedPane());
     		mainFrame.getSidePanel().add(mainFrame.getTabbedPane());
-    		//tabbedPane.setVisible(true);
+    		tabbedPane.setVisible(true);
     		
     		
     	}
