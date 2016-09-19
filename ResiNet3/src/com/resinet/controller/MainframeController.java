@@ -384,12 +384,11 @@ public class MainframeController extends WindowAdapter implements ActionListener
         int height = netPanel.getHeight();
 
         CalculationParams params = GraphSaver.inputNet(mainFrame.getContentPane(), width, height);
-
         if (params == null)
             return;
 
         resetGraph();
-
+        switchMode(params.hypergraphMode);
         //Graphelemente hinzufügen
         netPanel.addNodesAndEdges(params.graphNodes, params.graphEdges);
 
@@ -683,7 +682,8 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
             params.setSingleReliabilityParams(edgeProbabilities, nodeProbabilities);
         }
-
+        
+        params.hypergraphMode = mainFrame.getHypergraphMode();
         return params;
     }
 

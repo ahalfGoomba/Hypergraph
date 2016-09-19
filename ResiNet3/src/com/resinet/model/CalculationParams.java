@@ -15,6 +15,7 @@ public class CalculationParams implements Constants {
     public boolean probabilitiesLoaded = false;
     public boolean differentTerminalNodeReliability = false;
     public final CALCULATION_MODES calculationMode;
+    public boolean hypergraphMode;
 
     //für die Serienberechnung
     public BigDecimal edgeStartValue, edgeEndValue, edgeStepSize, nodeStartValue, nodeEndValue, nodeStepSize;

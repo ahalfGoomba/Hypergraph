@@ -44,20 +44,20 @@ public class GraphUtil {
             }   
         }
         
-        for (HyperEdgePoint drawnHyperEdgePoint : hep) {
-        	if (drawnHyperEdgePoint.getX() < minX){
-                minX = (int) drawnHyperEdgePoint.getX();
-        }
-        if (drawnHyperEdgePoint.getMaxX() > maxX) {
-            maxX = (int) drawnHyperEdgePoint.getMaxX();
-        }
-        if (drawnHyperEdgePoint.getY() < minY) {
-            minY = (int) drawnHyperEdgePoint.getY();
-        }
-        if (drawnHyperEdgePoint.getMaxY() > maxY) {
-            maxY = (int) drawnHyperEdgePoint.getMaxY();
-        } 
-    }
+//        for (HyperEdgePoint drawnHyperEdgePoint : hep) {
+//        	if (drawnHyperEdgePoint.getX() < minX){
+//                minX = (int) drawnHyperEdgePoint.getX();
+//        }
+//        if (drawnHyperEdgePoint.getMaxX() > maxX) {
+//            maxX = (int) drawnHyperEdgePoint.getMaxX();
+//        }
+//        if (drawnHyperEdgePoint.getY() < minY) {
+//            minY = (int) drawnHyperEdgePoint.getY();
+//        }
+//        if (drawnHyperEdgePoint.getMaxY() > maxY) {
+//            maxY = (int) drawnHyperEdgePoint.getMaxY();
+//        } 
+//    }
 
         return new BorderRectangle(Math.max(minX - spaces, 0), Math.max(minY - spaces, 0),
                 Math.max(maxX - minX + 2 * spaces, 0), Math.max(maxY - minY + 2 * spaces, 0));

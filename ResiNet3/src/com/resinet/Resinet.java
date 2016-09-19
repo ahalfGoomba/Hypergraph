@@ -449,7 +449,7 @@ public class Resinet implements Constants {
         hypergraphTabbedPane.addChangeListener(controller);
     	JPanel hypergraphPanel = new JPanel(new BorderLayout());
     	
-    	coloredHyperedges = new JCheckBox("colored Hyperedges");
+    	coloredHyperedges = new JCheckBox("colored Hyperedges                  ");
     	coloredHyperedges.addItemListener(controller);
     	hypergraphPanel.add(coloredHyperedges);
     	hypergraphTabbedPane.add("Hypergraph", hypergraphPanel);
@@ -731,7 +731,7 @@ public class Resinet implements Constants {
         return generateGraphMenuItem;
     }
     
-    public boolean getHyergraphMode(){
+    public boolean getHypergraphMode(){
     	return hypergraphMode;
     }
     
