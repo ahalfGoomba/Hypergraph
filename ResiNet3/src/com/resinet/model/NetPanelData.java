@@ -80,6 +80,7 @@ public class NetPanelData implements Serializable {
         	if (node.equals(hyperEdgeLine.startNode)){
         		removeHyperEdgeLines.add(hyperEdgeLine);
         		removedHyperEdgeLineIndices.add(i);
+        		
         	}
         }
         //TODO HyperEdgePoints entfernen wenn sie nicht mehr mit einem Knoten verbunden sind
@@ -238,6 +239,7 @@ public class NetPanelData implements Serializable {
         ArrayList<EdgeLine> selectedEdges = new ArrayList<>();
         ArrayList<HyperEdgePoint> originalSelectedHEPs = new ArrayList<>();
         ArrayList<HyperEdgePoint> selectedHEPs = new ArrayList<>();
+        ArrayList<HyperEdgeLine> selectedHyperEdgeLines = new ArrayList<>();
         
         
         //Ausgewählte Knoten sammeln
@@ -275,7 +277,7 @@ public class NetPanelData implements Serializable {
             //Aktuellen Knoten durch geklonten ersetzen
             selectedNodes.set(i, newNode);
         }       
-        return new NodeEdgeWrapper(originalSelectedNodes, selectedNodes, selectedEdges, originalSelectedHEPs, selectedHEPs);
+        return new NodeEdgeWrapper(originalSelectedNodes, selectedNodes, selectedEdges, originalSelectedHEPs, selectedHEPs, selectedHyperEdgeLines);
     }
 
     /**
@@ -298,8 +300,8 @@ public class NetPanelData implements Serializable {
      * @param moveNodes Die Menge der zu bewegenden Knoten
      * @param amount    Die Dimension, um die die Knoten verschoben werden sollen
      */
-    public void moveNodesFinal(ArrayList<NodePoint> moveNodes, Dimension amount) {
-        MoveAction action = new MoveAction(moveNodes, amount);
+    public void moveNodesFinal(ArrayList<NodePoint> moveNodes, ArrayList<HyperEdgePoint> moveHyperEdgePoints, Dimension amount) {
+        MoveAction action = new MoveAction(moveNodes, moveHyperEdgePoints, amount);
         undoManager.addEdit(action);
     }
 
@@ -310,34 +312,34 @@ public class NetPanelData implements Serializable {
      * @param nodes  Die Menge der zu bewegenden Knoten
      * @param amount Die Dimension, um die die Knoten verschoben werden sollen
      */
-    public void moveNodesNotFinal(ArrayList<NodePoint> nodes, Dimension amount) {
-        MoveAction action = new MoveAction(nodes, amount);
+    public void moveNodesNotFinal(ArrayList<NodePoint> nodes, ArrayList<HyperEdgePoint> hyperEdgePoints, Dimension amount) {
+        MoveAction action = new MoveAction(nodes, hyperEdgePoints, amount);
         action.execute();
     }
     
     
-    /**
-     * Bewegt eine Menge von HEPS um die angegebenen Koordinaten. Diese Methode sollte nicht aufgerufen werden,
-     * w�hrend das Verschieben noch im Gange ist. 
-     * 
-     * @param HEP
-     * @param amount
-     */
-    public void moveHEPFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
-    	undoManager.addEdit(action);
-    }
-    
-    /**
-     * Bewegt eine Menge von HEP um die angegebenen Koordinaten, aber fügt diese Aktion nicht in den UndoManager ein.
-     * Diese Methode sollte aufgerufen werden, während das Verschieben am Gange ist.
-     * @param HEP
-     * @param amount
-     */
-    public void moveHEPNotFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
-        action.execute();
-    }
+//    /**
+//     * Bewegt eine Menge von HEPS um die angegebenen Koordinaten. Diese Methode sollte nicht aufgerufen werden,
+//     * w�hrend das Verschieben noch im Gange ist. 
+//     * 
+//     * @param HEP
+//     * @param amount
+//     */
+//    public void moveHEPFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+//    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
+//    	undoManager.addEdit(action);
+//    }
+//    
+//    /**
+//     * Bewegt eine Menge von HEP um die angegebenen Koordinaten, aber fügt diese Aktion nicht in den UndoManager ein.
+//     * Diese Methode sollte aufgerufen werden, während das Verschieben am Gange ist.
+//     * @param HEP
+//     * @param amount
+//     */
+//    public void moveHEPNotFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+//    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
+//        action.execute();
+//    }
 
     /**
      * Verändert die Position einer Knotenmenge innerhalb eines Auswählrechtecks. Diese Aktion wird ausgeführt, aber
@@ -382,7 +384,7 @@ public class NetPanelData implements Serializable {
      * @param amount Die Dimension, um die die Knoten verschoben werden sollen
      */
     public void moveAllNodesNoUndo(Dimension amount) {
-        MoveAction action = new MoveAction(nodes, amount);
+        MoveAction action = new MoveAction(nodes, hyperEdgePoints, amount);
         action.execute();
     }
 
@@ -666,10 +668,12 @@ public class NetPanelData implements Serializable {
         private static final long serialVersionUID = 37760421287789359L;
 
         final List<NodePoint> movedNodes;
+        final List<HyperEdgePoint> movedHyperEdgePoints;
         final Dimension amount;
 
-        MoveAction(ArrayList<NodePoint> nodes, Dimension amount) {
+        MoveAction(ArrayList<NodePoint> nodes, ArrayList<HyperEdgePoint> hyperEdgePoints, Dimension amount) {
             movedNodes = new ArrayList<>(nodes);
+            movedHyperEdgePoints = new ArrayList<>(hyperEdgePoints);
             this.amount = amount;
         }
 
@@ -684,7 +688,12 @@ public class NetPanelData implements Serializable {
                 node.x += amount.getWidth();
                 node.y += amount.getHeight();
             }
+            for (HyperEdgePoint hep : movedHyperEdgePoints) {
+                hep.x += amount.getWidth();
+                hep.y += amount.getHeight();
+            }
             refreshEdges();
+            refreshHyperEdgeLines(); 
         }
 
         @Override
@@ -694,7 +703,12 @@ public class NetPanelData implements Serializable {
                 node.x -= amount.getWidth();
                 node.y -= amount.getHeight();
             }
+            for (HyperEdgePoint hep : movedHyperEdgePoints) {
+                hep.x -= amount.getWidth();
+                hep.y -= amount.getHeight();
+            }
             refreshEdges();
+            refreshHyperEdgeLines();
         }
 
         private void refreshEdges() {
@@ -703,50 +717,56 @@ public class NetPanelData implements Serializable {
                     .forEach(EdgeLine::refresh);
         }
         
+        private void refreshHyperEdgeLines(){
+        	hyperEdgeLines.stream().filter(
+        			hyperEdgeLine -> movedNodes.contains(hyperEdgeLine.startNode) || movedHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint))
+        			.forEach(HyperEdgeLine::refresh);
+        	
+        }
  
         
     }
     
-    /**
-     * Beschreibt eine Aktion, bei der eine Menge von HEP bewegt wird.
-     */
-    private class MoveActionHEP extends AbstractUndoableEdit {
-        
-       
-		private static final long serialVersionUID = -7568376935181441206L;
-		final List<HyperEdgePoint> movedHEP;
-        final Dimension amount;
-
-        MoveActionHEP(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-            movedHEP = new ArrayList<>(HEP);
-            this.amount = amount;
-        }
-
-        @Override
-        public void redo() throws CannotRedoException {
-            super.redo();
-            execute();
-        }
-
-        void execute() {
-            for (HyperEdgePoint hep : movedHEP) {
-                hep.x += amount.getWidth();
-                hep.y += amount.getHeight();
-            }
-            
-        }
-
-        @Override
-        public void undo() throws CannotUndoException {
-            super.undo();
-            for (HyperEdgePoint hep : movedHEP) {
-                hep.x -= amount.getWidth();
-                hep.y -= amount.getHeight();
-            }
-           	        }
-
-       
-    }
+//    /**
+//     * Beschreibt eine Aktion, bei der eine Menge von HEP bewegt wird.
+//     */
+//    private class MoveActionHEP extends AbstractUndoableEdit {
+//        
+//       
+//		private static final long serialVersionUID = -7568376935181441206L;
+//		final List<HyperEdgePoint> movedHEP;
+//        final Dimension amount;
+//
+//        MoveActionHEP(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
+//            movedHEP = new ArrayList<>(HEP);
+//            this.amount = amount;
+//        }
+//
+//        @Override
+//        public void redo() throws CannotRedoException {
+//            super.redo();
+//            execute();
+//        }
+//
+//        void execute() {
+//            for (HyperEdgePoint hep : movedHEP) {
+//                hep.x += amount.getWidth();
+//                hep.y += amount.getHeight();
+//            }
+//            
+//        }
+//
+//        @Override
+//        public void undo() throws CannotUndoException {
+//            super.undo();
+//            for (HyperEdgePoint hep : movedHEP) {
+//                hep.x -= amount.getWidth();
+//                hep.y -= amount.getHeight();
+//            }
+//           	        }
+//
+//       
+//    }
 
     
     /**

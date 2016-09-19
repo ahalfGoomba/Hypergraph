@@ -282,6 +282,11 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
         //Kantenkoordinaten neu setzen
         nodeEdgeWrapper.edges.forEach(EdgeLine::refresh);
+        
+        //HyperEdgeLines neu setzen
+        nodeEdgeWrapper.hyperEdgeLines.forEach(HyperEdgeLine::refresh);
+        
+        
 
         //Neue Knoten und Kanten hinzuf√ºgen 
         netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, null);
@@ -648,35 +653,39 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
         }
 
-        if (selectedNodesDragging) {
+        if (selectedNodesDragging || selectedHyperEdgePointDragging) {
             selectedNodesDragging = false;
-
+            selectedHyperEdgePointDragging = false;
             //Ausgew√§hlte Knoten sammeln
             ArrayList<NodePoint> selectedNodes = new ArrayList<>(
                     drawnNodes.stream().filter(nodePoint -> nodePoint.selected).collect(Collectors.toList()));
+        	//Ausgew‰hlte HEP sammeln
+        	ArrayList<HyperEdgePoint> selectedhyperEdgePoints = new ArrayList <>(
+        			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
 
             Point endPoint = mouseEvent.getPoint();
             Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
 
-            netData.moveNodesFinal(selectedNodes, moveAmount);
+            netData.moveNodesFinal(selectedNodes, selectedhyperEdgePoints, moveAmount);
             //Scrollpane aktualisieren
             revalidateScrollPane();
         }
         
-        if (selectedHyperEdgePointDragging){
-        	selectedHyperEdgePointDragging = false;
-        	
-        	//Ausgew‰hlte HEP sammeln
-        	ArrayList<HyperEdgePoint> selectedhyperEdgePoints = new ArrayList <>(
-        			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
-        	
-        	 Point endPoint = mouseEvent.getPoint();
-             Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
-
-             netData.moveHEPFinal(selectedhyperEdgePoints, moveAmount);
-             //Scrollpane aktualisieren
-             revalidateScrollPane();
-        }
+//        if (selectedHyperEdgePointDragging){
+//        	selectedHyperEdgePointDragging = false;
+//        	
+//        	//Ausgew‰hlte HEP sammeln
+//        	ArrayList<HyperEdgePoint> selectedhyperEdgePoints = new ArrayList <>(
+//        			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
+//        	
+//        	 Point endPoint = mouseEvent.getPoint();
+//             Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
+//
+//             
+//            netData.moveHEPFinal(selectedhyperEdgePoints, moveAmount);
+//             //Scrollpane aktualisieren
+//             revalidateScrollPane();
+//        }
 
         if (selectedNodesResizing) {
             selectedNodesResizing = false;
@@ -716,7 +725,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             //Mausposition setzen und Ausw√§hlrechteck neu zeichnen
             currentMousePosition = evt.getPoint();
             netPanel.repaint();
-        } else if (selectedNodesDragging) {
+        } else if (selectedNodesDragging || selectedHyperEdgePointDragging) {
             Point newMousePosition = evt.getPoint();
 
             //Offsets bestimmen
@@ -736,22 +745,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                     selectedNodes.add(nodePoint);
                 }
             }
-            netData.moveNodesNotFinal(selectedNodes, new Dimension(offsetX, offsetY));
-
-            //Neue Mausposition setzen
-            currentMousePosition = evt.getPoint();
-            netPanel.repaint();
-        } 
-        else if (selectedHyperEdgePointDragging){
-        	Point newMousePosition = evt.getPoint();
-
-            //Offsets bestimmen
-            int offsetX = newMousePosition.x - currentMousePosition.x;
-            int offsetY = newMousePosition.y - currentMousePosition.y;
-
-            //Auswahlrechteck verschieben
-            selectionRectangle.addToX(offsetX);
-            selectionRectangle.addToY(offsetY);
 
             List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
             ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>();
@@ -762,13 +755,40 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                     selectedHyperEdgePoints.add(hyperEdgePoint);
                 }
             }
-            netData.moveHEPNotFinal(selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
+//            netData.moveHEPNotFinal(selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
+            netData.moveNodesNotFinal(selectedNodes, selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
 
             //Neue Mausposition setzen
             currentMousePosition = evt.getPoint();
             netPanel.repaint();
-        	
-        }
+        } 
+//        else if (selectedHyperEdgePointDragging){
+//        	Point newMousePosition = evt.getPoint();
+//
+//            //Offsets bestimmen
+//            int offsetX = newMousePosition.x - currentMousePosition.x;
+//            int offsetY = newMousePosition.y - currentMousePosition.y;
+//
+//            //Auswahlrechteck verschieben
+//            selectionRectangle.addToX(offsetX);
+//            selectionRectangle.addToY(offsetY);
+//
+//            List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
+//            ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>();
+//
+//            //Ausgew√§hlte HyperEdgePoints sammeln
+//            for (HyperEdgePoint hyperEdgePoint : drawnHyperEdgePoints) {
+//                if (hyperEdgePoint.selected) {
+//                    selectedHyperEdgePoints.add(hyperEdgePoint);
+//                }
+//            }
+//            netData.moveHEPNotFinal(selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
+//
+//            //Neue Mausposition setzen
+//            currentMousePosition = evt.getPoint();
+//            netPanel.repaint();
+//        	
+//        }
         else if (selectedNodesResizing) {
             Point newMousePosition = evt.getPoint();
 

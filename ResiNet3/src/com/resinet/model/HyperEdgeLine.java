@@ -15,6 +15,10 @@ public class HyperEdgeLine extends Line2D.Double {
 		super();
 		startNode = start;
 		hyperEdgePoint = end;
+		refresh();
+	}
+	
+	public void refresh(){
 		setLine(startNode.x + 10, startNode.y + 10, hyperEdgePoint.x + 5, hyperEdgePoint.y + 5);
 	}
 

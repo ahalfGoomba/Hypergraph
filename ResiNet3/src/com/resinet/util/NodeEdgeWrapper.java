@@ -1,6 +1,7 @@
 package com.resinet.util;
 
 import com.resinet.model.EdgeLine;
+import com.resinet.model.HyperEdgeLine;
 import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.NodePoint;
 
@@ -23,15 +24,18 @@ public class NodeEdgeWrapper implements Serializable {
     public final ArrayList<NodePoint> nodes;
     public final ArrayList<EdgeLine> edges;
     public final ArrayList<HyperEdgePoint> hyperEdgePoints;
+    public final ArrayList<HyperEdgeLine> hyperEdgeLines;
     
-    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges, ArrayList<HyperEdgePoint> hyperEdgePoints) {
+    private NodeEdgeWrapper(ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges, ArrayList<HyperEdgePoint> hyperEdgePoints, ArrayList<HyperEdgeLine> hyperEdgeLines) {
         this.nodes = nodes;
         this.edges = edges;
         this.hyperEdgePoints = hyperEdgePoints;
+        this.hyperEdgeLines = hyperEdgeLines; 
     }
 
-    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges,  ArrayList<HyperEdgePoint> originalhyperEdgePoints, ArrayList<HyperEdgePoint> hyperEdgePoints) {
-        this(nodes, edges, hyperEdgePoints);
+    public NodeEdgeWrapper(ArrayList<NodePoint> originalNodes, ArrayList<NodePoint> nodes, ArrayList<EdgeLine> edges,  ArrayList<HyperEdgePoint> originalhyperEdgePoints,
+    		ArrayList<HyperEdgePoint> hyperEdgePoints, ArrayList<HyperEdgeLine> hyperEdgeLines) {
+        this(nodes, edges, hyperEdgePoints, hyperEdgeLines);
         this.originalNodes = originalNodes;
         this.originalhyperEdgePoints = originalhyperEdgePoints;
     }
