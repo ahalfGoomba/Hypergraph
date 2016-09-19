@@ -146,7 +146,7 @@ public class NetPanelData implements Serializable {
      */
     public void addHyperEdge(HyperEdgePoint newHEP, List<NodePoint> selectedNodes){
        addHyperEdgePoint(newHEP);
-       System.out.println(selectedNodes.size());
+       
         
         for (NodePoint nodePoint : selectedNodes) {        	
                	

@@ -1030,7 +1030,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param edges Die Kantenmenge
      */
     public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
-        netData.addNodesAndEdges(nodes, edges, null);
+    	List<HyperEdgeLine> hel = new ArrayList<HyperEdgeLine>();
+    	netData.addNodesAndEdges(nodes, edges, hel);
     }
 
     /**
