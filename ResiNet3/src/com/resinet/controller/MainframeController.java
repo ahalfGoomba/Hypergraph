@@ -5,6 +5,7 @@ import com.resinet.algorithms.ProbabilityCalculator;
 import com.resinet.model.CalculationParams;
 import com.resinet.model.Graph;
 import com.resinet.model.GraphWrapper;
+import com.resinet.model.HyperEdgeLine;
 import com.resinet.util.*;
 import com.resinet.views.*;
 import com.sun.istack.internal.Nullable;
@@ -106,13 +107,14 @@ public class MainframeController extends WindowAdapter implements ActionListener
      */
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (mainFrame == null)
+      
+    	if (mainFrame == null)
             return;
 
         AbstractButton checkbox = (AbstractButton) e.getSource();
         if (checkbox == mainFrame.getCalculationSeriesCheckBox() || checkbox == mainFrame.getDifferentForTerminalCheckBox()) {
             mainFrame.setGuiState(GUI_STATES.ENTER_GRAPH, true);
-        } else if (checkbox == mainFrame.getConsiderEdgesBox() || checkbox == mainFrame.getConsiderNodesBox() || checkbox == mainFrame.getConsiderHyperEdgesBox()) {
+        } else if (checkbox == mainFrame.getConsiderEdgesBox() || checkbox == mainFrame.getConsiderNodesBox()) {
             NetPanelController netPanelController = mainFrame.getNetPanel().getController();
 
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
@@ -121,6 +123,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
             netPanelController.setClickableElements(considerNodes, considerEdges);
             updateSingleReliabilityProbPanel();
+        } else if(checkbox == mainFrame.getColoredHyperedgeCheckBox()){
+        	mainFrame.getNetPanel().setColoredHypergraph(mainFrame.getColoredHyperedgeCheckBox().isSelected());
+        	mainFrame.getNetPanel().repaint();
+        	
         }
     }
 
@@ -156,7 +162,8 @@ public class MainframeController extends WindowAdapter implements ActionListener
     public void graphElementDeleted(int element, int number) {
         if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME)
             return;
-
+        if (element == 2)
+        	return;
         List<ProbabilitySpinner> list;
         if (element == 0) {
             list = nodeProbabilityBoxes;
@@ -278,7 +285,9 @@ public class MainframeController extends WindowAdapter implements ActionListener
      */
     @Override
     public void stateChanged(ChangeEvent e) {
-        if (mainFrame == null)
+      
+    	
+    	if (mainFrame == null)
             return;
 
         NetPanelController netPanelController = mainFrame.getNetPanel().getController();

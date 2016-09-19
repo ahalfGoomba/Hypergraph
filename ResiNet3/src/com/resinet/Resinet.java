@@ -55,7 +55,7 @@ public class Resinet implements Constants {
     private JCheckBox considerNodesBox;
     private JCheckBox considerEdgesBox;
     private JCheckBox considerHyperEdgesBox;
-    private JCheckBox coloredHyperedges;
+    private JCheckBox coloredHyperedgesBox;
     private JScrollPane singleReliabilitiesScrollPane;
     private JPanel expandedOutputPanel;
     private JButton collapseOutputBtn;
@@ -447,11 +447,11 @@ public class Resinet implements Constants {
     private void initHypergraphPanel(){
     	hypergraphTabbedPane = new JTabbedPane(JTabbedPane.TOP);
         hypergraphTabbedPane.addChangeListener(controller);
-    	JPanel hypergraphPanel = new JPanel(new BorderLayout());
+    	JPanel hypergraphPanel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
     	
-    	coloredHyperedges = new JCheckBox("colored Hyperedges                  ");
-    	coloredHyperedges.addItemListener(controller);
-    	hypergraphPanel.add(coloredHyperedges);
+    	coloredHyperedgesBox = new JCheckBox("colored Hyperedges                  ");
+    	coloredHyperedgesBox.addItemListener(controller);
+    	hypergraphPanel.add(coloredHyperedgesBox);
     	hypergraphTabbedPane.add("Hypergraph", hypergraphPanel);
     	
     	
@@ -749,5 +749,9 @@ public class Resinet implements Constants {
     
     public JPanel getCalculatePanel(){
     	return calculatePanel;
+    }
+    
+    public JCheckBox getColoredHyperedgeCheckBox(){
+    	return coloredHyperedgesBox;
     }
 }

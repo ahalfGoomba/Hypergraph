@@ -28,6 +28,7 @@ public class NetPanel extends JPanel {
     private float selectionAnimationPhase = 0;
 
     private boolean centerGraphOnNextPaint = false;
+    private boolean coloredHyperedge = false;
 
     private final Cursor switchCursor, deleteCursor;
 
@@ -95,17 +96,25 @@ public class NetPanel extends JPanel {
   
         
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
-            imgGraphics.setColor(Color.black);
-
+          System.out.println(coloredHyperedge);
+        	if(coloredHyperedge){
+        	 imgGraphics.setColor(Color.blue);  
+           } else {
+        	imgGraphics.setColor(Color.black);
+           }
             drawHyperEdgeLine(imgGraphics, hel);  
         }
         
         //HyperEdgePoint zeichen
 
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
-            imgGraphics.setColor(Color.black);
-
-            drawHyperEdgePoint(imgGraphics, hep);         
+            Color color = Color.black;
+        	if(coloredHyperedge){
+            	color = Color.blue;
+            } else {
+            	imgGraphics.setColor(Color.black);
+            }
+            drawHyperEdgePoint(imgGraphics, hep, color);         
         }
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
@@ -232,8 +241,8 @@ public class NetPanel extends JPanel {
     /**
      * Zeichnet einen HyperedgePoint
      */
-    private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint hep){
-    	imgGraphics.setColor(Color.black);
+    private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint hep, Color color){
+    	
     	imgGraphics.draw(hep);
     	 imgGraphics.setColor(Color.white);
          imgGraphics.fill(hep);
@@ -250,7 +259,8 @@ public class NetPanel extends JPanel {
          else{
              imgGraphics.setColor(Color.white);
              imgGraphics.fill(hep);
-             imgGraphics.setColor(Color.black);
+            
+             imgGraphics.setColor(color);
 
             
              if (hep.selected) {
@@ -263,7 +273,7 @@ public class NetPanel extends JPanel {
     }
     
     private void drawHyperEdgeLine(Graphics2D imgGraphics, HyperEdgeLine hel){
-    	imgGraphics.setColor(Color.black);
+    
     	imgGraphics.draw(hel);
     	
     }
@@ -401,6 +411,10 @@ public class NetPanel extends JPanel {
      */
     public boolean canRedo() {
         return controller.getNetData().canRedo();
+    }
+    
+    public void setColoredHypergraph(boolean value){
+    	coloredHyperedge = value;
     }
 
     public List<NodePoint> getNodes() {
