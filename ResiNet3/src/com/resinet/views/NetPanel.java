@@ -92,29 +92,52 @@ public class NetPanel extends JPanel {
         imgGraphics.setColor(Color.WHITE);
         //Hintergrund zeichnen
         imgGraphics.fillRect(0, 0, getWidth(), getHeight());
+       
         
-  
+        
+        
+        
+        int counter = 1;
+        Color color1 = Color.black;
+        
+        for (HyperEdgePoint hep : drawnHyperEdgePoints){
+          	if(coloredHyperedge){
+          		switch(counter){
+          		case 1: color1 = Color.blue;
+          			break;
+          		case 2: color1 = Color.cyan;
+          			break;
+          		case 3: color1 = Color.red;
+          			break;
+          		case 4: color1 = Color.green;
+          			break;
+          		default: color1 = Color.black;
+          			break;
+          		}
+//        		color1 = new Color(counter/10, counter/10, counter/10);
+//        		System.out.println(color1);
+          	}
+          	counter++;
+          	hep.setColor(color1);
+          	
+        }
+        
+        
         
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
-          System.out.println(coloredHyperedge);
-        	if(coloredHyperedge){
-        	 imgGraphics.setColor(Color.blue);  
-           } else {
-        	imgGraphics.setColor(Color.black);
-           }
-            drawHyperEdgeLine(imgGraphics, hel);  
+          System.out.println(hel.hyperEdgePoint.getColor());
+        
+            drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
         }
         
         //HyperEdgePoint zeichen
 
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
-            Color color = Color.black;
-        	if(coloredHyperedge){
-            	color = Color.blue;
-            } else {
-            	imgGraphics.setColor(Color.black);
-            }
-            drawHyperEdgePoint(imgGraphics, hep, color);         
+                  
+            
+            	imgGraphics.setColor(hep.color);
+            
+            drawHyperEdgePoint(imgGraphics, hep, hep.color);         
         }
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
@@ -272,8 +295,9 @@ public class NetPanel extends JPanel {
          imgGraphics.setStroke(new BasicStroke(1));	
     }
     
-    private void drawHyperEdgeLine(Graphics2D imgGraphics, HyperEdgeLine hel){
-    
+    private void drawHyperEdgeLine(Graphics2D imgGraphics, HyperEdgeLine hel, Color color){
+    	
+    	imgGraphics.setColor(color);
     	imgGraphics.draw(hel);
     	
     }

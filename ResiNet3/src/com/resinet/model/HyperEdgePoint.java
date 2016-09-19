@@ -1,5 +1,6 @@
 package com.resinet.model;
 
+import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ public class HyperEdgePoint extends Ellipse2D.Double {
 
 	private static final long serialVersionUID = -2331803725388061479L;
 	public boolean selected = false;
+	public Color color;
 
 	
 	/**
@@ -27,8 +29,16 @@ public class HyperEdgePoint extends Ellipse2D.Double {
  
    }
    
+   public void setColor(Color clr){
+	   color = clr;
+   }
+   
    public boolean getSelected(){
    	return selected;
+   }
+   
+   public Color getColor(){
+	   return color;
    }
  
 }
