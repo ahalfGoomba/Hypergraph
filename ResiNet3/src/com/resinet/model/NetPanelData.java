@@ -642,6 +642,20 @@ public class NetPanelData implements Serializable {
                     edges.addAll(affectedEdges);
                 }
             }
+            if(affectedHyperEdgePoints != null) {
+            	if (isAddAction){
+            		hyperEdgePoints.removeAll(affectedHyperEdgePoints);
+            	} else {
+            		hyperEdgePoints.addAll(affectedHyperEdgePoints);
+            	}
+            }            
+            if(affectedHyperEdgeLines != null) {
+            	if (isAddAction){
+            		hyperEdgeLines.removeAll(affectedHyperEdgeLines);
+            	} else {
+            		hyperEdgeLines.addAll(affectedHyperEdgeLines);
+            	}
+            }
         }
     }
 
@@ -688,15 +702,19 @@ public class NetPanelData implements Serializable {
                     edgeLine -> movedNodes.contains(edgeLine.startNode) || movedNodes.contains(edgeLine.endNode))
                     .forEach(EdgeLine::refresh);
         }
+        
+ 
+        
     }
     
     /**
      * Beschreibt eine Aktion, bei der eine Menge von HEP bewegt wird.
      */
     private class MoveActionHEP extends AbstractUndoableEdit {
-        private static final long serialVersionUID = 1L ;
-
-        final List<HyperEdgePoint> movedHEP;
+        
+       
+		private static final long serialVersionUID = -7568376935181441206L;
+		final List<HyperEdgePoint> movedHEP;
         final Dimension amount;
 
         MoveActionHEP(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
