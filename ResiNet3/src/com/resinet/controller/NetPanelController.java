@@ -1117,6 +1117,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     public boolean isEdgeClickable() {
         return edgeClickable;
     }
+    
+    public boolean isHyperEdgePointClickable(){
+    	return hyperEdgePointClickable;
+    }
 
     public void setClickableElements(boolean nodeClickable, boolean edgeClickable) {
         this.nodeClickable = nodeClickable;

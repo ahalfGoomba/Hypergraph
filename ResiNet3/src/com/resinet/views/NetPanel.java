@@ -410,7 +410,8 @@ public class NetPanel extends JPanel {
         } else if (controlDown && hoveredElement instanceof NodePoint) {
             setCursor(switchCursor);
         } else if (((hoveredElement instanceof NodePoint && controller.isNodeClickable()) ||
-                (hoveredElement instanceof EdgeLine && controller.isEdgeClickable()))) {
+                (hoveredElement instanceof EdgeLine && controller.isEdgeClickable()) || 
+                (hoveredElement instanceof HyperEdgePoint && controller.isHyperEdgePointClickable()))) {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         } else {
             setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
