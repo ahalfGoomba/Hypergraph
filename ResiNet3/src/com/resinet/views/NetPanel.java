@@ -95,9 +95,9 @@ public class NetPanel extends JPanel {
        
         
         
-        
-        
+        	
         int counter = 1;
+        boolean bright = false;
         Color color1 = Color.black;
         
         for (HyperEdgePoint hep : drawnHyperEdgePoints){
@@ -111,13 +111,30 @@ public class NetPanel extends JPanel {
           			break;
           		case 4: color1 = Color.green;
           			break;
-          		default: color1 = Color.black;
+          		case 5: color1 = Color.orange;
           			break;
+          		case 6: color1 = Color.yellow;
+          			break;
+          		case 7: color1 = Color.darkGray;
+          			break;
+          		case 8: color1 = Color.magenta;
+          			break;
+          		case 9: color1 = Color.gray;
+          			break;
+          		case 10: color1 = Color.lightGray;
+          			break;
+          		default: color1 = Color.black;
+          			counter =  0;
+          			bright = true;
+          			break;       
+          		
           		}
-//        		color1 = new Color(counter/10, counter/10, counter/10);
-//        		System.out.println(color1);
+          		counter++;
+          		if(bright){
+          			color1.brighter();
+          		}
           	}
-          	counter++;
+          
           	hep.setColor(color1);
           	
         }
@@ -125,7 +142,7 @@ public class NetPanel extends JPanel {
         
         
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
-          System.out.println(hel.hyperEdgePoint.getColor());
+          
         
             drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
         }
@@ -135,9 +152,9 @@ public class NetPanel extends JPanel {
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
                   
             
-            	imgGraphics.setColor(hep.color);
+            	imgGraphics.setColor(hep.getColor());
             
-            drawHyperEdgePoint(imgGraphics, hep, hep.color);         
+            drawHyperEdgePoint(imgGraphics, hep, hep.getColor());         
         }
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
@@ -286,7 +303,7 @@ public class NetPanel extends JPanel {
              imgGraphics.setColor(color);
 
             
-             if (hep.selected) {
+             if (hep.getSelected()) {
                  imgGraphics.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2, 2}, selectionAnimationPhase));
              }
 

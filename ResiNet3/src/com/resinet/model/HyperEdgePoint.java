@@ -10,7 +10,8 @@ public class HyperEdgePoint extends Ellipse2D.Double {
 
 	private static final long serialVersionUID = -2331803725388061479L;
 	public boolean selected = false;
-	public Color color;
+	private Color color;
+	private List<HyperEdgeLine> edges;
 
 	
 	/**
@@ -22,6 +23,7 @@ public class HyperEdgePoint extends Ellipse2D.Double {
    public HyperEdgePoint(double x, double y) {
        super(x, y, 10, 10);
        selected = false;
+       edges = new ArrayList<HyperEdgeLine>();
    }
    
    public void setSelected(boolean isSelected){
@@ -39,6 +41,14 @@ public class HyperEdgePoint extends Ellipse2D.Double {
    
    public Color getColor(){
 	   return color;
+   }
+   
+   public void addHyperEdgeLine(HyperEdgeLine line){
+	   edges.add(line);
+   }
+   
+   public List<HyperEdgeLine> getHyperedges(){
+	   return edges;
    }
  
 }
