@@ -384,9 +384,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                
                 if(mouseEvent.isControlDown() && hypergraphMode){                	
                 	
-                	currentNode.setSelected(true);              	
+                	currentNode.setSelected(true);    
+                	if(!selectedNodes.contains(currentNode)){
                 	selectedNodes.add(currentNode);
-                	
+                	}
                 }
 
                 if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
@@ -474,19 +475,19 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 //Wenn kein bestehendes Element angeklickt wurde, neuen Knoten erzeugen
                 int x = clickX - 10;
                 int y = clickY - 10;
-                System.out.println(hypergraphMode + "netpanelcontroller");
+               
                //Hyperedge erzeugen
                 if(mouseEvent.isControlDown() && hypergraphMode){
                 	
                 	HyperEdgePoint newHE = new HyperEdgePoint(x, y);
-                	for(NodePoint p : selectedNodes){
-                		HyperEdgeLine line = new HyperEdgeLine(p, newHE); 
-                		newHE.addHyperEdgeLine(line);
+                	for(NodePoint p : selectedNodes){                		
+                		newHE.addNodePoint(p);
+                		System.out.println(p);
                 	}
                 	//false wenn der knoten nicht bereits existiert
                 	boolean doubleCheck = false;
                 	for (HyperEdgePoint hep : netData.getHyperEdgePoints()){
-                		if(hep.getHyperedges().size() == newHE.getHyperedges().size() && hep.getHyperedges().containsAll(newHE.getHyperedges())){
+                		if(hep.getNodePoints().size() == newHE.getNodePoints().size() && hep.getNodePoints().containsAll(newHE.getNodePoints())){
                 			doubleCheck = true;
                 			System.out.println(doubleCheck);
                 		}
@@ -499,11 +500,16 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
                 	selectedNodes.clear();
                 	//Fehlerausgabe für den Benutzer bei zu wenig ausgewählten Knoten
-                	} else {
+                	} else if (selectedNodes.size() < 2){
                 		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
                 		JOptionPane.showMessageDialog(null, "Es müssen mindestens 2 Knoten ausgewählt werden!", "Error",
                                 JOptionPane.ERROR_MESSAGE);
+                		selectedNodes.clear();
                 		
+                	} else {
+                		JOptionPane.showMessageDialog(null, "Diese Konten sind bereits durch eine Hyperkante verbunden", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                		selectedNodes.clear();
                 	}
 
             	} else {
