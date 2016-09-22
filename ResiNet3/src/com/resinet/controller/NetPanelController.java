@@ -672,7 +672,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
             
             //Rechteck erstellen, dass mit 5 Pixel Abstand alle ausgewählten Knoten umschließt
-            //Falls keine Knoten ausgewählt wurden, hat das Reckteck alle Parameter auf 0
+            //Falls keine Knoten und kein HEP ausgewählt wurden, hat das Reckteck alle Parameter auf 0
             selectionRectangle = GraphUtil.getGraphBounds(selectedNodes, selectedHyperEdgePoints, 5);
         
 
@@ -874,7 +874,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-        if (newLineDragging || selectDragging || selectedNodesResizing)
+        if (newLineDragging || selectDragging || selectedNodesResizing || selectedHyperEdgePointResizing)
             return;
 
         int x = mouseEvent.getX();
@@ -884,7 +884,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         /**
          * Prüfen, ob der Cursor auf einem markierten Bereich ist oder Nahe einer Kante davon ist
          */
-        if (nodesSelected) {
+        if (nodesSelected || hyperEdgePointsSelected) {
             resizeBorder = selectionRectangle.getResizableBorder(x, y, RESIZE_DISTANCE);
             if (resizeBorder > 0) {
                 cursorOnSelectionBorder = true;
@@ -904,6 +904,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             cursorOnSelectionBorder = false;
             cursorInsideSelection = false;
         }
+        
+
 
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
