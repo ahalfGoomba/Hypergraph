@@ -1,6 +1,7 @@
 package com.resinet.views;
 
 import com.resinet.controller.NetPanelController;
+import com.resinet.model.BorderRectangle;
 import com.resinet.model.EdgeLine;
 import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.HyperEdgeLine;
@@ -15,9 +16,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NetPanel extends JPanel {
@@ -106,11 +109,11 @@ public class NetPanel extends JPanel {
           		switch(counter){
           		case 1: color1 = Color.blue;
           			break;
-          		case 2: color1 = Color.cyan;
+          		case 2: color1 = Color.red;
           			break;
-          		case 3: color1 = Color.red;
+          		case 3: color1 = Color.green;
           			break;
-          		case 4: color1 = Color.green;
+          		case 4: color1 = Color.cyan;
           			break;
           		case 5: color1 = Color.orange;
           			break;
@@ -150,7 +153,7 @@ public class NetPanel extends JPanel {
       
        
         
-        GeneralPath hyperEdgeBorder = new GeneralPath();        
+        //GeneralPath hyperEdgeBorder = new GeneralPath();        
       
         //HyperEdgePoint zeichen
        
@@ -158,25 +161,18 @@ public class NetPanel extends JPanel {
         	
         	imgGraphics.setColor(hep.getColor());
         	List<NodePoint> nodes = hep.getNodePoints();
-        	hyperEdgeBorder.moveTo(nodes.get(0).getCenterX(), nodes.get(0).getCenterY()); 
-        	hyperEdgeBorder.quadTo(nodes.get(0).getCenterX(), nodes.get(0).getCenterY(), nodes.get(1).getCenterX(), nodes.get(1).getCenterY());
-        	for(int i = 1; i < nodes.size(); i++){
-        		if(i+1 == nodes.size()){
-        		//hyperEdgeBorder.curveTo(nodes.get(i-1).getX(), nodes.get(i-1).getY(), nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(i-1).getX(), nodes.get(i-1).getY());	
-        		//hyperEdgeBorder.closePath();
-        		hyperEdgeBorder.quadTo(nodes.get(i).getCenterX(), nodes.get(i).getCenterY(), nodes.get(0).getCenterX(), nodes.get(0).getCenterY());
-        		} else {
-        		hyperEdgeBorder.quadTo(nodes.get(i).getCenterX(), nodes.get(i).getCenterY(), nodes.get(i+1).getCenterX(), nodes.get(i+1).getCenterY());	
-        		//hyperEdgeBorder.curveTo(nodes.get(i-1).getX(), nodes.get(i-1).getY(), nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(i+1).getX(), nodes.get(i+1).getY());
-
-        		}
-        		}
+        	List<HyperEdgePoint> emptyList = new ArrayList<HyperEdgePoint>(); 
+        	BorderRectangle border = GraphUtil.getGraphBounds(nodes, emptyList , 1);
         	
-        	
-        	//hyperEdgeBorder.curveTo(10, 90, 100, 50, 34, 99);
-             //hyperEdgeBorder.curveTo(10, 10, 10, 10, 50, 50);
-             imgGraphics.setColor(Color.black);
-             imgGraphics.draw(hyperEdgeBorder);
+        	//imgGraphics.draw(border);
+        	Ellipse2D hyperEdgeBorder = new Ellipse2D.Double(1,1,1,1);
+        	hyperEdgeBorder.setFrameFromCenter(border.getCenterX(), border.getCenterY(), border.getMinX() - border.getWidth()/4, border.getMaxY() + border.getHeight()/4);
+            imgGraphics.setColor(hep.getColor());
+            imgGraphics.draw(hyperEdgeBorder);
+            //alpha wert der füllfarbe ändern
+            Color color = new Color(hep.getColor().getRed(), hep.getColor().getGreen(), hep.getColor().getBlue(), 170);
+            imgGraphics.setColor(color);
+            imgGraphics.fill(hyperEdgeBorder);
             drawHyperEdgePoint(imgGraphics, hep, hep.getColor());                     
         }
 
