@@ -867,7 +867,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         /**
          * Prüfen, ob der Cursor auf einem markierten Bereich ist oder Nahe einer Kante davon ist
          */
-        if (nodesSelected) {
+        if (nodesSelected || hyperEdgePointsSelected) {
             resizeBorder = selectionRectangle.getResizableBorder(x, y, RESIZE_DISTANCE);
             if (resizeBorder > 0) {
                 cursorOnSelectionBorder = true;
@@ -888,26 +888,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             cursorInsideSelection = false;
         }
         
-        if (hyperEdgePointsSelected) {
-            resizeBorder = selectionRectangle.getResizableBorder(x, y, RESIZE_DISTANCE);
-            if (resizeBorder > 0) {
-                cursorOnSelectionBorder = true;
-                cursorInsideSelection = false;
-                consumed = true;
-                hoveredElement = null;
-            } else if (selectionRectangle.contains(x, y)) {
-                cursorInsideSelection = true;
-                cursorOnSelectionBorder = false;
-                consumed = true;
-                hoveredElement = null;
-            } else {
-                cursorInsideSelection = false;
-                cursorOnSelectionBorder = false;
-            }
-        } else {
-            cursorOnSelectionBorder = false;
-            cursorInsideSelection = false;
-        }
+
 
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
