@@ -511,6 +511,10 @@ public class NetPanelData implements Serializable {
     	return Collections.unmodifiableList(hyperEdgePoints);
     }
     
+    /**
+     * 
+     * @return nicht veränderbare Listenrepräsentation der HyperEdgekantenliste
+     */
     public List<HyperEdgeLine> getHyperEdgeLines(){
     	return Collections.unmodifiableList(hyperEdgeLines);
     }

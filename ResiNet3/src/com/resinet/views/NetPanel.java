@@ -214,6 +214,9 @@ public class NetPanel extends JPanel {
             //animiert gestrichelte Linie
             imgGraphics.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2, 2}, selectionAnimationPhase));
             imgGraphics.draw(controller.getSelectionRectangle());
+        } else if (controller.isHyperEdgePointSelected()){
+        	imgGraphics.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2, 2}, selectionAnimationPhase));
+            imgGraphics.draw(controller.getSelectionRectangle());
         }
 
         g.drawImage(img, 0, 0, this);

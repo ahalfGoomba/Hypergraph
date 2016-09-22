@@ -1150,6 +1150,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         return nodesSelected;
     }
 
+    public boolean  isHyperEdgePointSelected(){
+    	return hyperEdgePointsSelected;
+    }
     public Rectangle2D getSelectionRectangle() {
         return selectionRectangle;
     }
