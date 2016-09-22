@@ -14,6 +14,7 @@ public class HyperEdgePoint extends Ellipse2D.Double {
 	//enthält eine liste der knoten die durch die hyperedge verbunden werden
 	private List<NodePoint> nodes;
 
+
 	
 	/**
     * Erstellt einen Knoten als Zentrum der Hyperkante(kein Knoten des Graphen)
@@ -22,7 +23,7 @@ public class HyperEdgePoint extends Ellipse2D.Double {
     * @param y      die y-Koordinate
     */
    public HyperEdgePoint(double x, double y) {
-       super(x, y, 10, 10);
+	   super(x, y, 10, 10);
        selected = false;
        nodes = new ArrayList<NodePoint>();
    }
@@ -51,5 +52,7 @@ public class HyperEdgePoint extends Ellipse2D.Double {
    public List<NodePoint> getNodePoints(){
 	   return nodes;
    }
+   
+
  
 }

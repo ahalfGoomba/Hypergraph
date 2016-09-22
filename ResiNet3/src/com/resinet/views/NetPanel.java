@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -95,7 +96,7 @@ public class NetPanel extends JPanel {
        
         
         
-        	
+              	
         int counter = 1;
         boolean bright = false;
         Color color1 = Color.black;
@@ -139,22 +140,44 @@ public class NetPanel extends JPanel {
           	
         }
         
-        
-        
+   
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
           
         
             drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
         }
         
+      
+       
+        
+        GeneralPath hyperEdgeBorder = new GeneralPath();        
+      
         //HyperEdgePoint zeichen
-
+       
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
-                  
-            
-            	imgGraphics.setColor(hep.getColor());
-            
-            drawHyperEdgePoint(imgGraphics, hep, hep.getColor());         
+        	
+        	imgGraphics.setColor(hep.getColor());
+        	List<NodePoint> nodes = hep.getNodePoints();
+        	hyperEdgeBorder.moveTo(nodes.get(0).getCenterX(), nodes.get(0).getCenterY()); 
+        	hyperEdgeBorder.quadTo(nodes.get(0).getCenterX(), nodes.get(0).getCenterY(), nodes.get(1).getCenterX(), nodes.get(1).getCenterY());
+        	for(int i = 1; i < nodes.size(); i++){
+        		if(i+1 == nodes.size()){
+        		//hyperEdgeBorder.curveTo(nodes.get(i-1).getX(), nodes.get(i-1).getY(), nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(i-1).getX(), nodes.get(i-1).getY());	
+        		//hyperEdgeBorder.closePath();
+        		hyperEdgeBorder.quadTo(nodes.get(i).getCenterX(), nodes.get(i).getCenterY(), nodes.get(0).getCenterX(), nodes.get(0).getCenterY());
+        		} else {
+        		hyperEdgeBorder.quadTo(nodes.get(i).getCenterX(), nodes.get(i).getCenterY(), nodes.get(i+1).getCenterX(), nodes.get(i+1).getCenterY());	
+        		//hyperEdgeBorder.curveTo(nodes.get(i-1).getX(), nodes.get(i-1).getY(), nodes.get(i).getX(), nodes.get(i).getY(), nodes.get(i+1).getX(), nodes.get(i+1).getY());
+
+        		}
+        		}
+        	
+        	
+        	//hyperEdgeBorder.curveTo(10, 90, 100, 50, 34, 99);
+             //hyperEdgeBorder.curveTo(10, 10, 10, 10, 50, 50);
+             imgGraphics.setColor(Color.black);
+             imgGraphics.draw(hyperEdgeBorder);
+            drawHyperEdgePoint(imgGraphics, hep, hep.getColor());                     
         }
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
@@ -283,7 +306,7 @@ public class NetPanel extends JPanel {
      */
     private void drawHyperEdgePoint(Graphics2D imgGraphics, HyperEdgePoint hep, Color color){
     	
-    	imgGraphics.draw(hep);
+    	 imgGraphics.draw(hep);
     	 imgGraphics.setColor(Color.white);
          imgGraphics.fill(hep);
          

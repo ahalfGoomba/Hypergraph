@@ -19,6 +19,7 @@ public class NodePoint extends Ellipse2D.Double {
         super(x, y, 20, 20);
         this.c_node = c_node;
         selected = false;
+        
     }
 
     /**
@@ -49,10 +50,13 @@ public class NodePoint extends Ellipse2D.Double {
     
     public void setSelected(boolean isSelected){
     	selected = isSelected;
+    	
   
     }
     
     public boolean getSelected(){
+    	System.out.println("in class" + selected);
     	return selected;
+    	
     }
 }
