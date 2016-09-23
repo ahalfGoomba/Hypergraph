@@ -127,6 +127,11 @@ public class MainframeController extends WindowAdapter implements ActionListener
         	mainFrame.getNetPanel().setColoredHypergraph(mainFrame.getColoredHyperedgeCheckBox().isSelected());
         	mainFrame.getNetPanel().repaint();
         	
+        } else if(checkbox == mainFrame.getEllipseVisualisationCheckBox()){
+        	mainFrame.getAlphaValueLabel().setVisible(mainFrame.getEllipseVisualisationCheckBox().isSelected());
+        	mainFrame.getAlphaValueSpinner().setVisible(mainFrame.getEllipseVisualisationCheckBox().isSelected());      
+        	mainFrame.getNetPanel().setEllipseMode(mainFrame.getEllipseVisualisationCheckBox().isSelected());
+        	mainFrame.getNetPanel().repaint();
         }
     }
 
@@ -286,13 +291,19 @@ public class MainframeController extends WindowAdapter implements ActionListener
     @Override
     public void stateChanged(ChangeEvent e) {
       
-    	
     	if (mainFrame == null)
             return;
 
+    	if(mainFrame.getAlphaValueSpinner() == e.getSource()){
+    		mainFrame.getNetPanel().setAlphaValue((Integer) mainFrame.getAlphaValueSpinner().getValue());
+    		mainFrame.getNetPanel().repaint();
+    	}
+    	
+
+
         NetPanelController netPanelController = mainFrame.getNetPanel().getController();
 
-        if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME) {
+        if (mainFrame.getReliabilityMode() == RELIABILITY_MODES.SAME && !mainFrame.getHypergraphMode()) {
             netPanelController.setClickableElements(true, true);
         } else {
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
