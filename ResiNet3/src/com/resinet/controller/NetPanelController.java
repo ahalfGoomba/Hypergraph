@@ -487,8 +487,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 if(mouseEvent.isControlDown() && hypergraphMode){
                 	
                 	HyperEdgePoint newHE = new HyperEdgePoint(x, y);
-                	
-                                                        
                     
                 	for(NodePoint p : selectedNodes){                		
                 		newHE.addNodePoint(p);             		
@@ -1124,6 +1122,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     
     public boolean isHyperEdgePointClickable(){
     	return hyperEdgePointClickable;
+    }
+    
+    public void setHyperEdgePointClickable(boolean value){
+    	hyperEdgePointClickable = value;
     }
 
     public void setClickableElements(boolean nodeClickable, boolean edgeClickable) {

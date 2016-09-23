@@ -60,6 +60,7 @@ public class NetPanelData implements Serializable {
         ArrayList<NodePoint> nodeWrapper = new ArrayList<>();
         ArrayList<EdgeLine> removeEdges = new ArrayList<>();
         ArrayList<HyperEdgeLine> removeHyperEdgeLines = new ArrayList<>();
+        ArrayList<HyperEdgePoint> removeHyperEdgePoints = new ArrayList<>();
         ArrayList<Integer> removedEdgeIndices = new ArrayList<>();
         ArrayList<Integer> removedHyperEdgeLineIndices = new ArrayList<>(); 
         nodeWrapper.add(node);
@@ -74,17 +75,34 @@ public class NetPanelData implements Serializable {
             }
         }
         
+    	for(HyperEdgePoint hep : hyperEdgePoints){
+    		if(hep.getNodePoints().contains(node)){
+    			hep.getNodePoints().remove(node); 
+    			if(hep.getNodePoints().size() < 2){
+    				removeHyperEdgePoints.add(hep);
+    				
+    			}
+    		}
+    	}
+        
         for (int i = 0; i < hyperEdgeLines.size(); i++){
         	HyperEdgeLine hyperEdgeLine = hyperEdgeLines.get(i);
         	
-        	if (node.equals(hyperEdgeLine.startNode)){
+        	if (node.equals(hyperEdgeLine.startNode) || removeHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint)){
+        		
         		removeHyperEdgeLines.add(hyperEdgeLine);
         		removedHyperEdgeLineIndices.add(i);
         		
         	}
+ 
+
+//        	for(HyperEdgePoint hep1 : removeHEPs){
+//        		hyperEdgePoints.remove(hep1);
+//        	}
+        	nodes.remove(node);
         }
         //TODO HyperEdgePoints entfernen wenn sie nicht mehr mit einem Knoten verbunden sind
-        AddOrRemoveAction action = new AddOrRemoveAction(false, nodeWrapper, removeEdges, removeHyperEdgeLines);
+        AddOrRemoveAction action = new AddOrRemoveAction(false, nodeWrapper, removeEdges,removeHyperEdgePoints, removeHyperEdgeLines);
         action.execute();
         undoManager.addEdit(action);
         
@@ -145,14 +163,9 @@ public class NetPanelData implements Serializable {
      * @param selectedNodes
      */
     public void addHyperEdge(HyperEdgePoint newHEP, List<NodePoint> selectedNodes){
-       addHyperEdgePoint(newHEP);
-       
-        
-        for (NodePoint nodePoint : selectedNodes) {        	
-               	
-                addHyperEdgeLine(nodePoint, newHEP);
-         
-            
+       addHyperEdgePoint(newHEP);       
+        for (NodePoint nodePoint : selectedNodes) {        	             	
+                addHyperEdgeLine(nodePoint, newHEP);         
         }
     }
     
@@ -161,6 +174,7 @@ public class NetPanelData implements Serializable {
      * @param Der einzufügende HEP
      */
     public void addHyperEdgePoint(HyperEdgePoint newHEP){
+    	hyperEdgePoints.add(newHEP);
     	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP);
         action.execute();
         undoManager.addEdit(action);

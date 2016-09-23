@@ -97,10 +97,7 @@ public class NetPanel extends JPanel {
         imgGraphics.setColor(Color.WHITE);
         //Hintergrund zeichnen
         imgGraphics.fillRect(0, 0, getWidth(), getHeight());
-       
-        
-        
-              	
+             	
         int counter = 1;
         boolean bright = false;
         Color color1 = Color.black;
@@ -152,8 +149,6 @@ public class NetPanel extends JPanel {
     
         }
         
-        
-      
         //HyperEdgePoint zeichen
        
         for (HyperEdgePoint hep : drawnHyperEdgePoints) {
@@ -161,9 +156,10 @@ public class NetPanel extends JPanel {
         	imgGraphics.setColor(hep.getColor());
         	List<NodePoint> nodes = hep.getNodePoints();
         	List<HyperEdgePoint> emptyList = new ArrayList<HyperEdgePoint>(); 
-        	BorderRectangle border = GraphUtil.getGraphBounds(nodes, emptyList , 1);
+        	
         	
         	if(ellipseMode){
+        	BorderRectangle border = GraphUtil.getGraphBounds(nodes, emptyList , 1);
         	Ellipse2D hyperEdgeBorder = new Ellipse2D.Double(1,1,1,1);
         	hyperEdgeBorder.setFrameFromCenter(border.getCenterX(), border.getCenterY(), border.getMinX() - border.getWidth()/5, border.getMaxY() + border.getHeight()/5);
             imgGraphics.setColor(hep.getColor());
@@ -179,8 +175,8 @@ public class NetPanel extends JPanel {
 
         //erst Kanten zeichnen, damit danach das Stück im inneren der Knoten überschrieben werden kann
         //und die Kanten demzufolge nur bis zu den Rändern der Knoten gehen
-
        
+        imgGraphics.setColor(Color.black);
         for (EdgeLine edgeLine : drawnEdges) {
             if (edgeLine.equals(controller.getHoveredElement())) {
                 imgGraphics.setStroke(new BasicStroke(2));

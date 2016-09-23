@@ -120,7 +120,6 @@ public class MainframeController extends WindowAdapter implements ActionListener
             boolean considerNodes = mainFrame.getConsiderNodesBox().isSelected();
             boolean considerEdges = mainFrame.getConsiderEdgesBox().isSelected();
 
-
             netPanelController.setClickableElements(considerNodes, considerEdges);
             updateSingleReliabilityProbPanel();
         } else if(checkbox == mainFrame.getColoredHyperedgeCheckBox()){
@@ -131,7 +130,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         	mainFrame.getAlphaValueLabel().setVisible(mainFrame.getEllipseVisualisationCheckBox().isSelected());
         	mainFrame.getAlphaValueSpinner().setVisible(mainFrame.getEllipseVisualisationCheckBox().isSelected());      
         	mainFrame.getNetPanel().setEllipseMode(mainFrame.getEllipseVisualisationCheckBox().isSelected());
-        	mainFrame.getNetPanel().repaint();
+        	mainFrame.getNetPanel().repaint();        	
         }
     }
 
@@ -189,6 +188,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
         list.remove(spinner);
 
         refreshSingleReliabilityScrollPane();
+     
     }
 
     /**

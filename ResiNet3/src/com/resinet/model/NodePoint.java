@@ -55,7 +55,7 @@ public class NodePoint extends Ellipse2D.Double {
     }
     
     public boolean getSelected(){
-    	System.out.println("in class" + selected);
+
     	return selected;
     	
     }
