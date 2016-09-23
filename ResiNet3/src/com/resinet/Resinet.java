@@ -41,6 +41,10 @@ public class Resinet implements Constants {
     private JTextPane statusBarCollapsedLabel;
     private JPanel singleReliabilitiesContainer;
     private JTabbedPane hypergraphTabbedPane;
+    private JCheckBox coloredHyperedgesBox;
+    private JCheckBox ellipseVisualisation;
+    private JSpinner alphaValueSpinner;
+    private JLabel alphaLabel;
     JPanel calculatePanel;
 
     private GUI_STATES guiState;
@@ -55,7 +59,7 @@ public class Resinet implements Constants {
     private JCheckBox considerNodesBox;
     private JCheckBox considerEdgesBox;
     private JCheckBox considerHyperEdgesBox;
-    private JCheckBox coloredHyperedgesBox;
+    
     private JScrollPane singleReliabilitiesScrollPane;
     private JPanel expandedOutputPanel;
     private JButton collapseOutputBtn;
@@ -447,18 +451,32 @@ public class Resinet implements Constants {
     private void initHypergraphPanel(){
     	hypergraphTabbedPane = new JTabbedPane(JTabbedPane.TOP);
         hypergraphTabbedPane.addChangeListener(controller);
-    	JPanel hypergraphPanel = new JPanel((new FlowLayout(FlowLayout.LEFT)));
-    	
-    	coloredHyperedgesBox = new JCheckBox("colored Hyperedges                  ");
+    	JPanel hypergraphPanel = new JPanel((new GridLayout(15,1)));
+    	    	
+    	coloredHyperedgesBox = new JCheckBox("colored Hyperedges");
     	coloredHyperedgesBox.addItemListener(controller);
     	hypergraphPanel.add(coloredHyperedgesBox);
+    	
+    	ellipseVisualisation = new JCheckBox("visualisation as ellipses       ");
+    	ellipseVisualisation.addItemListener(controller);
+    	hypergraphPanel.add(ellipseVisualisation);
+    	
+    	alphaLabel = new JLabel(Strings.getLocalizedString("alpha.value"));
+    	alphaLabel.setVisible(false);
+    	hypergraphPanel.add(alphaLabel);
+    	
+    	SpinnerModel sm = new SpinnerNumberModel(185, 0, 255, 1);
+    	alphaValueSpinner = new JSpinner(sm);
+    	alphaValueSpinner.setSize(5, 5);
+    	alphaValueSpinner.setVisible(false);
+    	alphaValueSpinner.addChangeListener(controller);
+    	hypergraphPanel.add(alphaValueSpinner);
+ 	
     	hypergraphTabbedPane.add("Hypergraph", hypergraphPanel);
     	
     	
     	hypergraphTabbedPane.setVisible(false);
-    	
-    	
-    	
+ 	
     	contentPane.add(sidePanel, BorderLayout.LINE_END);
     }
 
@@ -753,5 +771,17 @@ public class Resinet implements Constants {
     
     public JCheckBox getColoredHyperedgeCheckBox(){
     	return coloredHyperedgesBox;
+    }
+    
+    public JLabel getAlphaValueLabel(){
+    	return alphaLabel;
+    }
+    
+    public JSpinner getAlphaValueSpinner(){
+    	return alphaValueSpinner;
+    }
+    
+    public JCheckBox getEllipseVisualisationCheckBox(){
+    	return ellipseVisualisation;
     }
 }

@@ -33,7 +33,8 @@ public class NetPanel extends JPanel {
 
     private boolean centerGraphOnNextPaint = false;
     private boolean coloredHyperedge = false;
-
+    private boolean ellipseMode = false;
+    private int alphaValue = 185;
     private final Cursor switchCursor, deleteCursor;
 
     public NetPanel(GraphChangedListener listener) {
@@ -143,17 +144,15 @@ public class NetPanel extends JPanel {
           	
         }
         
-   
+   //wenn der ellipseMode aus ist werden die kanten der Hyperedge in standart darstellugn gezeichnet
+        if(!ellipseMode){        
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
-          
-        
-            drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
+  drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
+        }
+    
         }
         
-      
-       
         
-        //GeneralPath hyperEdgeBorder = new GeneralPath();        
       
         //HyperEdgePoint zeichen
        
@@ -164,22 +163,24 @@ public class NetPanel extends JPanel {
         	List<HyperEdgePoint> emptyList = new ArrayList<HyperEdgePoint>(); 
         	BorderRectangle border = GraphUtil.getGraphBounds(nodes, emptyList , 1);
         	
-        	//imgGraphics.draw(border);
+        	if(ellipseMode){
         	Ellipse2D hyperEdgeBorder = new Ellipse2D.Double(1,1,1,1);
-        	hyperEdgeBorder.setFrameFromCenter(border.getCenterX(), border.getCenterY(), border.getMinX() - border.getWidth()/4, border.getMaxY() + border.getHeight()/4);
+        	hyperEdgeBorder.setFrameFromCenter(border.getCenterX(), border.getCenterY(), border.getMinX() - border.getWidth()/5, border.getMaxY() + border.getHeight()/5);
             imgGraphics.setColor(hep.getColor());
             imgGraphics.draw(hyperEdgeBorder);
             //alpha wert der füllfarbe ändern
-            Color color = new Color(hep.getColor().getRed(), hep.getColor().getGreen(), hep.getColor().getBlue(), 170);
+            Color color = new Color(hep.getColor().getRed(), hep.getColor().getGreen(), hep.getColor().getBlue(), alphaValue);
             imgGraphics.setColor(color);
             imgGraphics.fill(hyperEdgeBorder);
-            drawHyperEdgePoint(imgGraphics, hep, hep.getColor());                     
+        	} else {            
+            drawHyperEdgePoint(imgGraphics, hep, hep.getColor());  
+        	}
         }
 
         //erst Kanten zeichnen, damit danach das StÃ¼ck im inneren der Knoten Ã¼berschrieben werden kann
         //und die Kanten demzufolge nur bis zu den RÃ¤ndern der Knoten gehen
-        imgGraphics.setColor(Color.black);
 
+       
         for (EdgeLine edgeLine : drawnEdges) {
             if (edgeLine.equals(controller.getHoveredElement())) {
                 imgGraphics.setStroke(new BasicStroke(2));
@@ -192,7 +193,7 @@ public class NetPanel extends JPanel {
             String s = String.valueOf(drawnEdges.indexOf(edgeLine));
             imgGraphics.drawString(s, (float) edgeLine.textPositionX, (float) edgeLine.textPositionY);
         }
-
+        
         //Knoten zeichnen
         int count = 0;
         for (NodePoint nodePoint : drawnNodes) {
@@ -495,5 +496,13 @@ public class NetPanel extends JPanel {
     
     public NetPanelController getController() {
         return controller;
+    }
+    
+    public void setAlphaValue(int value){
+    	alphaValue = value;
+    }
+    
+    public void setEllipseMode(boolean mode){
+    	ellipseMode = mode;
     }
 }
