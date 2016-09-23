@@ -488,6 +488,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 if(mouseEvent.isControlDown() && hypergraphMode){
                 	
                 	HyperEdgePoint newHE = new HyperEdgePoint(x, y);
+                	
+                                                        
+                    
                 	for(NodePoint p : selectedNodes){                		
                 		newHE.addNodePoint(p);             		
                 	}
@@ -726,11 +729,14 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             //Ausgewählte Knoten sammeln
             ArrayList<NodePoint> selectedNodes = new ArrayList<>(
                     drawnNodes.stream().filter(nodePoint -> nodePoint.selected).collect(Collectors.toList()));
+            //Ausgew�hlte HEP sammeln
+            ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>(
+                    drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
 
             double factorX = selectionRectangle.width / beginSelectionRectangle.width - 1.0;
             double factorY = selectionRectangle.height / beginSelectionRectangle.height - 1.0;
 
-            netData.resizeNodesFinal(selectedNodes, resizeBorder, factorX, factorY, selectionRectangle);
+            netData.resizeNodesFinal(selectedNodes, selectedHyperEdgePoints, resizeBorder, factorX, factorY, selectionRectangle);
         }
         
         
@@ -770,14 +776,15 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             selectionRectangle.addToY(offsetY);
 
             List<NodePoint> drawnNodes = netData.getNodes();
-            ArrayList<NodePoint> selectedNodes = new ArrayList<>();
+            ArrayList<NodePoint> selectedNodes2 = new ArrayList<>();
 
             //Ausgewählte Knoten sammeln
             for (NodePoint nodePoint : drawnNodes) {
                 if (nodePoint.selected) {
-                    selectedNodes.add(nodePoint);
+                    selectedNodes2.add(nodePoint);
                 }
             }
+
 
             List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
             ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>();
@@ -789,46 +796,24 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 }
             }
 //            netData.moveHEPNotFinal(selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
-            netData.moveNodesNotFinal(selectedNodes, selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
+            netData.moveNodesNotFinal(selectedNodes2, selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
 
             //Neue Mausposition setzen
             currentMousePosition = evt.getPoint();
             netPanel.repaint();
         } 
-//        else if (selectedHyperEdgePointDragging){
-//        	Point newMousePosition = evt.getPoint();
-//
-//            //Offsets bestimmen
-//            int offsetX = newMousePosition.x - currentMousePosition.x;
-//            int offsetY = newMousePosition.y - currentMousePosition.y;
-//
-//            //Auswahlrechteck verschieben
-//            selectionRectangle.addToX(offsetX);
-//            selectionRectangle.addToY(offsetY);
-//
-//            List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
-//            ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>();
-//
-//            //Ausgewählte HyperEdgePoints sammeln
-//            for (HyperEdgePoint hyperEdgePoint : drawnHyperEdgePoints) {
-//                if (hyperEdgePoint.selected) {
-//                    selectedHyperEdgePoints.add(hyperEdgePoint);
-//                }
-//            }
-//            netData.moveHEPNotFinal(selectedHyperEdgePoints, new Dimension(offsetX, offsetY));
-//
-//            //Neue Mausposition setzen
-//            currentMousePosition = evt.getPoint();
-//            netPanel.repaint();
-//        	
-//        }
+
         else if (selectedNodesResizing) {
             Point newMousePosition = evt.getPoint();
 
             List<NodePoint> drawnNodes = netData.getNodes();
+            List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
             //Ausgewählte Knoten sammeln
             ArrayList<NodePoint> selectedNodes = new ArrayList<>(
                     drawnNodes.stream().filter(nodePoint -> nodePoint.selected).collect(Collectors.toList()));
+            //Ausgew�hlte HEP sammeln
+            ArrayList<HyperEdgePoint> selectedHyperEdgePoints = new ArrayList<>(
+            		drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList())); 
 
             double factorX = 0;
             double factorY = 0;
@@ -865,7 +850,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
 
             if (factorX != 0 || factorY != 0) {
-                netData.resizeNodesNotFinal(selectedNodes, resizeBorder, factorX, factorY, selectionRectangle);
+                netData.resizeNodesNotFinal(selectedNodes, selectedHyperEdgePoints, resizeBorder, factorX, factorY, selectionRectangle);
             }
 
             currentMousePosition = evt.getPoint();

@@ -318,28 +318,6 @@ public class NetPanelData implements Serializable {
     }
     
     
-//    /**
-//     * Bewegt eine Menge von HEPS um die angegebenen Koordinaten. Diese Methode sollte nicht aufgerufen werden,
-//     * w�hrend das Verschieben noch im Gange ist. 
-//     * 
-//     * @param HEP
-//     * @param amount
-//     */
-//    public void moveHEPFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-//    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
-//    	undoManager.addEdit(action);
-//    }
-//    
-//    /**
-//     * Bewegt eine Menge von HEP um die angegebenen Koordinaten, aber fügt diese Aktion nicht in den UndoManager ein.
-//     * Diese Methode sollte aufgerufen werden, während das Verschieben am Gange ist.
-//     * @param HEP
-//     * @param amount
-//     */
-//    public void moveHEPNotFinal(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-//    	MoveActionHEP action = new MoveActionHEP(HEP, amount);
-//        action.execute();
-//    }
 
     /**
      * Verändert die Position einer Knotenmenge innerhalb eines Auswählrechtecks. Diese Aktion wird ausgeführt, aber
@@ -353,8 +331,8 @@ public class NetPanelData implements Serializable {
      * @param factorY            Faktor in Y-Richtung
      * @param selectionRectangle Das Auswählrechteck
      */
-    public void resizeNodesNotFinal(List<NodePoint> nodes, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
-        ResizeAction action = new ResizeAction(nodes, direction, factorX, factorY, selectionRectangle);
+    public void resizeNodesNotFinal(List<NodePoint> nodes, List<HyperEdgePoint> hyperEdgePoints, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
+        ResizeAction action = new ResizeAction(nodes, hyperEdgePoints, direction, factorX, factorY, selectionRectangle);
         action.execute();
     }
 
@@ -371,8 +349,8 @@ public class NetPanelData implements Serializable {
      * @param factorY            Faktor in Y-Richtung
      * @param selectionRectangle Das Auswählrechteck
      */
-    public void resizeNodesFinal(List<NodePoint> nodes, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
-        ResizeAction action = new ResizeAction(nodes, direction, factorX, factorY, selectionRectangle);
+    public void resizeNodesFinal(List<NodePoint> nodes, List<HyperEdgePoint> hyperEdgePoints, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
+        ResizeAction action = new ResizeAction(nodes, hyperEdgePoints, direction, factorX, factorY, selectionRectangle);
         undoManager.addEdit(action);
     }
     
@@ -805,12 +783,14 @@ public class NetPanelData implements Serializable {
         private static final long serialVersionUID = -807459713565607621L;
 
         final List<NodePoint> resizeNodes;
+        final List<HyperEdgePoint> resizeHyperEdgePoints;
         final int direction;
         final double factorX, factorY;
         private final BorderRectangle selectionRectangle;
 
-        ResizeAction(List<NodePoint> resizeNodes, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
+        ResizeAction(List<NodePoint> resizeNodes, List<HyperEdgePoint> resizeHyperEdgePoints, int direction, double factorX, double factorY, BorderRectangle selectionRectangle) {
             this.resizeNodes = new ArrayList<>(resizeNodes);
+            this.resizeHyperEdgePoints = new ArrayList<>(resizeHyperEdgePoints);
             this.direction = direction;
             this.factorX = factorX;
             this.factorY = factorY;
@@ -851,7 +831,36 @@ public class NetPanelData implements Serializable {
                     node.y = selectionRectangle.y + y * (factorY + 1) - 10.0;
                 }
             }
+            
+            for (HyperEdgePoint hep : resizeHyperEdgePoints) {
+                double x = hep.x - selectionRectangle.x + 10.0;
+                double y = hep.y - selectionRectangle.y + 10.0;
+
+                if (direction == 1 || direction == 5 || direction == 8) {
+                    //links
+                    //rechter Rand vom Auswahlrechteck minus Abstand des HyperEdgePoints von rechts um den Faktor erhöht
+                	hep.x = (selectionRectangle.x + selectionRectangle.width)
+                            - ((selectionRectangle.width - x) * (factorX + 1.0)) - 10.0;
+                }
+
+                if (direction == 2 || direction == 5 || direction == 6) {
+                    //oben
+                	hep.y = (selectionRectangle.y + selectionRectangle.height)
+                            - ((selectionRectangle.height - y) * (factorY + 1.0)) - 10.0;
+                }
+
+                if (direction == 3 || direction == 6 || direction == 7) {
+                    //rechts
+                	hep.x = selectionRectangle.x + x * (factorX + 1) - 10.0;
+                }
+
+                if (direction == 4 || direction == 7 || direction == 8) {
+                    //unten
+                	hep.y = selectionRectangle.y + y * (factorY + 1) - 10.0;
+                }
+            }
             refreshEdges();
+            refreshHyperEdgeLines();
         }
 
         @Override
@@ -886,13 +895,49 @@ public class NetPanelData implements Serializable {
                     node.y = selectionRectangle.y + y / (factorY + 1) - 10.0;
                 }
             }
+            
+            for (HyperEdgePoint hep : resizeHyperEdgePoints) {
+                double x = hep.x - selectionRectangle.x + 10.0;
+                double y = hep.y - selectionRectangle.y + 10.0;
+
+                if (direction == 1 || direction == 5 || direction == 8) {
+                    //links
+                    //rechter Rand vom Auswahlrechteck minus Abstand des Knotens von rechts um den Faktor erhöht
+                    hep.x = (selectionRectangle.x + selectionRectangle.width)
+                            - ((selectionRectangle.width - x) / (factorX + 1.0)) - 10.0;
+                }
+
+                if (direction == 2 || direction == 5 || direction == 6) {
+                    //oben
+                    hep.y = (selectionRectangle.y + selectionRectangle.height)
+                            - ((selectionRectangle.height - y) / (factorY + 1.0)) - 10.0;
+                }
+
+                if (direction == 3 || direction == 6 || direction == 7) {
+                    //rechts
+                    hep.x = selectionRectangle.x + x / (factorX + 1) - 10.0;
+                }
+
+                if (direction == 4 || direction == 7 || direction == 8) {
+                    //unten
+                    hep.y = selectionRectangle.y + y / (factorY + 1) - 10.0;
+                }
+            }
             refreshEdges();
+            refreshHyperEdgeLines();
         }
 
         private void refreshEdges() {
             edges.stream().filter(
                     edgeLine -> resizeNodes.contains(edgeLine.startNode) || resizeNodes.contains(edgeLine.endNode))
                     .forEach(EdgeLine::refresh);
+        }
+        
+        private void refreshHyperEdgeLines(){
+        	hyperEdgeLines.stream().filter(
+        			hyperEdgeLine -> resizeHyperEdgePoints.contains(hyperEdgeLine.startNode) || resizeHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint))
+        			.forEach(HyperEdgeLine::refresh);
+        	
         }
     }
 
