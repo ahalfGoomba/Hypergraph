@@ -72,7 +72,8 @@ public class NetPanelData implements Serializable {
             if (node.equals(edge.startNode) || node.equals(edge.endNode)) {
                 removeEdges.add(edge);
                 removedEdgeIndices.add(i);
-            }
+            } 
+            
         }
         
     	for(HyperEdgePoint hep : hyperEdgePoints){
