@@ -709,46 +709,6 @@ public class NetPanelData implements Serializable {
         
     }
     
-//    /**
-//     * Beschreibt eine Aktion, bei der eine Menge von HEP bewegt wird.
-//     */
-//    private class MoveActionHEP extends AbstractUndoableEdit {
-//        
-//       
-//		private static final long serialVersionUID = -7568376935181441206L;
-//		final List<HyperEdgePoint> movedHEP;
-//        final Dimension amount;
-//
-//        MoveActionHEP(ArrayList<HyperEdgePoint> HEP, Dimension amount) {
-//            movedHEP = new ArrayList<>(HEP);
-//            this.amount = amount;
-//        }
-//
-//        @Override
-//        public void redo() throws CannotRedoException {
-//            super.redo();
-//            execute();
-//        }
-//
-//        void execute() {
-//            for (HyperEdgePoint hep : movedHEP) {
-//                hep.x += amount.getWidth();
-//                hep.y += amount.getHeight();
-//            }
-//            
-//        }
-//
-//        @Override
-//        public void undo() throws CannotUndoException {
-//            super.undo();
-//            for (HyperEdgePoint hep : movedHEP) {
-//                hep.x -= amount.getWidth();
-//                hep.y -= amount.getHeight();
-//            }
-//           	        }
-//
-//       
-//    }
 
     
     /**
