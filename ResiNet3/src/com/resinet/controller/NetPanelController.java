@@ -31,7 +31,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     private int resizeBorder = 0;
     private boolean selectedNodesDragging = false;
     private boolean selectedNodesResizing = false;
-    private boolean selectedHyperEdgePointResizing = false; 
     private boolean selectedHyperEdgePointDragging = false;
     private Point selectionDraggingStart;
 
@@ -574,7 +573,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             selectedNodesDragging = cursorInsideSelection;
             selectedNodesResizing = !cursorInsideSelection;
             selectedHyperEdgePointDragging = cursorInsideSelection; 
-            selectedHyperEdgePointResizing = !cursorInsideSelection; 
             selectionDraggingStart = mouseEvent.getPoint();
             hoveredElement = null;
             beginSelectionRectangle = (BorderRectangle) selectionRectangle.clone();
@@ -704,21 +702,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             revalidateScrollPane();
         }
         
-//        if (selectedHyperEdgePointDragging){
-//        	selectedHyperEdgePointDragging = false;
-//        	
-//        	//Ausgewählte HEP sammeln
-//        	ArrayList<HyperEdgePoint> selectedhyperEdgePoints = new ArrayList <>(
-//        			drawnHyperEdgePoints.stream().filter(hyperEdgePoint -> hyperEdgePoint.selected).collect(Collectors.toList()));
-//        	
-//        	 Point endPoint = mouseEvent.getPoint();
-//             Dimension moveAmount = new Dimension(endPoint.x - selectionDraggingStart.x, endPoint.y - selectionDraggingStart.y);
-//
-//             
-//            netData.moveHEPFinal(selectedhyperEdgePoints, moveAmount);
-//             //Scrollpane aktualisieren
-//             revalidateScrollPane();
-//        }
 
         if (selectedNodesResizing) {
             selectedNodesResizing = false;
@@ -851,12 +834,12 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             }
 
             currentMousePosition = evt.getPoint();
-        }
+        } 
     }
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-        if (newLineDragging || selectDragging || selectedNodesResizing || selectedHyperEdgePointResizing)
+        if (newLineDragging || selectDragging || selectedNodesResizing)
             return;
 
         int x = mouseEvent.getX();
