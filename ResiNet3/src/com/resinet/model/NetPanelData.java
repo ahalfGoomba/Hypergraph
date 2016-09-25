@@ -463,7 +463,7 @@ public class NetPanelData implements Serializable {
      */
     public void resetSelection() {
         for (NodePoint node : nodes) {
-            node.selected = false;
+            node.setSelected(false);
         }
     }
 

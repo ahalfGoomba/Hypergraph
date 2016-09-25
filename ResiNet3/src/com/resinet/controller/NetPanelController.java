@@ -362,7 +362,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         netPanel.requestFocusInWindow();
         
 
-        if (nodesSelected) {
+        if (nodesSelected && !mouseEvent.isControlDown()) {
             resetSelection();
             netPanel.repaint();
             return;
@@ -643,12 +643,12 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             selectionRectangle = new BorderRectangle(mouseEvent.getPoint(), selectStartPoint);
 
             //Liste mit ausgewählten Knoten
-            ArrayList<NodePoint> selectedNodes = new ArrayList<>();
+            //ArrayList<NodePoint> selectedNodes = new ArrayList<>();
             
             
             for (NodePoint node : drawnNodes) {
                 if (node.intersects(selectionRectangle)) {
-                    node.selected = true;
+                    node.setSelected(true);
                     nodesSelected = true;
                     selectedNodes.add(node);
                 } else {
