@@ -240,6 +240,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         ArrayList<NodePoint> nodes = nodeEdgeWrapper.nodes;
         ArrayList<HyperEdgePoint> hyperEdgePoints = nodeEdgeWrapper.hyperEdgePoints;
         
+        
         //Freie Stelle fÃ¼r neue Knoten suchen
         BorderRectangle pasteRectangle = GraphUtil.getGraphBounds(nodeEdgeWrapper.nodes, nodeEdgeWrapper.hyperEdgePoints);
         Point2D originalLocation = pasteRectangle.getLocation();
@@ -288,7 +289,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         
 
         //Neue Knoten und Kanten hinzufÃ¼gen 
-        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, null);
+        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, hyperEdgePoints, nodeEdgeWrapper.hyperEdgeLines);
 
         listener.graphChanged();
 
@@ -1036,8 +1037,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param edges Die Kantenmenge
      */
     public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
-    	List<HyperEdgeLine> hel = new ArrayList<HyperEdgeLine>();
-    	netData.addNodesAndEdges(nodes, edges, hel);
+    	List<HyperEdgeLine> hels = new ArrayList<HyperEdgeLine>();
+    	List<HyperEdgePoint> heps = new ArrayList<HyperEdgePoint>();
+    	netData.addNodesAndEdges(nodes, edges,heps, hels);
     }
 
     /**
@@ -1046,7 +1048,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param graphWrapper Wrapper mit Mengen von Knoten und Kanten
      */
     public void addGraphWrapperAndSelect(GraphWrapper graphWrapper) {
-        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges, graphWrapper.hel);
+        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges,graphWrapper.hyperEdgePoints, graphWrapper.hel);
         
         //TODO HyperEdgePoints hinzufügen
         //nur eingefügt damit hier was funktioniert....später ändern!

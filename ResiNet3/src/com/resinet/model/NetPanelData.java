@@ -245,6 +245,7 @@ public class NetPanelData implements Serializable {
     /**
      * Erstellt ein Objekt mit den ausgewÃ¤hlten Knoten und den Kanten innerhalb der Knotenmenge. Dabei werden die Knoten
      * und Kanten geklont. Die Referenzen der Kanten werden auf die geklonten Knoten gesetzt.
+     * gleicher Vorgang für hyperkanten
      *
      * @return NodeEdgeWrapper
      */
@@ -273,8 +274,24 @@ public class NetPanelData implements Serializable {
                 selectedEdges.add((EdgeLine) edgeLine.clone());
             }
         }
+        
+        //Ausgewählte HyperEdgePoints sammeln
+        for(HyperEdgePoint hep : hyperEdgePoints){
+        	if(hep.getSelected()){
+        		selectedHEPs.add(hep);
+        	}
+        }
+        
+        
+        //fügt alle hyperEdgePoints deren knoten mit kopiert wurden in originalHEPs ein
+        for(HyperEdgePoint sHEP : selectedHEPs){
+        	if(originalSelectedNodes.containsAll(sHEP.getNodePoints())){
+        		originalSelectedHEPs.add(sHEP);
+        	}
+        	selectedHEPs = originalSelectedHEPs;
+        }
 
-        //Knoten klonen und dabei Referenzen der geklonten Kanten neu setzen
+        //Knoten klonen und dabei Referenzen der geklonten Kanten neu setzen und neue hypergraphedgelines erstellen
         for (int i = 0; i < selectedNodes.size(); i++) {
             NodePoint nodePoint = selectedNodes.get(i);
 
@@ -290,6 +307,13 @@ public class NetPanelData implements Serializable {
                     edgeLine.startNode = newNode;
                 }
             }
+            
+            for(HyperEdgePoint hep : originalSelectedHEPs){
+            	if(hep.getNodePoints().contains(nodePoint)) {
+            		selectedHyperEdgeLines.add(new HyperEdgeLine(newNode, hep));
+            	}
+            }
+            
             //Aktuellen Knoten durch geklonten ersetzen
             selectedNodes.set(i, newNode);
         }       
@@ -303,8 +327,8 @@ public class NetPanelData implements Serializable {
      * @param edges Die Kantenmenge
      * @param hyperEdgeLines Die HyperEdgeLinemenge
      */
-    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgeLine> hyperEdgeLines) {
-        AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges, hyperEdgeLines);
+    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdgePoints, List<HyperEdgeLine> hyperEdgeLines) {
+        AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges, hyperEdgePoints, hyperEdgeLines);
         action.execute();
         undoManager.addEdit(action);
     }
