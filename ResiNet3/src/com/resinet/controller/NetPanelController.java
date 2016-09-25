@@ -364,12 +364,14 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
 
         if (nodesSelected && !mouseEvent.isControlDown()) {
             resetSelection();
+            selectedNodes.clear();
             netPanel.repaint();
             return;
         }
         
         if (hyperEdgePointsSelected) {
-            resetSelection();
+            resetSelection();  
+            selectedNodes.clear();
             netPanel.repaint();
             return;
         }
@@ -511,8 +513,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	if(selectedNodes.size() >= 2 && !doubleCheck){
                 	netData.addHyperEdge(newHE, selectedNodes);                	
                 	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
-                	deselectNodes(selectedNodes);
-                	selectedNodes.clear();
+                	resetSelection();
+                    selectedNodes.clear();                
                 	//Fehlerausgabe für den Benutzer bei zu wenig ausgewählten Knoten
                 	} else if (selectedNodes.size() < 2){
                 		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
