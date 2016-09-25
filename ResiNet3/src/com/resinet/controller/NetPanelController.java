@@ -183,7 +183,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         nodesSelected = false;
         hyperEdgePointsSelected = false; 
         netPanel.selectionAnimationTimer.stop();
+        
         netData.resetSelection();
+        
     }
 
     /**
@@ -192,7 +194,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     private void removeSelectedNodes() {
         if (!nodesSelected && !hyperEdgePointsSelected)
             return;
-        
+        selectedNodes.clear();
         netData.removeSelectedHyperEdgePoints();
         netData.removeSelectedNodes();
         resetSelection();
@@ -570,6 +572,8 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             //Rechtsklick ignorieren
             return;
         }
+        
+ 
         //Mausposition setzen
         currentMousePosition = mouseEvent.getPoint();
 
@@ -646,6 +650,11 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         }
         //Falls ausgewählt wurde
         if (selectDragging) {
+            if (nodesSelected && !mouseEvent.isControlDown()) {
+                resetSelection();
+                selectedNodes.clear();
+                netPanel.repaint();               
+            }
             selectDragging = false;
 
             //Rechteck mit dem Startpunkt und der aktuellen Position erstellen

@@ -236,6 +236,10 @@ public class NetPanelData implements Serializable {
     			removeHyperEdgeLines.add(hyperEdgeLine);
     		}
     	}
+    	
+    	for(HyperEdgePoint hep : hyperEdgePoints){
+    		hep.getNodePoints().removeAll(removeNodes);
+    	}
 
         AddOrRemoveAction action = new AddOrRemoveAction(false, removeNodes, removeEdges, removeHyperEdgeLines);
         action.execute();
@@ -462,6 +466,9 @@ public class NetPanelData implements Serializable {
      * Setzt bei allen Knoten den selected-Status auf false.
      */
     public void resetSelection() {
+    	for(HyperEdgePoint hep : hyperEdgePoints){
+    		hep.setSelected(false);
+    	}
         for (NodePoint node : nodes) {
             node.setSelected(false);
         }
@@ -619,6 +626,7 @@ public class NetPanelData implements Serializable {
                 if (isAddAction) {
                     nodes.addAll(affectedNodes);
                 } else {
+                	
                     nodes.removeAll(affectedNodes);
                 }
             }
