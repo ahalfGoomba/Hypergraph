@@ -367,6 +367,12 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             netPanel.repaint();
             return;
         }
+        
+        if (hyperEdgePointsSelected) {
+            resetSelection();
+            netPanel.repaint();
+            return;
+        }
         List<NodePoint> drawnNodes = netData.getNodes();
         List<EdgeLine> drawnEdges = netData.getEdges();
         List<HyperEdgePoint> drawnHyperEdgePoints = netData.getHyperEdgePoints();
@@ -384,16 +390,17 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                
                 if(mouseEvent.isControlDown() && hypergraphMode){  
                 	
-                	if(currentNode.getSelectedForHyperEdge()){
-                	currentNode.setSelected(false);
+                	
+                	if(currentNode.getSelected()){                	
+                
+                	currentNode.setSelected(false);   
                 	} else {
+ 
                 		currentNode.setSelected(true);
                 	}
                 	if(!selectedNodes.contains(currentNode)){
                 	selectedNodes.add(currentNode);
-                	
                 	}
-                	
                 }
 
                 if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
@@ -455,7 +462,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             				
             				currentHyperEdgePoint.setSelected(true);
             				selectedHyperEdgePoints.add(currentHyperEdgePoint);
-            			
+            				
             			}
             			
             			if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
@@ -490,7 +497,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 	for(NodePoint p : selectedNodes){                		
                 		newHE.addNodePoint(p);             		
                 	}
-                	//false wenn der HEknoten nicht bereits existiert
+                	//false wenn der knoten nicht bereits existiert
                 	boolean doubleCheck = false;
                 	for (HyperEdgePoint hep : netData.getHyperEdgePoints()){
                 		if(hep.getNodePoints().size() == newHE.getNodePoints().size() && hep.getNodePoints().containsAll(newHE.getNodePoints())){
@@ -502,7 +509,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                 
                 	
                 	if(selectedNodes.size() >= 2 && !doubleCheck){
-                	netData.addHyperEdge(newHE, selectedNodes);  	
+                	netData.addHyperEdge(newHE, selectedNodes);                	
                 	listener.graphElementAdded(2, drawnHyperEdgePoints.size() - 1);
                 	deselectNodes(selectedNodes);
                 	selectedNodes.clear();
