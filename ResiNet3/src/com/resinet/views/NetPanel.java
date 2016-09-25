@@ -100,13 +100,13 @@ public class NetPanel extends JPanel {
         //Hintergrund zeichnen
         imgGraphics.fillRect(0, 0, getWidth(), getHeight());
              	
-        int counter = 1;
+        int colorCounter = 1;
         boolean bright = false;
         Color color1 = Color.black;
-        
+
         for (HyperEdgePoint hep : drawnHyperEdgePoints){
           	if(coloredHyperedge){
-          		switch(counter){
+          		switch(colorCounter){
           		case 1: color1 = Color.blue;
           			break;
           		case 2: color1 = Color.red;
@@ -128,12 +128,13 @@ public class NetPanel extends JPanel {
           		case 10: color1 = Color.lightGray;
           			break;
           		default: color1 = Color.black;
-          			counter =  0;
+          			colorCounter =  0;
           			bright = true;
           			break;       
           		
           		}
-          		counter++;
+
+          		colorCounter++;
           		if(bright){
           			color1.brighter();
           		}

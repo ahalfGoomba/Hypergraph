@@ -174,10 +174,11 @@ public class NetPanelData implements Serializable {
      * HyperEdgePoint hinzufügen
      * @param Der einzufügende HEP
      */
-    public void addHyperEdgePoint(HyperEdgePoint newHEP){
-    	hyperEdgePoints.add(newHEP);
-    	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP);
+    public void addHyperEdgePoint(HyperEdgePoint newHEP){    
+    	//hyperEdgePoints.add(newHEP);   	
+    	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP); 	
         action.execute();
+ 
         undoManager.addEdit(action);
     	
     }
@@ -617,7 +618,7 @@ public class NetPanelData implements Serializable {
             if(affectedHyperEdgeLines != null){
             	if(isAddAction){
             		hyperEdgeLines.addAll(affectedHyperEdgeLines);
-            		System.out.println(affectedHyperEdgeLines.size());
+            		
             	} else {
             		hyperEdgeLines.removeAll(affectedHyperEdgeLines);
             	}
