@@ -145,6 +145,7 @@ public class NetPanel extends JPanel {
         }
         
    //wenn der ellipseMode aus ist werden die kanten der Hyperedge in standart darstellugn gezeichnet
+        
         if(!ellipseMode){        
         for(HyperEdgeLine hel : drawnHyperEdgeLines) {
   drawHyperEdgeLine(imgGraphics, hel, hel.hyperEdgePoint.getColor());  
