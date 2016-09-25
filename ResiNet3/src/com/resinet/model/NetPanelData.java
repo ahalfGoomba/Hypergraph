@@ -935,7 +935,7 @@ public class NetPanelData implements Serializable {
         
         private void refreshHyperEdgeLines(){
         	hyperEdgeLines.stream().filter(
-        			hyperEdgeLine -> resizeHyperEdgePoints.contains(hyperEdgeLine.startNode) || resizeHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint))
+        			hyperEdgeLine -> resizeNodes.contains(hyperEdgeLine.startNode) || resizeHyperEdgePoints.contains(hyperEdgeLine.hyperEdgePoint))
         			.forEach(HyperEdgeLine::refresh);
         	
         }
