@@ -383,17 +383,16 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                
                 if(mouseEvent.isControlDown() && hypergraphMode){  
                 	
-                	
-                	if(currentNode.getSelected()){                	
-                
-                	currentNode.setSelected(false);   
+                	if(currentNode.getSelectedForHyperEdge()){
+                	currentNode.setSelected(false);
                 	} else {
- 
                 		currentNode.setSelected(true);
                 	}
                 	if(!selectedNodes.contains(currentNode)){
                 	selectedNodes.add(currentNode);
+                	
                 	}
+                	
                 }
 
                 if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {
@@ -455,7 +454,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             				
             				currentHyperEdgePoint.setSelected(true);
             				selectedHyperEdgePoints.add(currentHyperEdgePoint);
-            				
+            			
             			}
             			
             			if (mouseEvent.isShiftDown() || SwingUtilities.isMiddleMouseButton(mouseEvent)) {

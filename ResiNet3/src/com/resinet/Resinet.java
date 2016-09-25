@@ -465,7 +465,7 @@ public class Resinet implements Constants {
     	alphaLabel.setVisible(false);
     	hypergraphPanel.add(alphaLabel);
     	
-    	SpinnerModel sm = new SpinnerNumberModel(185, 0, 255, 1);
+    	SpinnerModel sm = new SpinnerNumberModel(130, 0, 255, 1);
     	alphaValueSpinner = new JSpinner(sm);
     	alphaValueSpinner.setSize(5, 5);
     	alphaValueSpinner.setVisible(false);

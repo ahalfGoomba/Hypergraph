@@ -7,6 +7,7 @@ public class NodePoint extends Ellipse2D.Double {
 
     public boolean c_node = false;
     public boolean selected;
+    private boolean selectedForHyperEdge;
 
     /**
      * Erstellt einen neuen Knoten
@@ -50,7 +51,7 @@ public class NodePoint extends Ellipse2D.Double {
     
     public void setSelected(boolean isSelected){
     	selected = isSelected;
-    	
+    	selectedForHyperEdge = isSelected;
   
     }
     
@@ -58,5 +59,13 @@ public class NodePoint extends Ellipse2D.Double {
 
     	return selected;
     	
+    }
+//    
+//    public void setSelectedForHyperEdge(boolean isSelected){
+//    	selectedForHyperEdge = isSelected;
+//    }
+//    
+    public boolean getSelectedForHyperEdge(){
+    	return selectedForHyperEdge;
     }
 }

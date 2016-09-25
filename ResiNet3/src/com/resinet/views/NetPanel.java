@@ -34,8 +34,9 @@ public class NetPanel extends JPanel {
     private boolean centerGraphOnNextPaint = false;
     private boolean coloredHyperedge = false;
     private boolean ellipseMode = false;
-    private int alphaValue = 185;
+    private int alphaValue = 130;
     private final Cursor switchCursor, deleteCursor;
+ 
 
     public NetPanel(GraphChangedListener listener) {
         controller = new NetPanelController(this, listener);
@@ -80,7 +81,8 @@ public class NetPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        List<NodePoint> drawnNodes = controller.getNodes();
+ 
+    	List<NodePoint> drawnNodes = controller.getNodes();
         List<EdgeLine> drawnEdges = controller.getEdges();
         List<HyperEdgePoint> drawnHyperEdgePoints = controller.getHyperEdgePoints();
         List<HyperEdgeLine> drawnHyperEdgeLines = controller.getHyperEdgeLines();
@@ -115,11 +117,11 @@ public class NetPanel extends JPanel {
           			break;
           		case 5: color1 = Color.orange;
           			break;
-          		case 6: color1 = Color.yellow;
+          		case 6: color1 = Color.magenta;
           			break;
           		case 7: color1 = Color.darkGray;
           			break;
-          		case 8: color1 = Color.magenta;
+          		case 8: color1 = Color.yellow;
           			break;
           		case 9: color1 = Color.gray;
           			break;
@@ -193,8 +195,10 @@ public class NetPanel extends JPanel {
         //Knoten zeichnen
         int count = 0;
         for (NodePoint nodePoint : drawnNodes) {
-            imgGraphics.setColor(Color.black);
-
+      
+            		imgGraphics.setColor(Color.black);
+            	
+           
             drawNode(imgGraphics, nodePoint);
 
             //Zahl im Knoten zeichnen
@@ -205,9 +209,6 @@ public class NetPanel extends JPanel {
                 imgGraphics.drawString(s, (float) nodePoint.getX() + 3, (float) nodePoint.getY() + 15);
             count++;
         }
-        
-
-        
 
         imgGraphics.setColor(Color.BLACK);
 
@@ -278,7 +279,7 @@ public class NetPanel extends JPanel {
                 imgGraphics.setColor(Color.black);
 
                 //Falls der Knoten ausgewählt ist, gestrichelte Umrandung zeichnen
-                if (nodePoint.selected) {
+                if (nodePoint.selected || nodePoint.getSelectedForHyperEdge()) {
                     imgGraphics.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2, 2}, selectionAnimationPhase));
                 }
 
