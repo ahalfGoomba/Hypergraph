@@ -35,7 +35,7 @@ public class NetPanel extends JPanel {
     private boolean coloredHyperedge = false;
     private boolean ellipseMode = false;
     private int alphaValue = 130;
-    private final Cursor switchCursor, deleteCursor;
+    private final Cursor switchCursor, deleteCursor, plusCursor;
  
 
     public NetPanel(GraphChangedListener listener) {
@@ -59,9 +59,11 @@ public class NetPanel extends JPanel {
         //Eigene Cursor initialisieren
         Image switchCursorImage = getToolkit().getImage(ClassLoader.getSystemResource("com/resinet/img/cursor_state_switch.png"));
         Image deleteCursorImage = getToolkit().getImage(ClassLoader.getSystemResource("com/resinet/img/cursor_delete.png"));
+        Image plusCursorImage = getToolkit().getImage(ClassLoader.getSystemResource("com/resinet/img/cursor_plus.png"));
 
         switchCursor = getToolkit().createCustomCursor(switchCursorImage, new Point(0, 0), "Switch State");
         deleteCursor = getToolkit().createCustomCursor(deleteCursorImage, new Point(0, 0), "Delete Element");
+        plusCursor = getToolkit().createCustomCursor(plusCursorImage, new Point(0, 0), "Select Node");
 
         selectionAnimationTimer = new Timer(30, (e) -> {
             //modulo, damit es nicht nach langer zeit zu einer Exception kommen kann
@@ -427,7 +429,7 @@ public class NetPanel extends JPanel {
         } else if (shiftDown && hoveredElement != null) {
             setCursor(deleteCursor);
         } else if (controlDown && hoveredElement instanceof NodePoint) {
-            setCursor(switchCursor);
+            setCursor(plusCursor);
         } else if (((hoveredElement instanceof NodePoint && controller.isNodeClickable()) ||
                 (hoveredElement instanceof EdgeLine && controller.isEdgeClickable()) || 
                 (hoveredElement instanceof HyperEdgePoint && controller.isHyperEdgePointClickable()))) {

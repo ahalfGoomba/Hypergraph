@@ -4,6 +4,7 @@ import com.resinet.model.*;
 import com.resinet.util.GraphChangedListener;
 import com.resinet.util.GraphUtil;
 import com.resinet.util.NodeEdgeWrapper;
+import com.resinet.util.Strings;
 import com.resinet.views.NetPanel;
 
 import javax.swing.*;
@@ -362,7 +363,6 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     public void mouseClicked(MouseEvent mouseEvent) {
         netPanel.requestFocusInWindow();
         
- 
         if (nodesSelected && !mouseEvent.isControlDown()) {
             resetSelection();
             selectedNodes.clear();
@@ -518,14 +518,17 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
                     selectedNodes.clear();                
                 	//Fehlerausgabe für den Benutzer bei zu wenig ausgewählten Knoten
                 	} else if (selectedNodes.size() < 2){
+                		
+                		
+                		
                 		System.out.println("es müssen min. 2 Knoten ausgewählt sein");
-                		JOptionPane.showMessageDialog(null, "Es müssen mindestens 2 Knoten ausgewählt werden!", "Error",
+                		JOptionPane.showMessageDialog(null, Strings.getLocalizedString("at.least.two.nodes"),"Error",
                                 JOptionPane.ERROR_MESSAGE);
                 		deselectNodes(selectedNodes);
                 		selectedNodes.clear();
                 		
                 	} else {
-                		JOptionPane.showMessageDialog(null, "Diese Konten sind bereits durch eine Hyperkante verbunden", "Error",
+                		JOptionPane.showMessageDialog(null, Strings.getLocalizedString("hyperedge.is.already.connected"), "Error",
                                 JOptionPane.ERROR_MESSAGE);
                 		deselectNodes(selectedNodes);
                 		selectedNodes.clear();
