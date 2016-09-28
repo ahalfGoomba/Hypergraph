@@ -171,7 +171,7 @@ public class NetPanelData implements Serializable {
        List<HyperEdgeLine> newLines = new ArrayList<HyperEdgeLine>();
        
         for (NodePoint nodePoint : selectedNodes) {        	             	
-                newLines.add(create**HyperEdgeLine(nodePoint, newHEP));         
+                newLines.add(createHyperEdgeLine(nodePoint, newHEP));         
         }
         AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP, newLines);
         action.execute(); 
