@@ -85,11 +85,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         switch (action) {
             case "delete":
             	removeSelectedNodes();
-            	                
                 break;
             case "undo":
                 netData.undo();
-                resetSelection();
+                resetSelection();             
                 break;
             case "redo":
                 netData.redo();
@@ -363,7 +362,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     public void mouseClicked(MouseEvent mouseEvent) {
         netPanel.requestFocusInWindow();
         
-
+ 
         if (nodesSelected && !mouseEvent.isControlDown()) {
             resetSelection();
             selectedNodes.clear();
@@ -737,7 +736,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
             netData.resizeNodesFinal(selectedNodes, selectedHyperEdgePoints, resizeBorder, factorX, factorY, selectionRectangle);
         }
         
-        
+       
         netPanel.repaint();
     }
 
