@@ -162,6 +162,7 @@ public class NetPanelData implements Serializable {
         undoManager.addEdit(action);
     }
     
+    
     /**
      * Fügt HyperEdge hinzu
      * @param newHEP
