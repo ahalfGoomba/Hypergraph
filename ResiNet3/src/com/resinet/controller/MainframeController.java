@@ -407,8 +407,9 @@ public class MainframeController extends WindowAdapter implements ActionListener
         if (params == null)
             return;
 
-        resetGraph();
         switchMode(params.hypergraphMode);
+        resetGraph();
+        
         //Graphelemente hinzufügen
         netPanel.addNodesAndEdges(params.graphNodes, params.graphEdges);
 
@@ -614,6 +615,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
         CalculationParams params = buildCalculationParams(null, true);
 
+        System.out.println(params);
         GraphSaver.exportNet(params, mainFrame.getNetPanel(), width, height);
     }
 
@@ -642,9 +644,10 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
         //Falls die Parameter gespeichert werden sollen, die Graphelementlisten setzen
         if (forSaving) {
-            params.setGraphLists(netPanel.getNodes(), netPanel.getEdges());
+            params.setGraphLists(netPanel.getNodes(), netPanel.getEdges(), netPanel.getHyperEdgePoints());
         }
 
+        if(!graph.hyperGraph){
         if (reliabilityMode == RELIABILITY_MODES.SAME) {
             //Gleiche Zuverlässigkeiten
             params.setReliabilityMode(true);
@@ -702,7 +705,7 @@ public class MainframeController extends WindowAdapter implements ActionListener
 
             params.setSingleReliabilityParams(edgeProbabilities, nodeProbabilities);
         }
-        
+        }
         params.hypergraphMode = mainFrame.getHypergraphMode();
         return params;
     }

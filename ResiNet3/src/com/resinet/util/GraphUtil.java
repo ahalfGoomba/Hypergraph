@@ -81,7 +81,8 @@ public class GraphUtil {
      * @return Ob der Graph zulässig ist
      */
     public static boolean graphIsValid(Component parentComponent, Graph graph) {
-        if (graph.edgeList.size() == 0) {
+        
+    	if (graph.edgeList.size() == 0 && !graph.hyperGraph) {
             //Dieser Block zeigt ein Hinweisfenster an, wenn keine Knoten vorhanden sind und bricht die Methode ab
             JOptionPane.showMessageDialog(parentComponent, Strings.getLocalizedString("error.no.edges"),
                     Strings.getLocalizedString("warning"), JOptionPane.ERROR_MESSAGE);
@@ -103,7 +104,7 @@ public class GraphUtil {
         }
 
         //Prüfen ob das Netz zusammenhängt
-        if (!Con_check.isConnected(graph)) {
+        if (!Con_check.isConnected(graph) && !graph.hyperGraph) {
             JOptionPane.showMessageDialog(parentComponent, Strings.getLocalizedString("your.graph.is.not.connected"),
                     Strings.getLocalizedString("error"), JOptionPane.ERROR_MESSAGE);
             return false;
@@ -120,11 +121,11 @@ public class GraphUtil {
     public static Graph makeGraph(NetPanel netPanel) {
         List<EdgeLine> graphEdges = netPanel.getEdges();
         List<NodePoint> graphNodes = netPanel.getNodes();
-        List<HyperEdgePoint> graphHEP = netPanel.getHyperEdgePoints();
+        //List<HyperEdgePoint> graphHEP = netPanel.getHyperEdges();
 
         ArrayList<Node> nodeList = new ArrayList<>();
         ArrayList<Edge> edgeList = new ArrayList<>();
-        ArrayList<HyperEdge> hyperEdgeList = new ArrayList<>();
+      //  ArrayList<HyperEdge> hyperEdgeList = new ArrayList<>();
 
         int counter = 0;
         //Knoten eintragen
@@ -155,9 +156,9 @@ public class GraphUtil {
 
         
                
-        
-        
-        return new Graph(nodeList, edgeList);
+        Graph graph = new Graph(nodeList, edgeList);
+        graph.setHyperGraph(netPanel.getController().getHyperGraphMode());
+        return graph;
     }
 
 }

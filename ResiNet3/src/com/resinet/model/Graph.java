@@ -16,10 +16,13 @@ public class Graph implements Serializable {
     private static final long serialVersionUID = -7423579476281719826L;
     public ArrayList<Node> nodeList;
     public ArrayList<Edge> edgeList;
+    //public ArrayList<HyperEdge> hyperEdgeList;
+    public boolean hyperGraph = false;
 
     public Graph(ArrayList<Node> nodeList, ArrayList<Edge> edgeList) {
         this.nodeList = nodeList;
         this.edgeList = edgeList;
+       // this.hyperEdgeList = hyperEdges;
     }
 
     /**
@@ -59,6 +62,10 @@ public class Graph implements Serializable {
 
     public ArrayList<Edge> getEdgelist() {
         return edgeList;
+    }
+    
+    public void setHyperGraph(boolean state){
+    	hyperGraph = state;
     }
 }
 

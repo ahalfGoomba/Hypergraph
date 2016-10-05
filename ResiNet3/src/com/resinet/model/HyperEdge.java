@@ -9,12 +9,11 @@ import java.util.ArrayList;
  */
 public class HyperEdge extends GraphElement implements Serializable {
 	
-	private final int hyperEdge_no;
+
 	
 	public ArrayList<Node> nodeList;
 	
-	public HyperEdge(int no, ArrayList<Node> nodes){
-		hyperEdge_no = no;
+	public HyperEdge(ArrayList<Node> nodes){
 		nodeList = nodes;		
 	}
 	

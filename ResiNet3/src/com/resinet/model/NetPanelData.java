@@ -6,6 +6,8 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,16 +29,20 @@ public class NetPanelData implements Serializable {
 
     private final ArrayList<NodePoint> nodes;
     private final ArrayList<EdgeLine> edges;
+    private final ArrayList<HyperEdge> hyperEdges;
     private final ArrayList<HyperEdgePoint> hyperEdgePoints;
     private final ArrayList<HyperEdgeLine> hyperEdgeLines;
     private final UndoManager undoManager;
 
+
     public NetPanelData() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
+        hyperEdges = new ArrayList<>();
         hyperEdgePoints = new ArrayList<>();
         hyperEdgeLines = new ArrayList<>();
         undoManager = new UndoManager();
+
     }
 
     /**
@@ -165,32 +171,34 @@ public class NetPanelData implements Serializable {
      * @param selectedNodes
      */
     public void addHyperEdge(HyperEdgePoint newHEP, List<NodePoint> selectedNodes){
-       addHyperEdgePoint(newHEP);       
+       List<HyperEdgeLine> newLines = new ArrayList<HyperEdgeLine>();
+       
         for (NodePoint nodePoint : selectedNodes) {        	             	
-                addHyperEdgeLine(nodePoint, newHEP);         
+                newLines.add(createHyperEdgeLine(nodePoint, newHEP));         
         }
-    }
-    
-    /**
-     * HyperEdgePoint hinzufügen
-     * @param Der einzufügende HEP
-     */
-    public void addHyperEdgePoint(HyperEdgePoint newHEP){    
-    	//hyperEdgePoints.add(newHEP);   	
-    	AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP); 	
-        action.execute();
- 
+        AddOrRemoveAction action = new AddOrRemoveAction(true, newHEP, newLines);
+        action.execute(); 
         undoManager.addEdit(action);
-    	
     }
+
     /**
      * fügt eine Kante vom HyperEdgePoint zu einem Knoten des Graphen ein
      * @param nodePoint Knoten des Graphen
      * @param hep HyperEdgePoint
      */
-    public void addHyperEdgeLine(NodePoint nodePoint, HyperEdgePoint hep){
-    	HyperEdgeLine newHyperEdgeLine = new HyperEdgeLine(nodePoint, hep);
-        AddOrRemoveAction action = new AddOrRemoveAction(true, newHyperEdgeLine);
+    public HyperEdgeLine createHyperEdgeLine(NodePoint nodePoint, HyperEdgePoint hep){
+
+    	return new HyperEdgeLine(nodePoint, hep);
+
+
+        
+    }
+    /**
+     * entfernt eine hyperEdgeLine
+     * @param hel zu entfernende hyperEdgeLine
+     */
+    public void removeHyperEdgeLine(HyperEdgeLine hel){
+        AddOrRemoveAction action = new AddOrRemoveAction(false, hel);
         action.execute();
         undoManager.addEdit(action);
     }
@@ -479,8 +487,8 @@ public class NetPanelData implements Serializable {
      * Macht die letzte Aktion rÃ¼ckgÃ¤ngig, falls mÃ¶glich.
      */
     public void undo() {
-        if (undoManager.canUndo()) {
-            undoManager.undo();
+        if (undoManager.canUndo()) {   
+        	undoManager.undo();
         }
     }
 
@@ -530,6 +538,15 @@ public class NetPanelData implements Serializable {
     }
     
     /**
+     * Gibt eine nicht verÃ¤nderbare ListenreprÃ¤sentation der HyperEdges zurÃ¼ck.
+     *
+     * @return nicht verÃ¤nderbare ListenreprÃ¤sentation der HyperEdges
+     */
+    public List<HyperEdge> getHyperEdges() {
+        return Collections.unmodifiableList(hyperEdges);
+    } 
+    
+    /**
      * Gibt eine nicht veränderbare Listenräpräsentation der HyperEdgePoints zurück
      * @return nicht veränderbare Liste der HyperEdgePoints
      */
@@ -554,6 +571,8 @@ public class NetPanelData implements Serializable {
         List<EdgeLine> affectedEdges;
         List<HyperEdgePoint> affectedHyperEdgePoints;
         List<HyperEdgeLine> affectedHyperEdgeLines;
+        List<NodePoint> hyperEdgeNodePoints;
+        List<HyperEdge> affectedHyperEdges;
         final boolean isAddAction;
 
 //        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
@@ -586,10 +605,10 @@ public class NetPanelData implements Serializable {
             affectedHyperEdgeLines = new ArrayList<>(addedHyperEdgeLines);
             }
 
-        AddOrRemoveAction(boolean isAddAction, List<HyperEdgePoint> addedHyperEdgePoints){
-        	this.isAddAction = isAddAction;
-        	affectedHyperEdgePoints = new ArrayList<>(addedHyperEdgePoints);        	        	
-        }
+//        AddOrRemoveAction(boolean isAddAction, List<HyperEdgePoint> addedHyperEdgePoints){
+//        	this.isAddAction = isAddAction;
+//        	affectedHyperEdgePoints = new ArrayList<>(addedHyperEdgePoints);        	        	
+//        }
         
        
         AddOrRemoveAction(boolean isAddAction, NodePoint node) {
@@ -615,6 +634,24 @@ public class NetPanelData implements Serializable {
         	affectedHyperEdgeLines = new ArrayList<>();
         	affectedHyperEdgeLines.add(hyperEdgeLine);
         }
+        
+        AddOrRemoveAction(boolean isAddAction, HyperEdgePoint hep, List<HyperEdgeLine> hyperEdgeLines){
+        	this.isAddAction = isAddAction;
+        	affectedHyperEdgeLines = new ArrayList<>();
+        	affectedHyperEdgeLines.addAll(hyperEdgeLines);
+        	affectedHyperEdgePoints = new ArrayList<>();
+        	affectedHyperEdgePoints.add(hep);
+        }
+
+//        AddOrRemoveAction(boolean isAddAction, HyperEdgePoint hep, List<HyperEdgeLine> hyperEdgeLines, List<NodePoint> nodePoints){
+//        	this.isAddAction = isAddAction;
+//        	affectedHyperEdgeLines = new ArrayList<>();
+//        	affectedHyperEdgeLines.addAll(hyperEdgeLines);
+//        	affectedHyperEdgePoints = new ArrayList<>();
+//        	affectedHyperEdgePoints.add(hep);      	
+//
+//        	
+//        }
 
         @Override
         public void redo() throws CannotRedoException {
@@ -645,8 +682,10 @@ public class NetPanelData implements Serializable {
             		hyperEdgePoints.addAll(affectedHyperEdgePoints);
             	} else {
             		hyperEdgePoints.removeAll(affectedHyperEdgePoints);
+            		
+            		}
             	}
-            }
+            
             
             if(affectedHyperEdgeLines != null){
             	if(isAddAction){

@@ -125,9 +125,9 @@ public class CalculationParams implements Constants {
      * @param nodes Die Knotenliste
      * @param edges Die Kantenliste
      */
-    public void setGraphLists(List<NodePoint> nodes, List<EdgeLine> edges) {
+    public void setGraphLists(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdgePoints) {
         graphNodes = nodes;
         graphEdges = edges;
-       
+        graphHEPs = hyperEdgePoints;
     }
 }
