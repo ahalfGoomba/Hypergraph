@@ -652,11 +652,12 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         }
         //Falls ausgewÃ¤hlt wurde
         if (selectDragging) {
-            if (nodesSelected && !mouseEvent.isControlDown()) {
-                resetSelection();
-                selectedNodes.clear();
-                netPanel.repaint();               
-            }
+        	//TODO Knotenauswahl löschen, wenn neues rechteck aufgezogen wird
+//            if (nodesSelected && !mouseEvent.isControlDown()) {
+//                resetSelection();
+//                selectedNodes.clear();
+//                netPanel.repaint();               
+//            }
             selectDragging = false;
 
             //Rechteck mit dem Startpunkt und der aktuellen Position erstellen
