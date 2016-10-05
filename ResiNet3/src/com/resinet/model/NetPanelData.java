@@ -29,6 +29,7 @@ public class NetPanelData implements Serializable {
 
     private final ArrayList<NodePoint> nodes;
     private final ArrayList<EdgeLine> edges;
+    private final ArrayList<HyperEdge> hyperEdges;
     private final ArrayList<HyperEdgePoint> hyperEdgePoints;
     private final ArrayList<HyperEdgeLine> hyperEdgeLines;
     private final UndoManager undoManager;
@@ -37,6 +38,7 @@ public class NetPanelData implements Serializable {
     public NetPanelData() {
         nodes = new ArrayList<>();
         edges = new ArrayList<>();
+        hyperEdges = new ArrayList<>();
         hyperEdgePoints = new ArrayList<>();
         hyperEdgeLines = new ArrayList<>();
         undoManager = new UndoManager();
@@ -536,6 +538,15 @@ public class NetPanelData implements Serializable {
     }
     
     /**
+     * Gibt eine nicht ver√§nderbare Listenrepr√§sentation der HyperEdges zur√ºck.
+     *
+     * @return nicht ver√§nderbare Listenrepr√§sentation der HyperEdges
+     */
+    public List<HyperEdge> getHyperEdges() {
+        return Collections.unmodifiableList(hyperEdges);
+    } 
+    
+    /**
      * Gibt eine nicht ver‰nderbare Listenr‰pr‰sentation der HyperEdgePoints zur¸ck
      * @return nicht ver‰nderbare Liste der HyperEdgePoints
      */
@@ -560,6 +571,8 @@ public class NetPanelData implements Serializable {
         List<EdgeLine> affectedEdges;
         List<HyperEdgePoint> affectedHyperEdgePoints;
         List<HyperEdgeLine> affectedHyperEdgeLines;
+        List<NodePoint> hyperEdgeNodePoints;
+        List<HyperEdge> affectedHyperEdges;
         final boolean isAddAction;
 
 //        AddOrRemoveAction(boolean isAddAction, List<NodePoint> addedNodes, List<EdgeLine> addedEdges) {
@@ -630,6 +643,15 @@ public class NetPanelData implements Serializable {
         	affectedHyperEdgePoints.add(hep);
         }
 
+//        AddOrRemoveAction(boolean isAddAction, HyperEdgePoint hep, List<HyperEdgeLine> hyperEdgeLines, List<NodePoint> nodePoints){
+//        	this.isAddAction = isAddAction;
+//        	affectedHyperEdgeLines = new ArrayList<>();
+//        	affectedHyperEdgeLines.addAll(hyperEdgeLines);
+//        	affectedHyperEdgePoints = new ArrayList<>();
+//        	affectedHyperEdgePoints.add(hep);      	
+//
+//        	
+//        }
 
         @Override
         public void redo() throws CannotRedoException {

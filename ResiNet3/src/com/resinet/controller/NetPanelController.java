@@ -1108,6 +1108,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         return netData.getEdges();
     }
     
+    public List<HyperEdge> getHyperEdges(){
+    	return netData.getHyperEdges();
+    }
+    
     public List<HyperEdgePoint> getHyperEdgePoints(){
     	return netData.getHyperEdgePoints();
     }
@@ -1179,5 +1183,9 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
     
     public void setHypergraphMode(boolean status){
     	hypergraphMode = status;
+    }
+    
+    public boolean getHyperGraphMode() {
+    	return hypergraphMode;
     }
 }

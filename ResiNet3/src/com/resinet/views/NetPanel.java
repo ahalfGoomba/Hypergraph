@@ -6,6 +6,7 @@ import com.resinet.model.EdgeLine;
 import com.resinet.model.HyperEdgePoint;
 import com.resinet.model.HyperEdgeLine;
 import com.resinet.model.GraphWrapper;
+import com.resinet.model.HyperEdge;
 import com.resinet.model.NodePoint;
 import com.resinet.util.GraphChangedListener;
 import com.resinet.util.GraphUtil;
@@ -486,6 +487,11 @@ public class NetPanel extends JPanel {
 
     public List<EdgeLine> getEdges() {
         return controller.getEdges();
+    }
+    
+    
+    public List<HyperEdge> getHyperEdges(){
+    	return controller.getHyperEdges();
     }
     
     public List<HyperEdgePoint> getHyperEdgePoints(){

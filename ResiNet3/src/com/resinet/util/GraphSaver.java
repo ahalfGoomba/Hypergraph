@@ -90,7 +90,7 @@ public final class GraphSaver {
     private static CalculationParams readPajekNetwork(File netFile, Component parentComponent, int width, int height) {
         ArrayList<NodePoint> nodeList = new ArrayList<>();
         ArrayList<EdgeLine> edgeList = new ArrayList<>();
-
+        ArrayList<HyperEdgePoint> hyperEdgePointList = new ArrayList<>();
         //Ab hier zeilenweises Einlesen der ausgewählten Datei
         String actRow;
         LineNumberReader lineReader;
@@ -179,7 +179,7 @@ public final class GraphSaver {
                 edgeList.add(edge1);
             }
             CalculationParams result = new CalculationParams();
-            result.setGraphLists(nodeList, edgeList);
+            result.setGraphLists(nodeList, edgeList, hyperEdgePointList);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,8 +194,11 @@ public final class GraphSaver {
      * @param netFile Die Resinet-Netzwerk-Datei
      */
     private static CalculationParams readResinetNetwork(File netFile, Component parentComponent) {
-        ArrayList<NodePoint> drawnNodes = new ArrayList<>();
+    	CalculationParams calculationParams = new CalculationParams();
+    	boolean hyperGraphMode = false;
+    	ArrayList<NodePoint> drawnNodes = new ArrayList<>();
         ArrayList<EdgeLine> drawnEdges = new ArrayList<>();
+        ArrayList<HyperEdgePoint> drawnHyperEdgePoints = new ArrayList<>();
 
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -205,6 +208,15 @@ public final class GraphSaver {
             //Normalisieren (hier wahrscheinlich unnötig, aber kann Fehler vermeiden)
             doc.getDocumentElement().normalize();
 
+            
+            //Hypergraph status einlesen
+            NodeList stateList = doc.getElementsByTagName("state");
+            	Element state = (Element) stateList.item(0);
+            	hyperGraphMode = Boolean.parseBoolean(state.getAttribute("hyperEdgeState"));
+            	
+            calculationParams.hypergraphMode = hyperGraphMode;            
+            	
+            	
             //Knotern einlesen
             NodeList nodeList = doc.getElementsByTagName("node");
             for (Integer i = 0; i < nodeList.getLength(); i++) {
@@ -244,9 +256,14 @@ public final class GraphSaver {
                     drawnEdges.add(position, el);
                 }
             }
+            
+            //hyperEdgePoints einlesen
+            
 
+           
+           
             //Zuverlässigkeiten einlesen
-            CalculationParams calculationParams = new CalculationParams();
+            if(!hyperGraphMode){
             //Modus einlesen
             nodeList = doc.getElementsByTagName("reliabilityMode");
             Node reliabilityModeNode = nodeList.item(0);
@@ -325,7 +342,8 @@ public final class GraphSaver {
                         nodeProbabilities.toArray(new BigDecimal[nodeProbabilities.size()]));
 
             }
-            calculationParams.setGraphLists(drawnNodes, drawnEdges);
+            }
+            calculationParams.setGraphLists(drawnNodes, drawnEdges, drawnHyperEdgePoints);
             return calculationParams;
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -543,6 +561,12 @@ public final class GraphSaver {
             sizeNode.setAttribute("height", Integer.toString((int) graphRect.getHeight()));
             rootElement.appendChild(sizeNode);
 
+            //HyperGraph status schreiben
+            Element state = doc.createElement("state");
+            	state.setAttribute("hyperEdgeState", Boolean.toString(params.hypergraphMode));
+            	//System.out.println(state);
+            	rootElement.appendChild(state);
+            	
             //Knoten schreiben
             for (Integer i = 0; i < drawnNodes.size(); i++) {
                 NodePoint graphNode = drawnNodes.get(i);
@@ -568,7 +592,20 @@ public final class GraphSaver {
 
                 rootElement.appendChild(edge);
             }
+            
+            //HyperKantenPunkte schreiben
+            for (int i = 0; i < drawnHEPs.size(); i++) {
+                HyperEdgePoint graphHyperEdgePoint = drawnHEPs.get(i);
 
+                Element hyperEdgePoint = doc.createElement("hyperEdgePoint");
+                hyperEdgePoint.setAttribute("nodeList", graphHyperEdgePoint.getNodePoints().toString());
+                hyperEdgePoint.setAttribute("x", Integer.toString((int) (graphHyperEdgePoint.x - graphRect.getX())));
+                hyperEdgePoint.setAttribute("y", Integer.toString((int) (graphHyperEdgePoint.y - graphRect.getY())));
+
+                rootElement.appendChild(hyperEdgePoint);
+            }
+
+            if(!params.graph.hyperGraph){
             //Wahrscheinlichkeiten schreiben
             Element reliabilityMode = doc.createElement("reliabilityMode");
             reliabilityMode.setAttribute("same_reliability", Boolean.toString(params.sameReliabilityMode));
@@ -637,7 +674,7 @@ public final class GraphSaver {
                     rootElement.appendChild(singleReliability);
                 }
             }
-
+            }
             //In XML-Datei schreiben
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
