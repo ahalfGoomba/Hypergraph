@@ -340,8 +340,18 @@ public class NetPanelData implements Serializable {
      * @param edges Die Kantenmenge
      * @param hyperEdgeLines Die HyperEdgeLinemenge
      */
-    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdgePoints, List<HyperEdgeLine> hyperEdgeLines) {
-        AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges, hyperEdgePoints, hyperEdgeLines);
+    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdgePoints) {
+       
+        List<HyperEdgeLine> newLines = new ArrayList<HyperEdgeLine>();
+        
+        for(HyperEdgePoint hep : hyperEdgePoints){
+        	   for (NodePoint nodePoint : hep.getNodePoints()) {        	             	
+                   newLines.add(createHyperEdgeLine(nodePoint, hep));         
+           }
+        }
+     
+    	
+    	AddOrRemoveAction action = new AddOrRemoveAction(true, nodes, edges, hyperEdgePoints, newLines);
         action.execute();
         undoManager.addEdit(action);
     }

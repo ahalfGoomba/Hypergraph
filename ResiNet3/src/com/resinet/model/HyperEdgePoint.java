@@ -47,6 +47,10 @@ public class HyperEdgePoint extends Ellipse2D.Double {
 	   nodes.add(node);
    }
    
+   public void setNodePointList(List<NodePoint> npList){
+	   nodes = npList;
+   }
+   
    public List<NodePoint> getNodePoints(){
 	   return nodes;
    }

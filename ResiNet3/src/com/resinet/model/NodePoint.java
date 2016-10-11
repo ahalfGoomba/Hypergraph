@@ -8,6 +8,8 @@ public class NodePoint extends Ellipse2D.Double {
     public boolean c_node = false;
     public boolean selected;
     private boolean selectedForHyperEdge;
+    // nummer die beim speichern/laden der zuordnung dient
+    public int saveNum;
 
     /**
      * Erstellt einen neuen Knoten
@@ -20,6 +22,7 @@ public class NodePoint extends Ellipse2D.Double {
         super(x, y, 20, 20);
         this.c_node = c_node;
         selected = false;
+        saveNum = 0;
         
     }
 

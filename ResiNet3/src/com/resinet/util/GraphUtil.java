@@ -100,7 +100,7 @@ public class GraphUtil {
             //Der Code in diesem Block zeigt nur ein Hinweisfenster an und bricht die Funktion ab
             JOptionPane.showMessageDialog(parentComponent, Strings.getLocalizedString("error.c_vertices.not.enough"),
                     Strings.getLocalizedString("warning"), JOptionPane.ERROR_MESSAGE);
-            return false;
+//            return false;
         }
 
         //Prüfen ob das Netz zusammenhängt

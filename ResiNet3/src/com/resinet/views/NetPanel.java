@@ -446,8 +446,8 @@ public class NetPanel extends JPanel {
      * @param nodes Die Knotenmenge
      * @param edges Die Kantenmenge
      */
-    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
-        controller.addNodesAndEdges(nodes, edges);
+    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdges) {
+        controller.addNodesAndEdges(nodes, edges, hyperEdges);
     }
 
     /**

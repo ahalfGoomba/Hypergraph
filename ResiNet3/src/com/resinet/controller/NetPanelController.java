@@ -291,7 +291,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
         
 
         //Neue Knoten und Kanten hinzufÃ¼gen 
-        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, hyperEdgePoints, nodeEdgeWrapper.hyperEdgeLines);
+        netData.addNodesAndEdges(nodes, nodeEdgeWrapper.edges, hyperEdgePoints);
 
         listener.graphChanged();
 
@@ -1056,10 +1056,10 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param nodes Die Knotenmenge
      * @param edges Die Kantenmenge
      */
-    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges) {
+    public void addNodesAndEdges(List<NodePoint> nodes, List<EdgeLine> edges, List<HyperEdgePoint> hyperEdges) {
     	List<HyperEdgeLine> hels = new ArrayList<HyperEdgeLine>();
-    	List<HyperEdgePoint> heps = new ArrayList<HyperEdgePoint>();
-    	netData.addNodesAndEdges(nodes, edges,heps, hels);
+
+    	netData.addNodesAndEdges(nodes, edges, hyperEdges);
     }
 
     /**
@@ -1068,7 +1068,7 @@ public class NetPanelController implements MouseListener, MouseMotionListener {
      * @param graphWrapper Wrapper mit Mengen von Knoten und Kanten
      */
     public void addGraphWrapperAndSelect(GraphWrapper graphWrapper) {
-        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges,graphWrapper.hyperEdgePoints, graphWrapper.hel);
+        netData.addNodesAndEdges(graphWrapper.nodes, graphWrapper.edges,graphWrapper.hyperEdgePoints);
         
         //TODO HyperEdgePoints hinzufügen
         //nur eingefügt damit hier was funktioniert....später ändern!

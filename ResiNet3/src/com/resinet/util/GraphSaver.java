@@ -259,8 +259,28 @@ public final class GraphSaver {
             
             //hyperEdgePoints einlesen
             
+            
+            nodeList = doc.getElementsByTagName("hyperEdgePoint");
+            for (Integer i = 0; i < nodeList.getLength(); i++) {
+            Node heNode = nodeList.item(i);
+            Element ele = (Element) heNode;
+            int x = Integer.parseInt(ele.getAttribute("x"));
+            int y = Integer.parseInt(ele.getAttribute("y"));
+            
+            List<NodePoint> heNodeList = new ArrayList<NodePoint>();
+            
+            int nodeCounter = Integer.parseInt(ele.getAttribute("nodeCount"));
+            for(int t = 0; t < nodeCounter; t++){
+            	NodePoint npTemp = drawnNodes.get(Integer.parseInt(ele.getAttribute("node"+t)));
+            	heNodeList.add(npTemp);
+            }
+            
 
-           
+            HyperEdgePoint hep = new HyperEdgePoint(x, y);
+            hep.setNodePointList(heNodeList);
+            drawnHyperEdgePoints.add(hep);
+
+            }
            
             //Zuverlässigkeiten einlesen
             if(!hyperGraphMode){
@@ -570,7 +590,7 @@ public final class GraphSaver {
             //Knoten schreiben
             for (Integer i = 0; i < drawnNodes.size(); i++) {
                 NodePoint graphNode = drawnNodes.get(i);
-
+                graphNode.saveNum = i;
                 Element node = doc.createElement("node");
                 node.setAttribute("node_number", i.toString());
                 node.setAttribute("x", Integer.toString((int) (graphNode.x - graphRect.getX())));
@@ -598,7 +618,13 @@ public final class GraphSaver {
                 HyperEdgePoint graphHyperEdgePoint = drawnHEPs.get(i);
 
                 Element hyperEdgePoint = doc.createElement("hyperEdgePoint");
-                hyperEdgePoint.setAttribute("nodeList", graphHyperEdgePoint.getNodePoints().toString());
+                
+                hyperEdgePoint.setAttribute("nodeCount", Integer.toString(graphHyperEdgePoint.getNodePoints().size()));
+                int counter = 0;
+                for(NodePoint np : graphHyperEdgePoint.getNodePoints()){
+                hyperEdgePoint.setAttribute("node" + counter, Integer.toString(np.saveNum));
+                counter++;
+                }
                 hyperEdgePoint.setAttribute("x", Integer.toString((int) (graphHyperEdgePoint.x - graphRect.getX())));
                 hyperEdgePoint.setAttribute("y", Integer.toString((int) (graphHyperEdgePoint.y - graphRect.getY())));
 
