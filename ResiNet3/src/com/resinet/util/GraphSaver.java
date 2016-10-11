@@ -616,7 +616,6 @@ public final class GraphSaver {
             //HyperKantenPunkte schreiben
             for (int i = 0; i < drawnHEPs.size(); i++) {
                 HyperEdgePoint graphHyperEdgePoint = drawnHEPs.get(i);
-
                 Element hyperEdgePoint = doc.createElement("hyperEdgePoint");
                 
                 hyperEdgePoint.setAttribute("nodeCount", Integer.toString(graphHyperEdgePoint.getNodePoints().size()));
